@@ -1,13 +1,13 @@
 ## What you get
 
-Twenty-two switches in Settings, one per element, all off by default:
+Twenty-three switches in Settings, one per element, all off by default:
 
 - Back and forward buttons
 - Left sidebar toggle and right panel toggle
 - The "..." buttons in the sidebar footer, next to the thread title, and on sidebar thread rows
 - The "Open in ..." app menu in the thread header
 - The chevron that collapses the prompt box
-- The "x" close button in the thread title bar
+- The "x" close button and the "Commit" button in the thread title bar
 - Under the prompt box: project folder, checkout, branch, new thread button, and context fill level
 - In the prompt box: the "+" button, model selector, provider icon, voice input button, and send/stop buttons (Enter still sends)
 - The message navigator on the right edge of the chat

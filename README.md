@@ -17,7 +17,7 @@ bb plugin config minus set hideThinking true
 
 Keys: `hideNavButtons`, `hideSidebarToggle`, `hideRightPanelToggle`,
 `hideFooterMore`, `hideThreadHeaderMore`, `hideThreadRowMore`, `hideOpenIn`,
-`hidePromptCollapse`, `hideClosePane`, `hideComposerFolder`,
+`hidePromptCollapse`, `hideCommit`, `hideClosePane`, `hideComposerFolder`,
 `hideComposerCheckout`, `hideComposerBranch`, `hideComposerNewThread`,
 `hideComposerContext`, `hidePromptPlus`, `hideModelSelector`,
 `hidePromptProviderIcon`, `hideMic`, `hideSend`, `hideMessageNav`, `hideThinking`, `hideThreadIcons`,

@@ -46,6 +46,14 @@ export const RULES = [
     ],
   },
   {
+    // The button has no label (its text changes with git state), so match its slot instead.
+    key: "hideCommit",
+    label: 'Hide "Commit" button in the thread title bar',
+    selectors: [
+      '[data-thread-header-workflow-actions] > [data-thread-header-responsive-action]:not(:has(button[aria-label^="Open workspace in"],button[aria-label="Choose another app to open workspace"]))',
+    ],
+  },
+  {
     key: "hidePromptCollapse",
     label: "Hide prompt box collapse chevron",
     selectors: ['button[aria-label="Collapse prompt box"]'],
