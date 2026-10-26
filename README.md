@@ -20,7 +20,7 @@ Keys: `hideWindowFrame`, `hideNavButtons`, `hideSidebarToggle`, `hideRightPanelT
 `hidePromptCollapse`, `hideCommit`, `hideClosePane`, `hideComposerFolder`,
 `hideComposerCheckout`, `hideComposerBranch`, `hideComposerNewThread`,
 `hideComposerContext`, `hidePromptPlus`, `hideModelSelector`,
-`hidePromptProviderIcon`, `hideMic`, `hideSend`, `hideMessageNav`, `hideThinking`, `hideThreadIcons`,
+`hidePromptProviderIcon`, `hideMic`, `hideSend`, `hideMessageActions`, `hideMessageNav`, `hideThinking`, `hideThreadIcons`,
 `collapseToolCalls`.
 
 ## How it works
