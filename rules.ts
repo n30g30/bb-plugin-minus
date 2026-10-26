@@ -45,6 +45,9 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
         key: "hideThreadRowMore",
         label: 'Hide "..." on thread rows',
         selectors: ["[data-thread-actions-trigger]"],
+        // bb reserves a 28px slot at the row's end for the status glyph and hover actions.
+        // With no glyph, collapse it so the title runs to the edge; hover actions still overlay it.
+        css: "[data-sidebar-thread-trailing]:not(:has([data-sidebar-thread-trailing-indicator])) > span > span:has(> .bb-sidebar-hover-actions){width:0!important}",
       },
       {
         key: "hideFooterMore",
