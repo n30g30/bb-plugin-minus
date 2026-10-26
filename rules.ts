@@ -96,6 +96,15 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
     title: "Chat",
     rules: [
       {
+        // The label row above a steering message; drop the whole row when the label is its only item.
+        key: "hideSteerLabel",
+        label: 'Hide "Steer" label on steering messages',
+        selectors: [
+          '.group\\/message > div:has(> span:only-child > svg[data-icon="ArrowTurnForward"])',
+          '.group\\/message span:has(> svg[data-icon="ArrowTurnForward"])',
+        ],
+      },
+      {
         key: "hideThinking",
         label: "Hide thinking",
         selectors: ['[data-timeline-row-id*=":kind:reasoning"]'],
