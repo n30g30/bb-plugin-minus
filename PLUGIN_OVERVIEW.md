@@ -1,6 +1,6 @@
 ## What you get
 
-Twenty-five switches in Settings, one per element, all off by default:
+Twenty-six switches in Settings, one per element, all off by default:
 
 - The padding and rounded corners around the workbench in the macOS app
 - Back and forward buttons
@@ -12,6 +12,7 @@ Twenty-five switches in Settings, one per element, all off by default:
 - Under the prompt box: project folder, checkout, branch, new thread button, and context fill level
 - In the prompt box: the "+" button, model selector, provider icon, voice input button, and send/stop buttons (Enter still sends)
 - The copy, edit, side chat and "..." actions that appear when you hover a message
+- The wrap and copy buttons on code blocks
 - The message navigator on the right edge of the chat
 - Thinking rows in the chat
 - Provider icons on sidebar thread rows

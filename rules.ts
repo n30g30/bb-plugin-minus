@@ -111,6 +111,14 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
         css: '[data-timeline-row-id] div:has(> div > button[aria-label="Message actions"]),[data-timeline-row-id] div:has(> div > button[aria-label="Message actions"]) *{visibility:hidden!important}',
       },
       {
+        // Wrap and copy sit in one group in the code block header; the language label stays.
+        key: "hideCodeBlockActions",
+        label: "Hide wrap and copy buttons on code blocks",
+        // visibility, not display: the header keeps its height so code blocks don't shift.
+        selectors: [],
+        css: '[data-clipboard-ignore] > div:has(button[aria-label="Wrap lines"]),[data-clipboard-ignore] > div:has(button[aria-label="Wrap lines"]) *{visibility:hidden!important}',
+      },
+      {
         key: "hideMessageNav",
         label: "Hide message navigator on the right",
         selectors: ["[data-thread-toc]"],
