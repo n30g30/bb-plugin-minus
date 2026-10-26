@@ -106,7 +106,9 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
         // The row under each message that holds copy, edit, side chat and "..." (fades in on hover).
         key: "hideMessageActions",
         label: "Hide message hover actions (copy, edit, side chat, ...)",
-        selectors: ['[data-timeline-row-id] div:has(> div > button[aria-label="Message actions"])'],
+        // visibility, not display: the row keeps its height so message spacing stays the same.
+        selectors: [],
+        css: '[data-timeline-row-id] div:has(> div > button[aria-label="Message actions"]),[data-timeline-row-id] div:has(> div > button[aria-label="Message actions"]) *{visibility:hidden!important}',
       },
       {
         key: "hideMessageNav",
