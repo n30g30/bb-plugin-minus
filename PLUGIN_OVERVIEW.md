@@ -1,6 +1,6 @@
 ## What you get
 
-Twenty-six switches in Settings, one per element, all off by default:
+Twenty-seven switches in Settings, one per element, all off by default:
 
 - The padding and rounded corners around the workbench in the macOS app
 - Back and forward buttons
@@ -8,6 +8,7 @@ Twenty-six switches in Settings, one per element, all off by default:
 - The "..." buttons in the sidebar footer, next to the thread title, and on sidebar thread rows
 - The "Open in ..." app menu in the thread header
 - The chevron that collapses the prompt box
+- Plus one switch that opens the message queue collapsed instead of expanded
 - The "x" close button and the "Commit" button in the thread title bar
 - Under the prompt box: project folder, checkout, branch, new thread button, and context fill level
 - In the prompt box: the "+" button, model selector, provider icon, voice input button, and send/stop buttons (Enter still sends)

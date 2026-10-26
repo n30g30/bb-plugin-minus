@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { definePluginApp, experimental_usePluginId, useSdk, useSettings } from "@get-bb/plugin-sdk/app";
+import { mountQueueCollapse } from "./collapse-queue";
 import { mountToolGrouping } from "./group-tools";
 import { AREAS, buildCss } from "./rules";
 
@@ -14,6 +15,8 @@ function HideStyles() {
     if (!collapseToolCalls) return;
     return mountToolGrouping(async (threadId) => (await sdk.threads.timeline({ threadId, deferContent: "true" })).rows);
   }, [collapseToolCalls, sdk]);
+  const collapseQueue = values?.collapseQueue === true;
+  useEffect(() => (collapseQueue ? mountQueueCollapse() : undefined), [collapseQueue]);
   return <style data-bb-minus="">{css}</style>;
 }
 

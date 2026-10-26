@@ -1,5 +1,5 @@
 // Each rule becomes one boolean setting, grouped by the area of bb it belongs to.
-// When on, its selectors get display:none and its css is added (collapseToolCalls has neither: see group-tools.ts).
+// When on, its selectors get display:none and its css is added (collapseToolCalls and collapseQueue have neither: see group-tools.ts, collapse-queue.ts).
 // Selectors target bb's own aria labels and data attributes, verified against bb 0.47.
 type Rule = { key: string; label: string; selectors: readonly string[]; css?: string };
 
@@ -132,6 +132,11 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
   {
     title: "Prompt box",
     rules: [
+      {
+        key: "collapseQueue",
+        label: "Collapse the message queue by default",
+        selectors: [],
+      },
       {
         key: "hidePromptCollapse",
         label: "Hide collapse chevron",
