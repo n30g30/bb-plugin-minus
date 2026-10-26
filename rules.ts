@@ -143,6 +143,12 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
         selectors: ['button[aria-label="Collapse prompt box"]'],
       },
       {
+        key: "hidePromptPlaceholder",
+        label: "Hide placeholder text",
+        selectors: [],
+        css: "[data-promptbox] [data-placeholder]::before{content:none!important}",
+      },
+      {
         key: "hidePromptPlus",
         label: 'Hide "+" button',
         selectors: ['[data-promptbox-action-row] button[aria-label="Prompt actions"]'],
