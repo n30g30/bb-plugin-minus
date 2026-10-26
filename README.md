@@ -6,7 +6,7 @@ and can collapse tool calls in the chat into one "Called N tools" row.
 ## Install
 
 ```
-bb plugin install git:https://github.com/n30g30/bb-plugin-minus.git@^0.1.0
+bb plugin install git:https://github.com/n30g30/bb-plugin-minus.git@^0.2.0
 ```
 
 Then flip switches in Settings → Plugins → Minus, or from a shell:
