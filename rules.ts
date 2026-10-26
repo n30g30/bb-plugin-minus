@@ -114,9 +114,13 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
         // Wrap and copy sit in one group in the code block header; the language label stays.
         key: "hideCodeBlockActions",
         label: "Hide wrap and copy buttons on code blocks",
-        // visibility, not display: the header keeps its height so code blocks don't shift.
-        selectors: [],
-        css: '[data-clipboard-ignore] > div:has(button[aria-label="Wrap lines"]),[data-clipboard-ignore] > div:has(button[aria-label="Wrap lines"]) *{visibility:hidden!important}',
+        // With no language label the header is empty, so drop it and pad the code like its bottom edge.
+        // With a label, drop only the buttons and keep the label row.
+        selectors: [
+          '[data-clipboard-ignore]:has(> span:empty):has(button[aria-label="Wrap lines"])',
+          '[data-clipboard-ignore] > div:has(button[aria-label="Wrap lines"])',
+        ],
+        css: '[data-clipboard-ignore]:has(> span:empty):has(button[aria-label="Wrap lines"]) + pre{padding-top:.75rem!important}',
       },
       {
         key: "hideMessageNav",
