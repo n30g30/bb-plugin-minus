@@ -1,7 +1,8 @@
 ## What you get
 
-Twenty-three switches in Settings, one per element, all off by default:
+Twenty-four switches in Settings, one per element, all off by default:
 
+- The padding and rounded corners around the workbench in the macOS app
 - Back and forward buttons
 - Left sidebar toggle and right panel toggle
 - The "..." buttons in the sidebar footer, next to the thread title, and on sidebar thread rows

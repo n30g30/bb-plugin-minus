@@ -15,7 +15,7 @@ Then flip switches in Settings → Plugins → Minus, or from a shell:
 bb plugin config minus set hideThinking true
 ```
 
-Keys: `hideNavButtons`, `hideSidebarToggle`, `hideRightPanelToggle`,
+Keys: `hideWindowFrame`, `hideNavButtons`, `hideSidebarToggle`, `hideRightPanelToggle`,
 `hideFooterMore`, `hideThreadHeaderMore`, `hideThreadRowMore`, `hideOpenIn`,
 `hidePromptCollapse`, `hideCommit`, `hideClosePane`, `hideComposerFolder`,
 `hideComposerCheckout`, `hideComposerBranch`, `hideComposerNewThread`,

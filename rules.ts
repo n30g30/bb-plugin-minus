@@ -1,11 +1,24 @@
 // Each rule becomes one boolean setting, grouped by the area of bb it belongs to.
-// When on, its selectors get display:none (collapseToolCalls has none: see group-tools.ts).
+// When on, its selectors get display:none and its css is added (collapseToolCalls has neither: see group-tools.ts).
 // Selectors target bb's own aria labels and data attributes, verified against bb 0.47.
-type Rule = { key: string; label: string; selectors: readonly string[] };
+type Rule = { key: string; label: string; selectors: readonly string[]; css?: string };
 
 const OPEN_IN = 'button[aria-label^="Open workspace in"],button[aria-label="Choose another app to open workspace"]';
 
 export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
+  {
+    title: "Window",
+    rules: [
+      {
+        // macOS desktop frames the workbench as a card: an 8px lip on the sides and bottom,
+        // rounded corners from --bb-frame-card-radius and an SVG mask with a fixed 8px radius.
+        key: "hideWindowFrame",
+        label: "Remove padding and rounded corners around the workbench (macOS app)",
+        selectors: [],
+        css: ":root{--bb-frame-window-lip:0px!important;--bb-frame-card-radius:0px!important;--bb-window-card-mask:none!important;--bb-window-card-mask-square-left:none!important}[data-framed]{--bb-window-frame-lip:0px!important;--bb-window-frame-leading-lip:0px!important}",
+      },
+    ],
+  },
   {
     title: "Sidebar",
     rules: [
@@ -174,8 +187,11 @@ const FLAT_FORM = (pluginId: string) =>
   ].join(",");
 
 export function buildCss(pluginId: string, enabled: (key: string) => boolean): string {
-  const rules = AREAS.flatMap((area) => area.rules).filter((rule) => rule.selectors.length > 0 && enabled(rule.key));
-  return [FLAT_FORM(pluginId), ...rules.map((rule) => rule.selectors.join(","))]
-    .map((selectors) => `${selectors}{display:none!important}`)
-    .join("\n");
+  const rules = AREAS.flatMap((area) => area.rules).filter((rule) => enabled(rule.key));
+  return [
+    ...[FLAT_FORM(pluginId), ...rules.filter((r) => r.selectors.length > 0).map((r) => r.selectors.join(","))].map(
+      (selectors) => `${selectors}{display:none!important}`,
+    ),
+    ...rules.flatMap((r) => (r.css === undefined ? [] : [r.css])),
+  ].join("\n");
 }

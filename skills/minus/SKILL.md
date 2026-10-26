@@ -12,7 +12,7 @@ bb plugin config minus get
 bb plugin config minus set <key> true|false
 ```
 
-Keys: `hideNavButtons`, `hideSidebarToggle` (⌘B still works), `hideRightPanelToggle` (⌘J still works),
+Keys: `hideWindowFrame` (macOS app workbench padding and rounded corners), `hideNavButtons`, `hideSidebarToggle` (⌘B still works), `hideRightPanelToggle` (⌘J still works),
 `hideFooterMore`, `hideThreadHeaderMore`, `hideThreadRowMore` (right-click still opens thread actions),
 `hideOpenIn` (⌘O still opens the default app), `hideCommit`, `hidePromptCollapse`, `hideClosePane`, `hideComposerFolder`, `hideComposerCheckout`, `hideComposerBranch`, `hideComposerNewThread`, `hideComposerContext`, `hidePromptPlus`, `hideModelSelector`, `hidePromptProviderIcon`, `hideMic`, `hideSend` (send, send options and stop; Enter still sends), `hideMessageNav` (the jump-to-message rail), `hideThinking`, `hideThreadIcons`, `collapseToolCalls` (groups each run of tool/thinking rows into one expandable "Called N tools" row).
 
