@@ -9,7 +9,7 @@ Twenty-two switches in Settings, one per element, all off by default:
 - The chevron that collapses the prompt box
 - The "x" close button in the thread title bar
 - Under the prompt box: project folder, checkout, branch, new thread button, and context fill level
-- In the prompt box: the "+" button, model selector, provider icon, voice input button, and send button (Enter still sends, and the stop button stays)
+- In the prompt box: the "+" button, model selector, provider icon, voice input button, and send/stop buttons (Enter still sends)
 - The message navigator on the right edge of the chat
 - Thinking rows in the chat
 - Provider icons on sidebar thread rows

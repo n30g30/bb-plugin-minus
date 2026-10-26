@@ -93,7 +93,7 @@ export const RULES = [
   {
     key: "hidePromptProviderIcon",
     label: "Hide provider icon in the model selector",
-    selectors: ['[data-promptbox-action-row] button[aria-label^="Provider, model"] span[title]:has([data-provider-logo])'],
+    selectors: ['[data-promptbox-action-row] button[aria-label^="Provider, model"] [aria-hidden="true"]:has(> [data-provider-logo])'],
   },
   {
     key: "hideMic",
@@ -101,10 +101,10 @@ export const RULES = [
     selectors: ['[data-promptbox-action-row] button[aria-label$="voice input"]'],
   },
   {
-    // The stop button shares this slot while a turn runs; keep it.
+    // Send, send options, and stop share this group.
     key: "hideSend",
-    label: "Hide send button in the prompt box (Enter still sends)",
-    selectors: ['[data-promptbox-submit-action]:not([aria-label="Stop run"])'],
+    label: "Hide send and stop buttons in the prompt box (Enter still sends)",
+    selectors: ["[data-promptbox-submit-group]"],
   },
   {
     key: "hideMessageNav",
