@@ -37,6 +37,14 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
         selectors: ['button[data-sidebar="trigger"]'],
       },
       {
+        // An empty group renders a "No threads" placeholder row instead of a thread section.
+        key: "hideEmptyProjects",
+        label: "Hide projects with no threads",
+        selectors: [
+          '[data-sidebar-sticky-group]:has(> .mt-1 > div > svg[data-icon="MessageSquare"]):not(:has([data-sidebar-sticky-section]))',
+        ],
+      },
+      {
         key: "hideThreadIcons",
         label: "Hide provider icons on thread rows",
         selectors: ["[data-sidebar-thread-provider]"],
