@@ -51,6 +51,7 @@ tags: [Minus, plugin, UX]
 - Источники этой редакции до commit: SHA-256 `group-tools.ts` — `ecd25081472be6f73a35dcf027fa879dc910c84b781ff7a06fd9c92d2895fd62`; `group-tools.test.mjs` — `4047983dfc95ff7d2d0248ed6ec5d227564eb89a1d90150b760f2d374bf794d2`.
 - Operate/harden-проход Impeccable и Frontend Design: оставлена текущая компактная нативная строка и её toggle; состояние каждой API-группы теперь независимо переживает смену окна. Новая поверхность, стиль и движение не добавлялись. JS DOM-тесты проверяют disclosure state и скрытие строк; live BB render не запускался, общий host не менялся.
 - Проектный `AGENTS.md` в checkout отсутствует; `vadikhq/IDE/projects/bb-plugin-minus.md` при read-only запросе GitHub вернул 404. Workflow-файлов в base нет, GitHub Actions не запускались.
+- Реализация и регрессионные тесты этой редакции зафиксированы коммитом `810d77528141a84228bb674b7b4109361a5cdbc5` и опубликованы в feature-ветке форка; local и remote head совпали. PR с цитатами ещё не открыт.
 
 ## Стадия и откат
 
