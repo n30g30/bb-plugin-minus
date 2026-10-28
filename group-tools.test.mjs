@@ -67,7 +67,11 @@ function mountDom({ rowIds, fetchTimeline, chooseQuote = () => QUOTES[0] }) {
 }
 
 function timeline(rows) {
-  return rows.map(([id, kind = "work"]) => ({ id: "thr_test:" + id, kind }));
+  return rows.map(([id, kind = "work", operationKind]) => ({
+    id: "thr_test:" + id,
+    kind,
+    ...(operationKind === undefined ? {} : { operationKind }),
+  }));
 }
 
 for (const count of [1, 2, 3]) {
@@ -129,6 +133,268 @@ test("uses the full timeline count when only one tool row is mounted", async () 
     marker.querySelector("button").click();
     await dom.flush();
     assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+  } finally {
+    dom.cleanup();
+  }
+});
+
+test("keeps a manual stop visible and outside collapsed tool-call groups", async () => {
+  const rowIds = ["tool-1", "op:thread-interrupted:manual-stop", "tool-2"];
+  const dom = mountDom({
+    rowIds,
+    fetchTimeline: async () => timeline([
+      ["tool-1"],
+      ["op:thread-interrupted:manual-stop", "system", "thread-interrupted"],
+      ["tool-2"],
+    ]),
+  });
+  const stopRow = dom.rows[1];
+  stopRow.textContent = "Stopped manually";
+  try {
+    const assertGroupsAndStop = () => {
+      const markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
+      assert.equal(markers.length, 2);
+      assert.deepEqual(
+        markers.map((marker) => marker.querySelector("button").getAttribute("aria-label")),
+        ["Show 1 tool call", "Show 1 tool call"],
+      );
+      assert.equal(stopRow.textContent, "Stopped manually");
+      assert.equal(stopRow.hasAttribute(HIDDEN), false);
+    };
+
+    assertGroupsAndStop(); // DOM fallback before the timeline API resolves.
+    await dom.flush();
+    assertGroupsAndStop(); // API-backed grouping keeps the system row as a boundary.
+
+    const buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
+    buttons[0].click();
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+    assert.equal(dom.rows[1].hasAttribute(HIDDEN), false);
+    assert.equal(dom.rows[2].hasAttribute(HIDDEN), true);
+
+    buttons[1].click();
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+    assert.equal(dom.rows[1].hasAttribute(HIDDEN), false);
+    assert.equal(dom.rows[2].hasAttribute(HIDDEN), false);
+
+    buttons[0].click();
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+    assert.equal(dom.rows[1].hasAttribute(HIDDEN), false);
+    assert.equal(dom.rows[2].hasAttribute(HIDDEN), false);
+  } finally {
+    dom.cleanup();
+  }
+});
+
+test("splits a virtualized tool run at an API interruption boundary", async () => {
+  let resolveTimeline;
+  const timelineResult = new Promise((resolve) => { resolveTimeline = resolve; });
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-2"],
+    fetchTimeline: () => timelineResult,
+  });
+  const spacer = dom.window.document.createElement("div");
+  spacer.setAttribute("data-timeline-window-spacer", "");
+  dom.container.insertBefore(spacer, dom.rows[1]);
+  try {
+    await dom.flush();
+    let markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
+    assert.equal(markers.length, 1);
+    assert.equal(markers[0].querySelector("button").getAttribute("aria-label"), "Show 2 tool calls");
+
+    resolveTimeline(timeline([
+      ["tool-1"],
+      ["op:thread-interrupted:manual-stop", "system", "thread-interrupted"],
+      ["tool-2"],
+    ]));
+    await dom.flush();
+
+    markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
+    assert.equal(markers.length, 2);
+    assert.deepEqual(
+      markers.map((marker) => marker.querySelector("button").getAttribute("aria-label")),
+      ["Show 1 tool call", "Show 1 tool call"],
+    );
+    assert.equal(spacer.hasAttribute(HIDDEN), false);
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [true, true]);
+
+    markers[1].querySelector("button").click();
+    await dom.flush();
+    assert.equal(spacer.hasAttribute(HIDDEN), false);
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [true, false]);
+  } finally {
+    dom.cleanup();
+  }
+});
+
+test("keeps all split groups expanded when the API resolves after fallback expansion", async () => {
+  let resolveTimeline;
+  const timelineResult = new Promise((resolve) => { resolveTimeline = resolve; });
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-2"],
+    fetchTimeline: () => timelineResult,
+  });
+  const spacer = dom.window.document.createElement("div");
+  spacer.setAttribute("data-timeline-window-spacer", "");
+  dom.container.insertBefore(spacer, dom.rows[1]);
+  try {
+    await dom.flush();
+    dom.container.querySelector("[data-bb-minus-group] button").click();
+    await dom.flush();
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [false, false]);
+
+    resolveTimeline(timeline([
+      ["tool-1"],
+      ["op:thread-interrupted:manual-stop", "system", "thread-interrupted"],
+      ["tool-2"],
+    ]));
+    await dom.flush();
+
+    const markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
+    assert.equal(markers.length, 2);
+    assert.deepEqual(
+      markers.map((marker) => marker.querySelector("button").getAttribute("aria-expanded")),
+      ["true", "true"],
+    );
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [false, false]);
+
+    markers[1].querySelector("button").click();
+    await dom.flush();
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [false, true]);
+  } finally {
+    dom.cleanup();
+  }
+});
+
+test("preserves a known API boundary when one mounted tool id is missing", async () => {
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-unknown", "tool-3"],
+    fetchTimeline: async () => timeline([
+      ["tool-1"],
+      ["op:thread-interrupted:manual-stop", "system", "thread-interrupted"],
+      ["tool-3"],
+    ]),
+  });
+  const spacer = dom.window.document.createElement("div");
+  spacer.setAttribute("data-timeline-window-spacer", "");
+  dom.container.insertBefore(spacer, dom.rows[2]);
+  try {
+    await dom.flush();
+    const markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
+    assert.equal(markers.length, 3);
+    assert.deepEqual(
+      markers.map((marker) => marker.querySelector("button").getAttribute("aria-label")),
+      ["Show 1 tool call", "Show 1 tool call", "Show 1 tool call"],
+    );
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [true, true, true]);
+    assert.equal(spacer.hasAttribute(HIDDEN), false);
+  } finally {
+    dom.cleanup();
+  }
+});
+
+test("counts an uncached mounted tool row without duplicating its run toggle", async () => {
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-unknown", "tool-2"],
+    fetchTimeline: async () => timeline([["tool-1"], ["tool-2"]]),
+  });
+  try {
+    await dom.flush();
+    const markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
+    assert.equal(markers.length, 1);
+    assert.equal(markers[0].querySelector("button").getAttribute("aria-label"), "Show 3 tool calls");
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [true, true, true]);
+
+    markers[0].querySelector("button").click();
+    await dom.flush();
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [false, false, false]);
+  } finally {
+    dom.cleanup();
+  }
+});
+
+test("does not reopen a collapsed API group when virtualization replaces its first row", async () => {
+  let resolveTimeline;
+  const timelineResult = new Promise((resolve) => { resolveTimeline = resolve; });
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-2"],
+    fetchTimeline: () => timelineResult,
+  });
+  const spacer = dom.window.document.createElement("div");
+  spacer.setAttribute("data-timeline-window-spacer", "");
+  dom.container.insertBefore(spacer, dom.rows[1]);
+  try {
+    await dom.flush();
+    dom.container.querySelector("[data-bb-minus-group] button").click();
+    await dom.flush();
+    resolveTimeline(timeline([
+      ["tool-1"],
+      ["tool-1b"],
+      ["op:thread-interrupted:manual-stop", "system", "thread-interrupted"],
+      ["tool-2"],
+    ]));
+    await dom.flush();
+
+    let markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
+    assert.deepEqual(
+      markers.map((marker) => marker.querySelector("button").getAttribute("aria-expanded")),
+      ["true", "true"],
+    );
+    markers[1].querySelector("button").click();
+    await dom.flush();
+    assert.deepEqual(
+      [...dom.container.querySelectorAll("[data-bb-minus-group] button")].map((button) => button.getAttribute("aria-expanded")),
+      ["true", "false"],
+    );
+
+    const replacement = dom.makeRow("tool-1b");
+    dom.rows[0].replaceWith(replacement);
+    await dom.flush();
+
+    markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
+    assert.deepEqual(
+      markers.map((marker) => marker.querySelector("button").getAttribute("aria-expanded")),
+      ["true", "false"],
+    );
+    assert.equal(replacement.hasAttribute(HIDDEN), false);
+    assert.equal(dom.rows[1].hasAttribute(HIDDEN), true);
+  } finally {
+    dom.cleanup();
+  }
+});
+
+test("does not expand a newly visible API group when virtualization shifts the mounted range", async () => {
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-2"],
+    fetchTimeline: async () => timeline([
+      ["tool-1"],
+      ["op:thread-interrupted:one", "system", "thread-interrupted"],
+      ["tool-2"],
+      ["op:thread-interrupted:two", "system", "thread-interrupted"],
+      ["tool-3"],
+    ]),
+  });
+  try {
+    await dom.flush();
+    let buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
+    assert.equal(buttons.length, 2);
+    buttons[1].click();
+    await dom.flush();
+    assert.deepEqual(buttons.map((button) => button.getAttribute("aria-expanded")), ["false", "true"]);
+
+    dom.rows[0].remove();
+    const newlyVisible = dom.makeRow("tool-3");
+    dom.container.append(newlyVisible);
+    await dom.flush();
+
+    buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
+    assert.equal(buttons.length, 2);
+    assert.deepEqual(buttons.map((button) => button.getAttribute("aria-expanded")), ["true", "false"]);
+    assert.equal(dom.rows[1].hasAttribute(HIDDEN), false);
+    assert.equal(newlyVisible.hasAttribute(HIDDEN), true);
   } finally {
     dom.cleanup();
   }

@@ -9,7 +9,7 @@ type FetchTimeline = (threadId: string) => Promise<TimelineRow[]>;
 
 const HIDDEN = "data-bb-minus-hidden";
 const MARKER = "data-bb-minus-group";
-const NON_TOOL = /^(user|assistant|error|op:thread-provisioning)|:turn(:|$)|kind:(assistant|user)/;
+const NON_TOOL = /^(user|assistant|error|op:(?!reasoning:))|:turn(:|$)|kind:(assistant|user)/;
 const REFETCH_MS = 2000;
 
 const TOGGLE_HTML = `<div class="rounded-md text-muted-foreground w-full">
@@ -80,6 +80,7 @@ export function mountToolGrouping(
   chooseQuote: () => QuoteEntry = pickRandomQuote,
 ): () => void {
   const expanded = new Set<string>();
+  const expandedSplitTransitions = new Set<string>();
   const quoteByGroup = new Map<string, QuoteEntry>();
   const quoteByRow = new Map<string, QuoteEntry>();
   const threads = new Map<string, ThreadRuns>();
@@ -116,18 +117,124 @@ export function mountToolGrouping(
     const threadId = rows[0].dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
     if (threadId === undefined) return null;
     const runs = threads.get(threadId);
-    const ids = rows.filter((row) => row.dataset.timelineRowId !== undefined).map(apiId);
-    const first = runs?.runOf.get(ids[0]);
-    const last = runs?.runOf.get(ids[ids.length - 1]);
-    if (runs === undefined || first === undefined || last === undefined) {
+    if (runs === undefined) {
       refresh(threadId);
       return null;
     }
+    const ids = rows.filter((row) => row.dataset.timelineRowId !== undefined).map(apiId);
+    const knownIds = ids.filter((id) => runs.runOf.has(id));
+    if (knownIds.length === 0) {
+      refresh(threadId);
+      return null;
+    }
+    const first = runs.runOf.get(knownIds[0]);
+    if (first === undefined || knownIds.some((id) => runs.runOf.get(id) !== first)) return null;
     const firstRowId = runs.firstIds[first];
     if (firstRowId === undefined) return null;
-    let n = 0;
-    for (let i = first; i <= last; i++) n += runs.counts[i];
-    return { key: "timeline:" + threadId + ":" + firstRowId, count: n };
+    const unknownRows = rows.filter(
+      (row) => row.dataset.timelineRowId !== undefined && !runs.runOf.has(apiId(row)),
+    );
+    if (unknownRows.length > 0) refresh(threadId);
+    const unknownCount = unknownRows.reduce((sum, row) => sum + domCount(row), 0);
+    return {
+      key: "timeline:" + threadId + ":" + firstRowId,
+      count: runs.counts[first] + unknownCount,
+    };
+  }
+
+  // A virtualization spacer can cover a system row that separates two API runs.
+  // Split the mounted DOM run at that boundary and leave its spacer outside either group.
+  function splitAtApiBoundaries(rows: HTMLElement[]): HTMLElement[][] {
+    const threadId = rows[0].dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
+    if (threadId === undefined) return [rows];
+    const api = threads.get(threadId);
+    if (api === undefined) return [rows];
+
+    const groups: HTMLElement[][] = [];
+    let group: HTMLElement[] = [];
+    let pendingSpacers: HTMLElement[] = [];
+    let openRun: number | undefined;
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      if (row.hasAttribute("data-timeline-window-spacer")) {
+        pendingSpacers.push(row);
+        continue;
+      }
+      const id = row.dataset.timelineRowId;
+      const run = id === undefined ? undefined : api.runOf.get(apiId(row));
+      if (run === undefined) {
+        let nextRun: number | undefined;
+        for (let next = i + 1; next < rows.length; next++) {
+          const candidate = rows[next];
+          if (candidate.hasAttribute("data-timeline-window-spacer")) continue;
+          const candidateId = candidate.dataset.timelineRowId;
+          const candidateRun =
+            candidateId === undefined ? undefined : api.runOf.get(apiId(candidate));
+          if (candidateRun !== undefined) {
+            nextRun = candidateRun;
+            break;
+          }
+        }
+        if (openRun !== undefined && nextRun !== undefined && nextRun !== openRun) {
+          for (const spacer of pendingSpacers) spacer.removeAttribute(HIDDEN);
+          pendingSpacers = [];
+          if (group.length > 0) groups.push(group);
+          group = [];
+          row.removeAttribute(HIDDEN);
+          groups.push([row]);
+        } else {
+          group.push(...pendingSpacers, row);
+          pendingSpacers = [];
+        }
+        continue;
+      }
+      if (openRun !== undefined && run !== openRun) {
+        for (const spacer of pendingSpacers) spacer.removeAttribute(HIDDEN);
+        pendingSpacers = [];
+        if (group.length > 0) groups.push(group);
+        group = [row];
+      } else {
+        group.push(...pendingSpacers, row);
+        pendingSpacers = [];
+      }
+      openRun = run;
+    }
+    if (group.length > 0) groups.push(group);
+    for (const spacer of pendingSpacers) spacer.removeAttribute(HIDDEN);
+
+    if (groups.length > 1) {
+      const firstRow = rows.find((row) => row.dataset.timelineRowId !== undefined);
+      if (firstRow !== undefined) {
+        const fallbackKey = `row:${threadId}:${rowKey(firstRow)}`;
+        // Only migrate an expansion that predates the API mapping. A mounted API group
+        // being open must not expand a newly visible neighbor after virtualization shifts.
+        const wasExpanded = expanded.has(fallbackKey);
+        const groupKeys = groups.map((part) => {
+          const groupFirstRow = part.find((row) => row.dataset.timelineRowId !== undefined)!;
+          const run = api.runOf.get(apiId(groupFirstRow));
+          const groupFirstId = run === undefined ? undefined : api.firstIds[run];
+          return groupFirstId === undefined
+            ? `row:${threadId}:${rowKey(groupFirstRow)}`
+            : `timeline:${threadId}:${groupFirstId}`;
+        });
+        const apiGroupKeys = groups.flatMap((part) => {
+          const mappedRow = part.find((row) => {
+            const id = row.dataset.timelineRowId;
+            return id !== undefined && api.runOf.has(apiId(row));
+          });
+          if (mappedRow === undefined) return [];
+          const run = api.runOf.get(apiId(mappedRow));
+          const firstId = run === undefined ? undefined : api.firstIds[run];
+          return firstId === undefined ? [] : [`timeline:${threadId}:${firstId}`];
+        });
+        const transition = threadId + "\0" + [...new Set(apiGroupKeys)].join("\0");
+        if (!expandedSplitTransitions.has(transition)) {
+          expandedSplitTransitions.add(transition);
+          if (wasExpanded) for (const key of groupKeys) expanded.add(key);
+        }
+      }
+    }
+    return groups.length > 0 ? groups : [rows];
   }
 
   function marker(container: Element, key: string): HTMLElement {
@@ -171,7 +278,7 @@ export function mountToolGrouping(
       if (run.length > 0) runs.push(run);
       for (const el of spacers) el.removeAttribute(HIDDEN);
 
-      for (const rows of runs) {
+      for (const rows of runs.flatMap(splitAtApiBoundaries)) {
         const api = apiRun(rows);
         const calls =
           api?.count ??
@@ -240,5 +347,7 @@ export function mountToolGrouping(
     for (const el of document.querySelectorAll(`[${HIDDEN}]`)) el.removeAttribute(HIDDEN);
     quoteByGroup.clear();
     quoteByRow.clear();
+    expanded.clear();
+    expandedSplitTransitions.clear();
   };
 }
