@@ -1,7 +1,8 @@
 # bb-plugin-minus
 
 A [bb](https://getbb.app) plugin that hides UI elements you do not want to see,
-and can collapse tool calls in the chat into one "Called N tools" row.
+and can collapse tool calls in the chat behind a short Russian quote linked to
+its source.
 
 ## Install
 
@@ -33,10 +34,12 @@ form on that page. Add an element by appending `{ key, label, selectors }` to
 an area. Prefer bb's aria labels and `data-*` attributes over Tailwind classes.
 
 `collapseToolCalls` is not CSS: `group-tools.ts` hides each run of tool and
-thinking rows in the top-level timeline and inserts a "Called N tools" toggle
-copied from bb's "Worked for" row. bb virtualizes the timeline, so N comes
-from `sdk.threads.timeline()` (`kind: "work"` rows), refetched at most every
-2s when unseen rows mount.
+thinking rows in the top-level timeline and inserts a row styled after the native
+"Worked for" row. The row shows a short italic Russian quote, author and source
+link instead of the visible call count; the button still announces the count
+and action to assistive technology. bb virtualizes the timeline, so the count
+comes from `sdk.threads.timeline()` (`kind: "work"` rows), refetched at most
+every 2s when unseen rows mount.
 
 ## License
 

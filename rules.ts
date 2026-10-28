@@ -99,7 +99,7 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
       },
       {
         key: "collapseToolCalls",
-        label: 'Collapse consecutive tool calls into one "Called N tools" row',
+        label: "Collapse consecutive tool calls behind a quote row",
         selectors: [],
       },
       {

@@ -22,7 +22,7 @@ Changes apply in every open window within about a second, without a reload. Keyb
 
 ## Collapse tool calls
 
-One more switch folds each run of consecutive tool calls and thinking rows in the chat into a single "Called N tools" row, styled like bb's own "Worked for" row. Click it to show the original rows again. The count comes from the thread's full timeline, so it stays exact while the turn runs.
+One more switch folds each run of consecutive tool calls and thinking rows in the chat into a single row styled after the native "Worked for" row. It shows an italic Russian quote, author and source link instead of the visible count; the button keeps the count available to screen readers. Click the quote row to show the original calls again. Counts come from the complete thread timeline, so they stay exact while a turn runs.
 
 ## How it works
 

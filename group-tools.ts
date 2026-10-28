@@ -1,7 +1,8 @@
 // Collapses each run of consecutive tool/thinking rows in the top-level thread timeline
-// into one "Called N tools" toggle styled like bb's "Worked for" row. bb owns the rows
-// (React), so this only sets an attribute on them and inserts its own sibling markers.
+// behind one quote toggle styled like bb's "Worked for" row. bb owns the rows (React),
+// so this only sets an attribute on them and inserts its own sibling markers.
 // The timeline is virtualized, so counts come from the timeline API, not mounted rows.
+import { pickRandomQuote, QUOTE_SOURCES, type QuoteEntry } from "./quotes.ts";
 
 type TimelineRow = { id: string; kind: string };
 type FetchTimeline = (threadId: string) => Promise<TimelineRow[]>;
@@ -11,7 +12,20 @@ const MARKER = "data-bb-minus-group";
 const NON_TOOL = /^(user|assistant|error|op:thread-provisioning)|:turn(:|$)|kind:(assistant|user)/;
 const REFETCH_MS = 2000;
 
-const TOGGLE_HTML = `<div class="rounded-md text-muted-foreground w-full"><div class="group/timeline-row"><button type="button" class="items-center gap-1 overflow-hidden text-left text-sm text-muted-foreground transition-colors duration-150 hover:duration-0 hover:text-foreground focus-visible:text-foreground group/toggle cursor-pointer px-2 flex w-full max-w-full justify-start py-0 leading-5"><span class="min-w-0 max-w-full"><span class="inline-flex min-w-0 max-w-full items-center gap-1.5 opacity-40"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true"><path d="M12 8.5L3.12132 17.3787C2.72349 17.7765 2.5 18.3161 2.5 18.8787C2.5 20.0503 3.44975 21 4.62132 21C5.18393 21 5.72349 20.7765 6.12132 20.3787L15 11.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.1207 5.03693L20.3682 9.3197C21.014 9.97093 21.3369 10.2966 21.4435 10.6774C21.5188 10.9467 21.5188 11.2317 21.4435 11.501C21.3369 11.8819 21.014 12.2075 20.3682 12.8587C19.7223 13.51 19.3994 13.8356 19.0216 13.943C18.7546 14.019 18.4719 14.019 18.2048 13.943C17.8271 13.8356 17.5042 13.51 16.8583 12.8587L10.0245 5.96802C8.99015 4.92507 8.47297 4.40359 8.50109 3.94831C8.51495 3.7239 8.60259 3.51054 8.75017 3.34197C9.04956 3 9.78095 3 11.2437 3C12.4209 3 13.0095 3 13.5574 3.16035C13.8406 3.24325 14.1139 3.3574 14.3723 3.50071C14.8721 3.77792 15.2883 4.19759 16.1207 5.03693Z" stroke="currentColor" stroke-width="1.5"/></svg><span class="min-w-0 max-w-full text-sm leading-5 inline-flex items-baseline gap-1 overflow-hidden whitespace-nowrap"><span class="shrink-0 whitespace-pre text-subtle-foreground">Called</span> <span data-count class="shrink-0 whitespace-pre text-muted-foreground tabular-nums"></span></span></span></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none size-3 shrink-0 origin-center text-subtle-foreground/60 transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></button></div></div>`;
+const TOGGLE_HTML = `<div class="rounded-md text-muted-foreground w-full">
+  <div class="group/timeline-row flex min-w-0 items-center gap-1.5">
+    <button type="button" aria-expanded="false" class="items-center gap-1 overflow-hidden text-left text-sm text-muted-foreground transition-colors duration-150 hover:duration-0 hover:text-foreground focus-visible:text-foreground group/toggle cursor-pointer px-2 flex min-w-0 flex-1 max-w-full justify-start py-0 leading-5">
+      <span class="min-w-0 max-w-full">
+        <span class="inline-flex min-w-0 max-w-full items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="size-3.5 shrink-0 text-muted-foreground opacity-40" aria-hidden="true"><path d="M12 8.5L3.12132 17.3787C2.72349 17.7765 2.5 18.3161 2.5 18.8787C2.5 20.0503 3.44975 21 4.62132 21C5.18393 21 5.72349 20.7765 6.12132 20.3787L15 11.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.1207 5.03693L20.3682 9.3197C21.014 9.97093 21.3369 10.2966 21.4435 10.6774C21.5188 10.9467 21.5188 11.2317 21.4435 11.501C21.3369 11.8819 21.014 12.2075 20.3682 12.8587C19.7223 13.51 19.3994 13.8356 19.0216 13.943C18.7546 14.019 18.4719 14.019 18.2048 13.943C17.8271 13.8356 17.5042 13.51 16.8583 12.8587L10.0245 5.96802C8.99015 4.92507 8.47297 4.40359 8.50109 3.94831C8.51495 3.7239 8.60259 3.51054 8.75017 3.34197C9.04956 3 9.78095 3 11.2437 3C12.4209 3 13.0095 3 13.5574 3.16035C13.8406 3.24325 14.1139 3.3574 14.3723 3.50071C14.8721 3.77792 15.2883 4.19759 16.1207 5.03693Z" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span data-quote class="min-w-0 max-w-full truncate text-sm italic leading-5 text-muted-foreground"></span>
+        </span>
+      </span>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none size-3 shrink-0 origin-center text-subtle-foreground/60 transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg>
+    </button>
+    <a data-source class="shrink-0 whitespace-nowrap text-sm leading-5 text-primary hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
+  </div>
+</div>`;
 
 function rowKey(row: HTMLElement): string {
   return (row.dataset.timelineRowId ?? "").replace(/^thr_[a-z0-9]+:/, "");
@@ -38,10 +52,11 @@ function domCount(row: HTMLElement): number {
 }
 
 // API runs: consecutive work rows and reasoning rows; anything else breaks a run.
-type ThreadRuns = { runOf: Map<string, number>; counts: number[] };
+type ThreadRuns = { runOf: Map<string, number>; counts: number[]; firstIds: string[] };
 function indexRuns(rows: TimelineRow[]): ThreadRuns {
   const runOf = new Map<string, number>();
   const counts: number[] = [];
+  const firstIds: string[] = [];
   let open = false;
   for (const row of rows) {
     const tool = row.kind === "work" || (row.kind === "system" && row.id.includes(":op:reasoning:"));
@@ -49,16 +64,24 @@ function indexRuns(rows: TimelineRow[]): ThreadRuns {
       open = false;
       continue;
     }
-    if (!open) counts.push(0);
+    if (!open) {
+      counts.push(0);
+      firstIds.push(row.id);
+    }
     open = true;
     runOf.set(row.id, counts.length - 1);
     if (row.kind === "work") counts[counts.length - 1]++;
   }
-  return { runOf, counts };
+  return { runOf, counts, firstIds };
 }
 
-export function mountToolGrouping(fetchTimeline: FetchTimeline): () => void {
+export function mountToolGrouping(
+  fetchTimeline: FetchTimeline,
+  chooseQuote: () => QuoteEntry = pickRandomQuote,
+): () => void {
   const expanded = new Set<string>();
+  const quoteByGroup = new Map<string, QuoteEntry>();
+  const quoteByRow = new Map<string, QuoteEntry>();
   const threads = new Map<string, ThreadRuns>();
   const lastFetch = new Map<string, number>();
   const inFlight = new Set<string>();
@@ -89,7 +112,7 @@ export function mountToolGrouping(fetchTimeline: FetchTimeline): () => void {
       });
   }
 
-  function apiCount(rows: HTMLElement[]): number | null {
+  function apiRun(rows: HTMLElement[]): { key: string; count: number } | null {
     const threadId = rows[0].dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
     if (threadId === undefined) return null;
     const runs = threads.get(threadId);
@@ -100,9 +123,11 @@ export function mountToolGrouping(fetchTimeline: FetchTimeline): () => void {
       refresh(threadId);
       return null;
     }
+    const firstRowId = runs.firstIds[first];
+    if (firstRowId === undefined) return null;
     let n = 0;
     for (let i = first; i <= last; i++) n += runs.counts[i];
-    return n;
+    return { key: "timeline:" + threadId + ":" + firstRowId, count: n };
   }
 
   function marker(container: Element, key: string): HTMLElement {
@@ -147,21 +172,50 @@ export function mountToolGrouping(fetchTimeline: FetchTimeline): () => void {
       for (const el of spacers) el.removeAttribute(HIDDEN);
 
       for (const rows of runs) {
+        const api = apiRun(rows);
         const calls =
-          apiCount(rows) ??
+          api?.count ??
           rows.reduce((sum, row) => sum + (row.dataset.timelineRowId === undefined ? 0 : domCount(row)), 0);
         if (calls === 0) {
           for (const row of rows) row.removeAttribute(HIDDEN);
           continue;
         }
-        const key = rowKey(rows[0]);
+        const threadId = rows[0].dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0] ?? "unknown";
+        const fallbackKey = `row:${threadId}:${rowKey(rows[0])}`;
+        const key = api?.key ?? fallbackKey;
+        const mountedIds = rows
+          .filter((row) => row.dataset.timelineRowId !== undefined)
+          .map(apiId);
+        const quote =
+          quoteByGroup.get(key) ??
+          quoteByGroup.get(fallbackKey) ??
+          mountedIds.map((id) => quoteByRow.get(id)).find((entry) => entry !== undefined) ??
+          chooseQuote();
+        quoteByGroup.set(key, quote);
+        quoteByGroup.set(fallbackKey, quote);
+        for (const id of mountedIds) quoteByRow.set(id, quote);
+        if (api !== null && expanded.delete(fallbackKey)) expanded.add(key);
         const open = expanded.has(key);
         const el = marker(container, key);
         used.add(el);
-        const text = `${calls} tool${calls === 1 ? "" : "s"}`;
-        const count = el.querySelector<HTMLElement>("[data-count]")!;
-        if (count.textContent !== text) count.textContent = text;
-        el.querySelector("button")!.setAttribute("aria-expanded", String(open));
+        const quoteText = el.querySelector<HTMLElement>("[data-quote]")!;
+        if (quoteText.textContent !== quote.text) quoteText.textContent = quote.text;
+        const quoteId = "bb-minus-quote-" + encodeURIComponent(key);
+        if (quoteText.id !== quoteId) quoteText.id = quoteId;
+        const source = QUOTE_SOURCES[quote.source];
+        const sourceLink = el.querySelector<HTMLAnchorElement>("[data-source]")!;
+        if (sourceLink.textContent !== source.byline) sourceLink.textContent = source.byline;
+        if (sourceLink.href !== source.url) sourceLink.href = source.url;
+        sourceLink.setAttribute(
+          "aria-label",
+          source.credit + ". " + source.title + ". " + quote.locator + ". Russian translation by Minus. Open the source.",
+        );
+        sourceLink.title = source.credit + ". " + source.title + " — " + quote.locator + ". Russian translation by Minus.";
+        const accessibleLabel = (open ? "Hide" : "Show") + " " + calls + " tool call" + (calls === 1 ? "" : "s");
+        const button = el.querySelector<HTMLButtonElement>("button")!;
+        button.setAttribute("aria-label", accessibleLabel);
+        button.setAttribute("aria-describedby", quoteId);
+        button.setAttribute("aria-expanded", String(open));
         el.querySelector<SVGElement>("svg.bb-icon-stroke")!.style.rotate = open ? "90deg" : "";
         if (el.nextElementSibling !== rows[0]) container.insertBefore(el, rows[0]);
         for (const row of rows) {
@@ -184,5 +238,7 @@ export function mountToolGrouping(fetchTimeline: FetchTimeline): () => void {
     style.remove();
     for (const el of document.querySelectorAll(`[${MARKER}]`)) el.remove();
     for (const el of document.querySelectorAll(`[${HIDDEN}]`)) el.removeAttribute(HIDDEN);
+    quoteByGroup.clear();
+    quoteByRow.clear();
   };
 }

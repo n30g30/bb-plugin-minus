@@ -2,6 +2,9 @@
   "name": "bb-plugin-minus",
   "version": "0.2.1",
   "type": "module",
+  "scripts": {
+    "test": "node --experimental-strip-types --test group-tools.test.mjs"
+  },
   "engines": {
     "bb": ">=0.47",
     "bbPluginSdk": ">=0.6.79"
@@ -21,6 +24,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "jsdom": "^29.1.1",
     "typescript": "^5.7.0"
   },
   "description": "Hide bb UI elements you do not want to see.",
