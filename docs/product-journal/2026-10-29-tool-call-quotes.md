@@ -87,4 +87,6 @@ tags: [Minus, plugin, UX]
 
 - На текущих исходниках JUnit: 20 тестов, 0 failures/errors/skipped ([отчёт](/Users/vadikone/.bb/thread-storage/thr_728uus83ee/minus-tests.xml)); `npx tsc --noEmit --pretty false`, `bb plugin build .` и `git diff --check` — PASS. Build включает используемые utility-классы в `dist/app.css`.
 - SHA-256 проверенных исходников: `group-tools.ts` — `eb31e3917e1917bfbc9f8eff80bdbb8f3bba3d31b55500b2a1b43ab30e4504d5`; `group-tools.test.mjs` — `b9bda534319b1caa929fbcef59e9003ec50ac056f7d7f71b37cb71275f69854c`.
-- Живой BB-рендер, computed-контраст темы и фактическое состояние hover/focus не проверены. Кандидат не устанавливался и общий runtime не перезагружался. Изменение находится в локальном diff ветки `bb/minus-tool-call-quotes`; PR #1, который проверяет старую видимую формулировку `Called N tools`, остаётся открытым и не изменялся.
+- Живой BB-рендер, computed-контраст темы и фактическое состояние hover/focus не проверены. Кандидат не устанавливался и общий runtime не перезагружался.
+- Коммит `40fd4afbabed74d610add75c6852e9652eb7e180` опубликован в `vadikhq/bb-plugin-minus:bb/minus-tool-call-quotes`; read-back показал тот же local/remote SHA, а `pr-binding preflight` — `READY` без открытого PR. GitHub Actions workflows в fork и upstream отсутствуют. PR с цитатами пока не создан: требуется согласование точного заголовка и полного описания.
+- PR #1 остаётся открытым на отдельной ветке с проверкой старой видимой формулировки `Called N tools`; он этой работой не изменялся.
