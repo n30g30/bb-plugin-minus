@@ -35,11 +35,14 @@ an area. Prefer bb's aria labels and `data-*` attributes over Tailwind classes.
 
 `collapseToolCalls` is not CSS: `group-tools.ts` hides each run of tool and
 thinking rows in the top-level timeline and inserts a row styled after the native
-"Worked for" row. The row shows a short italic Russian quote, author and source
-link instead of the visible call count; the button still announces the count
-and action to assistive technology. bb virtualizes the timeline, so the count
-comes from `sdk.threads.timeline()` (`kind: "work"` rows), refetched at most
-every 2s when unseen rows mount.
+"Worked for" row. The single-line row shows an italic Russian quote, linked
+author/source, a visible tool count, and the summed runtime across those calls.
+Its text uses BB's muted foreground token; hover and keyboard focus remain
+visible. bb virtualizes the timeline, so counts and runtimes come from
+`sdk.threads.timeline()` (`kind: "work"` rows), including work that is not
+currently mounted. Concurrent calls are added together, so the total can exceed
+the group's wall-clock duration. A manual "Stopped manually" row stays visible
+outside the group and is excluded from both metrics.
 
 ## License
 

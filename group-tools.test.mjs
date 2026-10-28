@@ -12,7 +12,7 @@ function makeRow(window, id) {
   return row;
 }
 
-function mountDom({ rowIds, fetchTimeline, chooseQuote = () => QUOTES[0] }) {
+function mountDom({ rowIds, fetchTimeline, chooseQuote = () => QUOTES[0], clock }) {
   const dom = new JSDOM("<!doctype html><html><head></head><body></body></html>", {
     pretendToBeVisual: true,
     url: "https://bb.local/",
@@ -40,7 +40,7 @@ function mountDom({ rowIds, fetchTimeline, chooseQuote = () => QUOTES[0] }) {
   container.append(...rows);
   list.append(container);
   window.document.body.append(list);
-  const dispose = mountToolGrouping(fetchTimeline, chooseQuote);
+  const dispose = mountToolGrouping(fetchTimeline, chooseQuote, clock);
 
   return {
     window,
@@ -67,11 +67,42 @@ function mountDom({ rowIds, fetchTimeline, chooseQuote = () => QUOTES[0] }) {
 }
 
 function timeline(rows) {
-  return rows.map(([id, kind = "work", operationKind]) => ({
+  return rows.map(([id, kind = "work", operationKind, startedAt = 1000, completedAt = 1300]) => ({
     id: "thr_test:" + id,
     kind,
+    startedAt,
+    ...(kind === "work" ? {
+      completedAt,
+      status: completedAt === null ? "pending" : "completed",
+    } : {}),
     ...(operationKind === undefined ? {} : { operationKind }),
   }));
+}
+
+function makeClock(startAt) {
+  let now = startAt;
+  let nextId = 0;
+  const timers = new Map();
+  return {
+    now: () => now,
+    setTimeout(callback, delayMs) {
+      const id = ++nextId;
+      timers.set(id, { callback, at: now + delayMs });
+      return id;
+    },
+    clearTimeout(id) {
+      timers.delete(id);
+    },
+    advance(milliseconds) {
+      now += milliseconds;
+      for (const [id, timer] of timers) {
+        if (timer.at <= now) {
+          timers.delete(id);
+          timer.callback();
+        }
+      }
+    },
+  };
 }
 
 for (const count of [1, 2, 3]) {
@@ -87,8 +118,21 @@ for (const count of [1, 2, 3]) {
       const button = marker.querySelector("button");
       const quote = marker.querySelector("[data-quote]");
       const source = marker.querySelector("[data-source]");
+      const metrics = marker.querySelector("[data-metrics]");
       assert.equal(marker.textContent.includes("Called"), false);
-      assert.equal(button.getAttribute("aria-label"), "Show " + count + " tool call" + (count === 1 ? "" : "s"));
+      assert.ok(button.classList.contains("text-muted-foreground"));
+      assert.ok(quote.classList.contains("text-muted-foreground"));
+      assert.ok(metrics.classList.contains("text-muted-foreground"));
+      assert.equal(
+        button.getAttribute("aria-label"),
+        "Show " + count + " tool call" + (count === 1 ? "" : "s") + ". Total tool time: " +
+          count * 300 + "ms.",
+      );
+      assert.equal(
+        metrics.textContent,
+        count + " tool" + (count === 1 ? "" : "s") + " · " + count * 300 + "ms",
+      );
+      assert.ok(marker.querySelector("[data-row]").classList.contains("flex-nowrap"));
       assert.equal(button.getAttribute("aria-describedby"), quote.id);
       assert.equal(quote.textContent, QUOTES[0].text);
       assert.ok(quote.classList.contains("italic"));
@@ -97,6 +141,11 @@ for (const count of [1, 2, 3]) {
       assert.equal(source.href, QUOTE_SOURCES[QUOTES[0].source].url);
       assert.equal(source.target, "_blank");
       assert.equal(source.rel, "noopener noreferrer");
+      assert.ok(source.classList.contains("text-muted-foreground"));
+      assert.ok(source.classList.contains("underline"));
+      assert.equal(source.classList.contains("text-primary"), false);
+      assert.ok(button.classList.contains("focus-visible:text-foreground"));
+      assert.ok(source.classList.contains("focus-visible:text-foreground"));
       assert.equal(button.contains(source), false);
       source.dispatchEvent(new dom.window.MouseEvent("click", { bubbles: true, cancelable: true }));
       await dom.flush();
@@ -127,7 +176,10 @@ test("uses the full timeline count when only one tool row is mounted", async () 
   try {
     await dom.flush();
     const marker = dom.container.querySelector("[data-bb-minus-group]");
-    assert.equal(marker.querySelector("button").getAttribute("aria-label"), "Show 3 tool calls");
+    assert.equal(
+      marker.querySelector("button").getAttribute("aria-label"),
+      "Show 3 tool calls. Total tool time: 900ms.",
+    );
     assert.equal(marker.textContent.includes("Called"), false);
     assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
     marker.querySelector("button").click();
@@ -138,14 +190,62 @@ test("uses the full timeline count when only one tool row is mounted", async () 
   }
 });
 
+test("shows the sum of individual tool runtimes rather than group wall time", async () => {
+  const rowIds = ["tool-1", "tool-2"];
+  const dom = mountDom({
+    rowIds,
+    fetchTimeline: async () => timeline([
+      ["tool-1", "work", undefined, 1000, 2500],
+      ["tool-2", "work", undefined, 1500, 3000],
+    ]),
+  });
+  try {
+    await dom.flush();
+    const marker = dom.container.querySelector("[data-bb-minus-group]");
+    const metrics = marker.querySelector("[data-metrics]");
+    assert.equal(metrics.textContent, "2 tools · 3s");
+    assert.ok(metrics.title.includes("parallel calls are added together"));
+    assert.match(marker.querySelector("button").getAttribute("aria-label"), /Total tool time: 3s/);
+  } finally {
+    dom.cleanup();
+  }
+});
+
+test("updates the visible duration while a tool call is pending", async () => {
+  const clock = makeClock(10000);
+  const rowIds = ["tool-1"];
+  let fetchCount = 0;
+  const dom = mountDom({
+    rowIds,
+    clock,
+    fetchTimeline: async () => {
+      fetchCount++;
+      return fetchCount === 1
+        ? timeline([["tool-1", "work", undefined, 10000, null]])
+        : timeline([["tool-1", "work", undefined, 10000, 11500]]);
+    },
+  });
+  try {
+    await dom.flush();
+    const metrics = dom.container.querySelector("[data-metrics]");
+    assert.equal(metrics.textContent, "1 tool · 0ms");
+    clock.advance(2000);
+    await dom.flush();
+    assert.equal(fetchCount, 2);
+    assert.equal(metrics.textContent, "1 tool · 1.5s");
+  } finally {
+    dom.cleanup();
+  }
+});
+
 test("keeps a manual stop visible and outside collapsed tool-call groups", async () => {
   const rowIds = ["tool-1", "op:thread-interrupted:manual-stop", "tool-2"];
   const dom = mountDom({
     rowIds,
     fetchTimeline: async () => timeline([
-      ["tool-1"],
+      ["tool-1", "work", undefined, 1000, 1500],
       ["op:thread-interrupted:manual-stop", "system", "thread-interrupted"],
-      ["tool-2"],
+      ["tool-2", "work", undefined, 1000, 2500],
     ]),
   });
   const stopRow = dom.rows[1];
@@ -154,10 +254,9 @@ test("keeps a manual stop visible and outside collapsed tool-call groups", async
     const assertGroupsAndStop = () => {
       const markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
       assert.equal(markers.length, 2);
-      assert.deepEqual(
-        markers.map((marker) => marker.querySelector("button").getAttribute("aria-label")),
-        ["Show 1 tool call", "Show 1 tool call"],
-      );
+      assert.ok(markers.every((marker) =>
+        marker.querySelector("button").getAttribute("aria-label").startsWith("Show 1 tool call."),
+      ));
       assert.equal(stopRow.textContent, "Stopped manually");
       assert.equal(stopRow.hasAttribute(HIDDEN), false);
     };
@@ -165,6 +264,10 @@ test("keeps a manual stop visible and outside collapsed tool-call groups", async
     assertGroupsAndStop(); // DOM fallback before the timeline API resolves.
     await dom.flush();
     assertGroupsAndStop(); // API-backed grouping keeps the system row as a boundary.
+    assert.deepEqual(
+      [...dom.container.querySelectorAll("[data-metrics]")].map((metrics) => metrics.textContent),
+      ["1 tool · 500ms", "1 tool · 1.5s"],
+    );
 
     const buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
     buttons[0].click();
@@ -203,7 +306,10 @@ test("splits a virtualized tool run at an API interruption boundary", async () =
     await dom.flush();
     let markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
     assert.equal(markers.length, 1);
-    assert.equal(markers[0].querySelector("button").getAttribute("aria-label"), "Show 2 tool calls");
+    assert.equal(
+      markers[0].querySelector("button").getAttribute("aria-label"),
+      "Show 2 tool calls. Total tool time: time unavailable.",
+    );
 
     resolveTimeline(timeline([
       ["tool-1"],
@@ -216,7 +322,10 @@ test("splits a virtualized tool run at an API interruption boundary", async () =
     assert.equal(markers.length, 2);
     assert.deepEqual(
       markers.map((marker) => marker.querySelector("button").getAttribute("aria-label")),
-      ["Show 1 tool call", "Show 1 tool call"],
+      [
+        "Show 1 tool call. Total tool time: 300ms.",
+        "Show 1 tool call. Total tool time: 300ms.",
+      ],
     );
     assert.equal(spacer.hasAttribute(HIDDEN), false);
     assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [true, true]);
@@ -287,7 +396,11 @@ test("preserves a known API boundary when one mounted tool id is missing", async
     assert.equal(markers.length, 3);
     assert.deepEqual(
       markers.map((marker) => marker.querySelector("button").getAttribute("aria-label")),
-      ["Show 1 tool call", "Show 1 tool call", "Show 1 tool call"],
+      [
+        "Show 1 tool call. Total tool time: 300ms.",
+        "Show 1 tool call. Total tool time: time unavailable.",
+        "Show 1 tool call. Total tool time: 300ms.",
+      ],
     );
     assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [true, true, true]);
     assert.equal(spacer.hasAttribute(HIDDEN), false);
@@ -305,7 +418,10 @@ test("counts an uncached mounted tool row without duplicating its run toggle", a
     await dom.flush();
     const markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
     assert.equal(markers.length, 1);
-    assert.equal(markers[0].querySelector("button").getAttribute("aria-label"), "Show 3 tool calls");
+    assert.equal(
+      markers[0].querySelector("button").getAttribute("aria-label"),
+      "Show 3 tool calls. Total tool time: time unavailable.",
+    );
     assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [true, true, true]);
 
     markers[0].querySelector("button").click();

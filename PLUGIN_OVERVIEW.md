@@ -22,7 +22,7 @@ Changes apply in every open window within about a second, without a reload. Keyb
 
 ## Collapse tool calls
 
-One more switch folds each run of consecutive tool calls and thinking rows in the chat into a single row styled after the native "Worked for" row. It shows an italic Russian quote, author and source link instead of the visible count; the button keeps the count available to screen readers. Click the quote row to show the original calls again. Counts come from the complete thread timeline, so they stay exact while a turn runs.
+One more switch folds each run of consecutive tool calls and thinking rows in the chat into a single row styled after the native "Worked for" row. The one-line row shows an italic Russian quote, linked author/source, a visible tool count, and the summed runtime of those calls. Its text uses BB's muted foreground token; hover and keyboard focus remain visible. Click the row to show the original calls again. Counts and runtimes come from the complete thread timeline, so they include virtualized calls and update while a call is running. Concurrent calls are added together, so the total can exceed the group's wall-clock duration. A manual "Stopped manually" row stays visible outside the group and is excluded from both metrics.
 
 ## How it works
 

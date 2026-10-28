@@ -4,8 +4,25 @@
 // The timeline is virtualized, so counts come from the timeline API, not mounted rows.
 import { pickRandomQuote, QUOTE_SOURCES, type QuoteEntry } from "./quotes.ts";
 
-type TimelineRow = { id: string; kind: string };
+type TimelineRow = {
+  id: string;
+  kind: string;
+  startedAt?: number;
+  completedAt?: number | null;
+  status?: string | null;
+};
 type FetchTimeline = (threadId: string) => Promise<TimelineRow[]>;
+type Clock = {
+  now: () => number;
+  setTimeout: (callback: () => void, delayMs: number) => ReturnType<typeof setTimeout>;
+  clearTimeout: (timer: ReturnType<typeof setTimeout>) => void;
+};
+
+const systemClock: Clock = {
+  now: () => Date.now(),
+  setTimeout: (callback, delayMs) => setTimeout(callback, delayMs),
+  clearTimeout: (timer) => clearTimeout(timer),
+};
 
 const HIDDEN = "data-bb-minus-hidden";
 const MARKER = "data-bb-minus-group";
@@ -13,17 +30,14 @@ const NON_TOOL = /^(user|assistant|error|op:(?!reasoning:))|:turn(:|$)|kind:(ass
 const REFETCH_MS = 2000;
 
 const TOGGLE_HTML = `<div class="rounded-md text-muted-foreground w-full">
-  <div class="group/timeline-row flex min-w-0 items-center gap-1.5">
-    <button type="button" aria-expanded="false" class="items-center gap-1 overflow-hidden text-left text-sm text-muted-foreground transition-colors duration-150 hover:duration-0 hover:text-foreground focus-visible:text-foreground group/toggle cursor-pointer px-2 flex min-w-0 flex-1 max-w-full justify-start py-0 leading-5">
-      <span class="min-w-0 max-w-full">
-        <span class="inline-flex min-w-0 max-w-full items-center gap-1.5">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="size-3.5 shrink-0 text-muted-foreground opacity-40" aria-hidden="true"><path d="M12 8.5L3.12132 17.3787C2.72349 17.7765 2.5 18.3161 2.5 18.8787C2.5 20.0503 3.44975 21 4.62132 21C5.18393 21 5.72349 20.7765 6.12132 20.3787L15 11.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.1207 5.03693L20.3682 9.3197C21.014 9.97093 21.3369 10.2966 21.4435 10.6774C21.5188 10.9467 21.5188 11.2317 21.4435 11.501C21.3369 11.8819 21.014 12.2075 20.3682 12.8587C19.7223 13.51 19.3994 13.8356 19.0216 13.943C18.7546 14.019 18.4719 14.019 18.2048 13.943C17.8271 13.8356 17.5042 13.51 16.8583 12.8587L10.0245 5.96802C8.99015 4.92507 8.47297 4.40359 8.50109 3.94831C8.51495 3.7239 8.60259 3.51054 8.75017 3.34197C9.04956 3 9.78095 3 11.2437 3C12.4209 3 13.0095 3 13.5574 3.16035C13.8406 3.24325 14.1139 3.3574 14.3723 3.50071C14.8721 3.77792 15.2883 4.19759 16.1207 5.03693Z" stroke="currentColor" stroke-width="1.5"/></svg>
-          <span data-quote class="min-w-0 max-w-full truncate text-sm italic leading-5 text-muted-foreground"></span>
-        </span>
-      </span>
+  <div data-row class="group/timeline-row flex min-w-0 flex-nowrap items-center gap-1.5">
+    <button type="button" aria-expanded="false" class="group/toggle flex min-w-0 flex-1 max-w-full items-center justify-start gap-1.5 overflow-hidden px-2 py-0 text-left text-sm leading-5 text-muted-foreground transition-colors duration-150 hover:duration-0 hover:text-foreground focus-visible:text-foreground cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="size-3.5 shrink-0 text-muted-foreground opacity-40" aria-hidden="true"><path d="M12 8.5L3.12132 17.3787C2.72349 17.7765 2.5 18.3161 2.5 18.8787C2.5 20.0503 3.44975 21 4.62132 21C5.18393 21 5.72349 20.7765 6.12132 20.3787L15 11.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.1207 5.03693L20.3682 9.3197C21.014 9.97093 21.3369 10.2966 21.4435 10.6774C21.5188 10.9467 21.5188 11.2317 21.4435 11.501C21.3369 11.8819 21.014 12.2075 20.3682 12.8587C19.7223 13.51 19.3994 13.8356 19.0216 13.943C18.7546 14.019 18.4719 14.019 18.2048 13.943C17.8271 13.8356 17.5042 13.51 16.8583 12.8587L10.0245 5.96802C8.99015 4.92507 8.47297 4.40359 8.50109 3.94831C8.51495 3.7239 8.60259 3.51054 8.75017 3.34197C9.04956 3 9.78095 3 11.2437 3C12.4209 3 13.0095 3 13.5574 3.16035C13.8406 3.24325 14.1139 3.3574 14.3723 3.50071C14.8721 3.77792 15.2883 4.19759 16.1207 5.03693Z" stroke="currentColor" stroke-width="1.5"/></svg>
+      <span data-quote class="min-w-0 max-w-full flex-1 truncate text-sm italic leading-5 text-muted-foreground"></span>
+      <span data-metrics class="shrink-0 whitespace-nowrap text-xs leading-5 text-muted-foreground"></span>
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none size-3 shrink-0 origin-center text-subtle-foreground/60 transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg>
     </button>
-    <a data-source class="shrink-0 whitespace-nowrap text-sm leading-5 text-primary hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
+    <a data-source class="min-w-0 shrink truncate whitespace-nowrap text-xs leading-5 text-muted-foreground underline underline-offset-2 hover:text-foreground focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
   </div>
 </div>`;
 
@@ -52,11 +66,20 @@ function domCount(row: HTMLElement): number {
 }
 
 // API runs: consecutive work rows and reasoning rows; anything else breaks a run.
-type ThreadRuns = { runOf: Map<string, number>; counts: number[]; firstIds: string[] };
-function indexRuns(rows: TimelineRow[]): ThreadRuns {
+type ThreadRuns = {
+  runOf: Map<string, number>;
+  counts: number[];
+  firstIds: string[];
+  durationMs: Array<number | null>;
+  pending: boolean[];
+};
+function indexRuns(rows: TimelineRow[], now: number): ThreadRuns {
   const runOf = new Map<string, number>();
   const counts: number[] = [];
   const firstIds: string[] = [];
+  const durationMs: number[] = [];
+  const durationKnown: boolean[] = [];
+  const pending: boolean[] = [];
   let open = false;
   for (const row of rows) {
     const tool = row.kind === "work" || (row.kind === "system" && row.id.includes(":op:reasoning:"));
@@ -67,17 +90,58 @@ function indexRuns(rows: TimelineRow[]): ThreadRuns {
     if (!open) {
       counts.push(0);
       firstIds.push(row.id);
+      durationMs.push(0);
+      durationKnown.push(true);
+      pending.push(false);
     }
     open = true;
     runOf.set(row.id, counts.length - 1);
-    if (row.kind === "work") counts[counts.length - 1]++;
+    if (row.kind === "work") {
+      const index = counts.length - 1;
+      counts[index]++;
+      const startedAt = row.startedAt;
+      const endedAt = row.completedAt ?? (row.status === "pending" ? now : undefined);
+      if (!Number.isFinite(startedAt) || endedAt === undefined) {
+        durationKnown[index] = false;
+      } else {
+        durationMs[index] += Math.max(0, endedAt - startedAt!);
+      }
+      if (row.status === "pending") pending[index] = true;
+    }
   }
-  return { runOf, counts, firstIds };
+  return {
+    runOf,
+    counts,
+    firstIds,
+    durationMs: durationMs.map((duration, index) => durationKnown[index] ? duration : null),
+    pending,
+  };
+}
+
+// The SDK timestamps are milliseconds: 1000ms = 1s, 60s = 1m, and 60m = 1h.
+// One decimal in the seconds range keeps short calls compact at 100ms precision.
+function formatToolTime(durationMs: number | null): string {
+  if (durationMs === null) return "time unavailable";
+  if (durationMs < 1000) return Math.round(durationMs) + "ms";
+  if (durationMs < 60 * 1000) {
+    // Tenths keep the compact tooling row useful for short calls.
+    return new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 }).format(durationMs / 1000) + "s";
+  }
+  const totalSeconds = Math.round(durationMs / 1000);
+  if (totalSeconds < 60 * 60) {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return minutes + "m" + (seconds === 0 ? "" : " " + seconds + "s");
+  }
+  const hours = Math.floor(totalSeconds / (60 * 60));
+  const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+  return hours + "h" + (minutes === 0 ? "" : " " + minutes + "m");
 }
 
 export function mountToolGrouping(
   fetchTimeline: FetchTimeline,
   chooseQuote: () => QuoteEntry = pickRandomQuote,
+  clock: Clock = systemClock,
 ): () => void {
   const expanded = new Set<string>();
   const expandedSplitTransitions = new Set<string>();
@@ -86,6 +150,7 @@ export function mountToolGrouping(
   const threads = new Map<string, ThreadRuns>();
   const lastFetch = new Map<string, number>();
   const inFlight = new Set<string>();
+  const refreshTimers = new Map<string, ReturnType<typeof setTimeout>>();
   let disposed = false;
   const style = document.createElement("style");
   style.textContent = `[${HIDDEN}]{display:none!important}`;
@@ -97,23 +162,41 @@ export function mountToolGrouping(
   };
 
   function refresh(threadId: string) {
-    const since = Date.now() - (lastFetch.get(threadId) ?? 0);
+    const now = clock.now();
+    const last = lastFetch.get(threadId);
+    const since = last === undefined ? REFETCH_MS : now - last;
     if (disposed || inFlight.has(threadId)) return;
     if (since < REFETCH_MS) {
-      setTimeout(() => refresh(threadId), REFETCH_MS - since);
+      if (!refreshTimers.has(threadId)) {
+        const timer = clock.setTimeout(() => {
+          refreshTimers.delete(threadId);
+          refresh(threadId);
+        }, REFETCH_MS - since);
+        refreshTimers.set(threadId, timer);
+      }
       return;
     }
+    const timer = refreshTimers.get(threadId);
+    if (timer !== undefined) {
+      clock.clearTimeout(timer);
+      refreshTimers.delete(threadId);
+    }
     inFlight.add(threadId);
-    lastFetch.set(threadId, Date.now());
+    lastFetch.set(threadId, now);
     fetchTimeline(threadId)
-      .then((rows) => threads.set(threadId, indexRuns(rows)), () => {})
+      .then((rows) => threads.set(threadId, indexRuns(rows, clock.now())), () => {})
       .finally(() => {
         inFlight.delete(threadId);
         schedule();
       });
   }
 
-  function apiRun(rows: HTMLElement[]): { key: string; count: number } | null {
+  function apiRun(rows: HTMLElement[]): {
+    key: string;
+    count: number;
+    durationMs: number | null;
+    pending: boolean;
+  } | null {
     const threadId = rows[0].dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
     if (threadId === undefined) return null;
     const runs = threads.get(threadId);
@@ -129,6 +212,7 @@ export function mountToolGrouping(
     }
     const first = runs.runOf.get(knownIds[0]);
     if (first === undefined || knownIds.some((id) => runs.runOf.get(id) !== first)) return null;
+    if (runs.pending[first]) refresh(threadId);
     const firstRowId = runs.firstIds[first];
     if (firstRowId === undefined) return null;
     const unknownRows = rows.filter(
@@ -139,6 +223,8 @@ export function mountToolGrouping(
     return {
       key: "timeline:" + threadId + ":" + firstRowId,
       count: runs.counts[first] + unknownCount,
+      durationMs: unknownRows.length > 0 ? null : runs.durationMs[first],
+      pending: runs.pending[first],
     };
   }
 
@@ -318,7 +404,21 @@ export function mountToolGrouping(
           source.credit + ". " + source.title + ". " + quote.locator + ". Russian translation by Minus. Open the source.",
         );
         sourceLink.title = source.credit + ". " + source.title + " — " + quote.locator + ". Russian translation by Minus.";
-        const accessibleLabel = (open ? "Hide" : "Show") + " " + calls + " tool call" + (calls === 1 ? "" : "s");
+        const duration = formatToolTime(api?.durationMs ?? null);
+        const metrics = el.querySelector<HTMLElement>("[data-metrics]")!;
+        const visibleCount = calls + " tool" + (calls === 1 ? "" : "s");
+        if (metrics.textContent !== visibleCount + " · " + duration) {
+          metrics.textContent = visibleCount + " · " + duration;
+        }
+        metrics.title = "Total time across individual tool calls; parallel calls are added together.";
+        const accessibleLabel =
+          (open ? "Hide " : "Show ") +
+          calls +
+          " tool call" +
+          (calls === 1 ? "" : "s") +
+          ". Total tool time: " +
+          duration +
+          ".";
         const button = el.querySelector<HTMLButtonElement>("button")!;
         button.setAttribute("aria-label", accessibleLabel);
         button.setAttribute("aria-describedby", quoteId);
@@ -342,6 +442,8 @@ export function mountToolGrouping(
     disposed = true;
     observer.disconnect();
     cancelAnimationFrame(frame);
+    for (const timer of refreshTimers.values()) clock.clearTimeout(timer);
+    refreshTimers.clear();
     style.remove();
     for (const el of document.querySelectorAll(`[${MARKER}]`)) el.remove();
     for (const el of document.querySelectorAll(`[${HIDDEN}]`)) el.removeAttribute(HIDDEN);
