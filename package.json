@@ -18,12 +18,14 @@
     "server": "./server.ts",
     "app": "./app.tsx"
   },
-  "dependencies": {},
   "devDependencies": {
     "@get-bb/plugin-sdk": "0.6.79",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "better-sqlite3": "^12.11.1",
+    "hono": "^4.13.14",
     "jsdom": "^29.1.1",
     "typescript": "^5.7.0"
   },

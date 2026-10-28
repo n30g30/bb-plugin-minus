@@ -260,7 +260,7 @@ export const QUOTES = [
     "source": "dhammapada",
     "locator": "Project Gutenberg plain-text line 120",
     "original": "He who lives without looking for pleasures, his senses well controlled, moderate in his food, faithful and strong, him Mara will certainly not overthrow, any more than the wind throws down a rocky mountain.",
-    "text": "Кого не сбивают чувственные желания, кто владеет собой, умерен и крепок, того не одолеет Мара, как ветер не сдвинет скалу."
+    "text": "Кто не ищет удовольствий, хорошо владеет чувствами, умерен в еде, верен и силён, того Мара не одолеет, как ветер не свалит каменную гору."
   },
   {
     "id": "tao-58d784f4624e",
@@ -316,7 +316,7 @@ export const QUOTES = [
     "source": "tao",
     "locator": "Project Gutenberg plain-text line 1036",
     "original": "All life-increasing arts to evil turn; Where the mind makes the vital breath to burn, (False) is the strength, (and o'er it we should mourn.)",
-    "text": "Когда ум разжигает жизненное дыхание, сила становится ложной и разрушительной."
+    "text": "Все искусства продления жизни оборачиваются злом: когда ум разжигает жизненное дыхание, сила становится ложной, и о ней стоит скорбеть."
   },
   {
     "id": "tao-c072dc7026d5",
@@ -344,7 +344,7 @@ export const QUOTES = [
     "source": "tao",
     "locator": "Project Gutenberg plain-text line 332",
     "original": "When the Great Tao (Way or Method) ceased to be observed, benevolence and righteousness came into vogue. (Then) appeared wisdom and shrewdness, and there ensued great hypocrisy.",
-    "text": "Когда Великий Путь забыли, заговорили о добродетели; за мудростью и хитростью пришло лицемерие."
+    "text": "Когда перестали следовать Великому Пути, вошли в моду человеколюбие и справедливость; затем явились мудрость с хитростью — и пришло великое лицемерие."
   },
   {
     "id": "tao-b018667214c2",
@@ -547,7 +547,7 @@ export const QUOTES = [
     "source": "meditations",
     "locator": "Project Gutenberg plain-text line 4680",
     "original": "To go on straight, whither right and reason directed him, and by so doing to follow God, was the only thing that he did mind, that, his only business and occupation.",
-    "text": "Он стремился идти прямо, куда вели справедливость и разум: в этом видел своё главное дело."
+    "text": "Его единственным делом было идти прямо туда, куда вели справедливость и разум, и тем самым следовать Богу."
   },
   {
     "id": "meditations-7e8b8c05ac79",
@@ -1044,7 +1044,7 @@ export const QUOTES = [
     "source": "walden",
     "locator": "Project Gutenberg plain-text line 2295",
     "original": "If you should ever be betrayed into any of these philanthropies, do not let your left hand know what your right hand does, for it is not worth knowing.",
-    "text": "Если уж возьмёшься за показную благотворительность, пусть левая рука не знает, что делает правая: она не заслуживает внимания."
+    "text": "Если тебя всё же вовлекут в благотворительное дело, пусть левая рука не знает, что делает правая: знать это не стоит."
   },
   {
     "id": "walden-8948ee0b63c4",
@@ -1128,7 +1128,7 @@ export const QUOTES = [
     "source": "walden",
     "locator": "Project Gutenberg plain-text line 10144",
     "original": "If a man is thought-free, fancy-free, imagination-free, that which _is not_ never for a long time appearing _to be_ to him, unwise rulers or reformers cannot fatally interrupt him.",
-    "text": "Если человек свободен от навязчивых мыслей и фантазий, неразумные правители и реформаторы не смогут сломить его."
+    "text": "Если человек свободен от мысли, фантазии и воображения, а несуществующее не может долго казаться ему существующим, неразумные правители и реформаторы не смогут сломить его."
   },
   {
     "id": "walden-22eed7a2081c",
@@ -1184,7 +1184,7 @@ export const QUOTES = [
     "source": "emerson",
     "locator": "Project Gutenberg plain-text line 1314",
     "original": "The soul raised over passion beholds identity and eternal causation, perceives the self-existence of Truth and Right, and calms itself with knowing that all things go well.",
-    "text": "Поднявшись над страстями, душа видит истину и правду и успокаивается, зная: всё идёт своим чередом."
+    "text": "Возвысившись над страстями, душа видит тождество и вечную причинность, созерцает самостоятельное бытие Истины и Права и находит покой в знании, что всё идёт хорошо."
   },
   {
     "id": "emerson-fe710039b527",
@@ -1310,7 +1310,7 @@ export const QUOTES = [
     "source": "selfhelp",
     "locator": "Project Gutenberg plain-text line 10357",
     "original": "Self-discipline and self-control are the beginnings of practical wisdom; and these must have their root in self-respect.",
-    "text": "Самодисциплина и самообладание начинаются с практической мудрости, а коренятся в уважении к себе."
+    "text": "Самодисциплина и самообладание — начало практической мудрости; их корень — уважение к себе."
   },
   {
     "id": "selfhelp-bbe740109335",
