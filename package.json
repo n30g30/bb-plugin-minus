@@ -6,6 +6,9 @@
     "bb": ">=0.47",
     "bbPluginSdk": ">=0.6.79"
   },
+  "scripts": {
+    "test": "node --experimental-strip-types --test group-tools.test.mjs"
+  },
   "bb": {
     "name": "Minus",
     "description": "Hide bb interface elements you never use and collapse tool calls in the chat.",
@@ -15,12 +18,12 @@
     "server": "./server.ts",
     "app": "./app.tsx"
   },
-  "dependencies": {},
   "devDependencies": {
     "@get-bb/plugin-sdk": "0.6.79",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "jsdom": "^29.1.1",
     "typescript": "^5.7.0"
   },
   "description": "Hide bb UI elements you do not want to see.",
