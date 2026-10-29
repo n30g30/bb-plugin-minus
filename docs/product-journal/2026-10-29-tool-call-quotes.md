@@ -144,3 +144,12 @@ tags: [Minus, plugin, UX]
 
 
 Независимый read-only reviewer /root/minus_final_review проверил объединение относительно обоих родителей: P0/P1/P2 не найдены. Подтверждено точное сохранение очереди из upstream, всех новых ключей и возможностей документации. Проверенные хеши group-tools.ts — 76bb2ac6325f063b87f24d1c53d337e5419c3e9bcbf961e4a1f50f83f68d5467, skills/minus/SKILL.md — 02461b5609977aea279f05267c67b5ed143f70c972b36ffa60755f25c48158bb. Последующие правки до commit касаются только этого журнала/evidence; проверенные исходники не менялись.
+
+
+## Согласованные описания PR опубликованы — 2026-10-29
+
+После явного согласования владельцем двух полных текстов обновлены только body [PR #1](https://github.com/n30g30/bb-plugin-minus/pull/1) и [PR #2](https://github.com/n30g30/bb-plugin-minus/pull/2). Заголовки и адресаты не менялись, вложений нет. Согласованные Markdown-файлы переданы дословно через gh pr edit --body-file существующим аккаунтом vadikhq. Независимое чтение GitHub API подтвердило точное равенство каждого body и согласованного файла, включая SHA-256. Это публикация описаний, не merge или установка.
+
+Before/after, проверенные заголовки, SHA публикации и хеши текстов: [PR #1](verification/2026-10-29-pr-descriptions/pr-1.json), [PR #2](verification/2026-10-29-pr-descriptions/pr-2.json); воспроизводимые изменения: [diff #1](verification/2026-10-29-pr-descriptions/pr-1-body.diff), [diff #2](verification/2026-10-29-pr-descriptions/pr-2-body.diff). При необходимости отката использовать сохранённый beforeBody после отдельного согласования редакции; не сбрасывать код или историю Git.
+
+Перед записью подтверждено отсутствие workflows в fork и upstream и отсутствие .github/workflows в текущей исполняемой ревизии. Коннектор отказал в чтении actions/workflows (endpoint не поддержан) и в записи body с HTTP 403 Resource not accessible by integration. После первого отказа записи независимое чтение подтвердило неизменность PR #1; затем использован уже настроенный официальный gh с аккаунтом автора PR. Входы, права и credentials не менялись. Повторная проверка конфликтов показала прежние upstream/main 773143c и feature fbacc44; локальный merge-tree чистый, GitHub MERGEABLE/CLEAN. Новое разрешение конфликтов и повтор тестов при неизменённых исходниках не требовались. Рабочий Minus и общий runtime не затронуты.

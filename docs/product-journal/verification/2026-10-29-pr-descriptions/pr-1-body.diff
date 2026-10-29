@@ -1,0 +1,26 @@
+--- PR-1-before.md
++++ PR-1-approved.md
+@@ -1,11 +1,15 @@
+-Minus already collapses consecutive tool calls into one row in BB chat. This PR preserves that behavior with DOM regression tests for the “Called 1 tool”, “Called 2 tools”, and “Called 3 tools” labels, verifies expanding and collapsing every mounted row, and covers a virtualized list. User-visible behavior does not change.
++Minus users keep the existing collapsed tool-call row unchanged. These regression tests protect the “Called 1 tool”, “Called 2 tools”, and “Called 3 tools” labels, expansion and collapse of every mounted row, and the count for virtualized calls.
+ 
+ ## Changes
+-- Extract the label formatter and use it when rendering the collapsed row.
+-- Add DOM tests for labels, all mounted rows, and the virtualized-list case.
++- Extract the label formatter and exercise the actual DOM behavior.
++- Add four regression cases for mounted groups and virtualization.
++- Declare the SDK’s optional type peers as development dependencies so the ordinary strict TypeScript check also works after a clean dependency install. The SDK pin stays at 0.6.79.
+ 
+-## Verification
+-- `npm test` — 4 passing DOM tests.
+-- `bb plugin build` — passed.
+-- `npx tsc --noEmit --skipLibCheck` — passed.
+-- `npx tsc --noEmit` reported missing SDK peer type modules `better-sqlite3` and `hono`.
++## Validation
++- Four DOM tests pass after a clean npm install from the lockfile.
++- `tsc --noEmit --pretty false` passes with `skipLibCheck: false`.
++- `bb plugin build .` and `git diff --check` pass.
++- Independent review found no remaining blocker in the dependency fix.
++
++## Scope
++This PR retains the existing label behavior. PR #2 adds quotes and has its own tests; do not merge the two test-file versions without reconciling their expectations. No plugin installation or runtime reload was performed. GitHub Actions is not configured; these are local checks.
