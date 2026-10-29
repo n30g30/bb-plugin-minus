@@ -1,18 +1,20 @@
 ## What you get
 
-Twenty-seven switches in Settings, one per element, all off by default:
+Thirty switches in Settings, one per element, all off by default:
 
 - The padding and rounded corners around the workbench in the macOS app
+- Sidebar projects that have no threads
 - Back and forward buttons
 - Left sidebar toggle and right panel toggle
 - The "..." buttons in the sidebar footer, next to the thread title, and on sidebar thread rows
 - The "Open in ..." app menu in the thread header
-- The chevron that collapses the prompt box
+- The chevron that collapses the prompt box, and its placeholder text
 - Plus one switch that opens the message queue collapsed instead of expanded
 - The "x" close button and the "Commit" button in the thread title bar
 - Under the prompt box: project folder, checkout, branch, new thread button, and context fill level
 - In the prompt box: the "+" button, model selector, provider icon, voice input button, and send/stop buttons (Enter still sends)
 - The copy, edit, side chat and "..." actions that appear when you hover a message
+- The "Steer" label above messages that steered a running turn
 - The wrap and copy buttons on code blocks
 - The message navigator on the right edge of the chat
 - Thinking rows in the chat

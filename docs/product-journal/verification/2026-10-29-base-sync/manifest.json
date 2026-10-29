@@ -1,0 +1,16 @@
+{
+  "headBefore": "1365af0d1d048b6a6e3a4af534b54cf3d0a059da",
+  "baseMerged": "773143cb1e980ebe461f8e6915ccab3bdbc29c1a",
+  "sourceHashes": {
+    "group-tools.ts": "76bb2ac6325f063b87f24d1c53d337e5419c3e9bcbf961e4a1f50f83f68d5467",
+    "group-tools.test.mjs": "0bd26f6d5ce18e211529dd209b2bbd9bb734592ee3de53566b6f4acbfdf3ee18",
+    "skills/minus/SKILL.md": "02461b5609977aea279f05267c67b5ed143f70c972b36ffa60755f25c48158bb",
+    "collapse-queue.ts": "201442caf3305c63898f02956cfd46787e9c611b9a60d7349a9c794787214570",
+    "rules.ts": "5687353a3bbffd32939a556df619f1a247b934939050508dc8d4f59b2dd855e8"
+  },
+  "tests": 23,
+  "browserCases": 12,
+  "sourceChange": "upstream data-minus-icon marker only; grouping logic and quote-row styles unchanged",
+  "runtimeChanged": false,
+  "kind": "isolated headless Chromium fixture with actual merged module and BB 0.48.0 CSS"
+}

@@ -37,6 +37,14 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
         selectors: ['button[data-sidebar="trigger"]'],
       },
       {
+        // An empty group renders a "No threads" placeholder row instead of a thread section.
+        key: "hideEmptyProjects",
+        label: "Hide projects with no threads",
+        selectors: [
+          '[data-sidebar-sticky-group]:has(> .mt-1 > div > svg[data-icon="MessageSquare"]):not(:has([data-sidebar-sticky-section]))',
+        ],
+      },
+      {
         key: "hideThreadIcons",
         label: "Hide provider icons on thread rows",
         selectors: ["[data-sidebar-thread-provider]"],
@@ -45,6 +53,9 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
         key: "hideThreadRowMore",
         label: 'Hide "..." on thread rows',
         selectors: ["[data-thread-actions-trigger]"],
+        // bb reserves a 28px slot at the row's end for the status glyph and hover actions.
+        // With no glyph, collapse it so the title runs to the edge; hover actions still overlay it.
+        css: "[data-sidebar-thread-trailing]:not(:has([data-sidebar-thread-trailing-indicator])) > span > span:has(> .bb-sidebar-hover-actions){width:0!important}",
       },
       {
         key: "hideFooterMore",
@@ -92,6 +103,15 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
   {
     title: "Chat",
     rules: [
+      {
+        // The label row above a steering message; drop the whole row when the label is its only item.
+        key: "hideSteerLabel",
+        label: 'Hide "Steer" label on steering messages',
+        selectors: [
+          '.group\\/message > div:has(> span:only-child > svg[data-icon="ArrowTurnForward"])',
+          '.group\\/message span:has(> svg[data-icon="ArrowTurnForward"])',
+        ],
+      },
       {
         key: "hideThinking",
         label: "Hide thinking",
@@ -141,6 +161,12 @@ export const AREAS: readonly { title: string; rules: readonly Rule[] }[] = [
         key: "hidePromptCollapse",
         label: "Hide collapse chevron",
         selectors: ['button[aria-label="Collapse prompt box"]'],
+      },
+      {
+        key: "hidePromptPlaceholder",
+        label: "Hide placeholder text",
+        selectors: [],
+        css: "[data-promptbox] [data-placeholder]::before{content:none!important}",
       },
       {
         key: "hidePromptPlus",

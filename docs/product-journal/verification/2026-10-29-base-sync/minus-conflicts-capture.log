@@ -1,0 +1,20 @@
+{
+  "url": "http://127.0.0.1:58031/",
+  "method": "isolated headless Chromium",
+  "browser": "Chromium 143.0.7499.4",
+  "deviceScaleFactor": 1,
+  "captures": [
+    {
+      "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-conflicts-captures/merged-1280x800.png",
+      "viewport": "1280x800",
+      "bytes": 29147,
+      "sha256": "a848a95a9561992fe856b99d72903359a400d7dbd0c9d3387101f57a4db0c9dc"
+    },
+    {
+      "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-conflicts-captures/merged-390x844.png",
+      "viewport": "390x844",
+      "bytes": 21954,
+      "sha256": "253c93aede061c5b2bde319f4adca43bf92dc246ba7d055e270b83d2446ce556"
+    }
+  ]
+}
