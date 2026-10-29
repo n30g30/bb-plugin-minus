@@ -421,14 +421,18 @@ export function mountToolGrouping(
         const quoteId = "bb-minus-quote-" + encodeURIComponent(key);
         if (quoteText.id !== quoteId) quoteText.id = quoteId;
         const source = QUOTE_SOURCES[quote.source];
+        const sourceLocator = quote.locator.replace(
+          /^Project Gutenberg plain-text line (\d+)$/,
+          "Строка $1 в тексте Project Gutenberg",
+        );
         const sourceLink = el.querySelector<HTMLAnchorElement>("[data-source]")!;
         if (sourceLink.textContent !== source.byline) sourceLink.textContent = source.byline;
         if (sourceLink.href !== source.url) sourceLink.href = source.url;
         sourceLink.setAttribute(
           "aria-label",
-          source.credit + ". " + source.title + ". " + quote.locator + ". Russian translation by Minus. Open the source.",
+          source.credit + ". «" + source.title + "». " + sourceLocator + ". Русский перевод Minus. Открыть источник.",
         );
-        sourceLink.title = source.credit + ". " + source.title + " — " + quote.locator + ". Russian translation by Minus.";
+        sourceLink.title = source.credit + ". «" + source.title + "». " + sourceLocator + ". Русский перевод Minus.";
         const duration = formatToolTime(api?.durationMs ?? null);
         const metrics = el.querySelector<HTMLElement>("[data-metrics]")!;
         const visibleCount = calls + " tool" + (calls === 1 ? "" : "s");

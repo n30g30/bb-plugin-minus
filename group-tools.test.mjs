@@ -149,7 +149,7 @@ for (const count of [1, 2, 3]) {
       source.dispatchEvent(new dom.window.MouseEvent("click", { bubbles: true, cancelable: true }));
       await dom.flush();
       assert.equal(button.getAttribute("aria-expanded"), "false");
-      assert.ok(source.getAttribute("aria-label").includes("Russian translation by Minus"));
+      assert.ok(source.getAttribute("aria-label").includes("Русский перевод Minus"));
       assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), rowIds.map(() => true));
 
       button.click();

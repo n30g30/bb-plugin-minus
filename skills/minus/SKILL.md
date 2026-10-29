@@ -23,3 +23,5 @@ gray on hover and focus, with a visible keyboard focus ring. Quotes are curated
 to read as self-contained thoughts. Parallel calls contribute their individual runtimes to the sum;
 the manual "Stopped manually" row stays separate and is not counted.
 Users can also flip the settings in Settings → Plugins → Minus.
+
+Author names and work titles in the visible source link are shown in Russian. The complete link label wraps with the chat width; the original source URL stays unchanged.

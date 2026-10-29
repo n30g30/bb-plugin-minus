@@ -2,52 +2,60 @@
 // Each record keeps its original excerpt and plain-text line locator for review.
 export const QUOTE_SOURCES = {
   "dhammapada": {
-    "byline": "Dhammapada · Müller",
-    "credit": "Buddhist canonical text, translated from Pali by F. Max Müller",
-    "title": "Dhammapada, a Collection of Verses; Being One of the Canonical Books of the Buddhists",
-    "url": "https://www.gutenberg.org/ebooks/2017"
+    "byline": "Буддийский канон · «Дхаммапада»",
+    "credit": "Буддийский канон; английский перевод с пали Фридриха Макса Мюллера",
+    "title": "Дхаммапада",
+    "url": "https://www.gutenberg.org/ebooks/2017",
+    "originalTitle": "Dhammapada, a Collection of Verses; Being One of the Canonical Books of the Buddhists"
   },
   "tao": {
-    "byline": "Laozi · Tao",
-    "credit": "Laozi, translated by James Legge",
-    "title": "The Tao Teh King, or the Tao and its Characteristics",
-    "url": "https://www.gutenberg.org/ebooks/216"
+    "byline": "Лао-цзы · «Дао дэ цзин»",
+    "credit": "Лао-цзы; английский перевод Джеймса Легга",
+    "title": "Дао дэ цзин",
+    "url": "https://www.gutenberg.org/ebooks/216",
+    "originalTitle": "The Tao Teh King, or the Tao and its Characteristics"
   },
   "meditations": {
-    "byline": "Marcus · Meditations",
-    "credit": "Marcus Aurelius, translated by George Long",
-    "title": "Meditations",
-    "url": "https://www.gutenberg.org/ebooks/2680"
+    "byline": "Марк Аврелий · «Наедине с собой»",
+    "credit": "Марк Аврелий; английский перевод Джорджа Лонга",
+    "title": "Наедине с собой (Размышления)",
+    "url": "https://www.gutenberg.org/ebooks/2680",
+    "originalTitle": "Meditations"
   },
   "analects": {
-    "byline": "Confucius · Analects",
-    "credit": "Confucius, translated by James Legge",
-    "title": "The Analects of Confucius (from the Chinese Classics)",
-    "url": "https://www.gutenberg.org/ebooks/3330"
+    "byline": "Конфуций · «Беседы и суждения»",
+    "credit": "Конфуций; английский перевод Джеймса Легга",
+    "title": "Лунь юй (Беседы и суждения)",
+    "url": "https://www.gutenberg.org/ebooks/3330",
+    "originalTitle": "The Analects of Confucius (from the Chinese Classics)"
   },
   "franklin": {
-    "byline": "Franklin · Autobiography",
-    "credit": "Benjamin Franklin",
-    "title": "Autobiography of Benjamin Franklin",
-    "url": "https://www.gutenberg.org/ebooks/20203"
+    "byline": "Бенджамин Франклин · «Автобиография»",
+    "credit": "Бенджамин Франклин",
+    "title": "Автобиография",
+    "url": "https://www.gutenberg.org/ebooks/20203",
+    "originalTitle": "Autobiography of Benjamin Franklin"
   },
   "walden": {
-    "byline": "Thoreau · Walden",
-    "credit": "Henry David Thoreau",
-    "title": "Walden, and On The Duty Of Civil Disobedience",
-    "url": "https://www.gutenberg.org/ebooks/205"
+    "byline": "Генри Дэвид Торо · «Уолден»",
+    "credit": "Генри Дэвид Торо",
+    "title": "Уолден, или Жизнь в лесу",
+    "url": "https://www.gutenberg.org/ebooks/205",
+    "originalTitle": "Walden, and On The Duty Of Civil Disobedience"
   },
   "emerson": {
-    "byline": "Emerson · Essays",
-    "credit": "Ralph Waldo Emerson",
-    "title": "Essays — First Series",
-    "url": "https://www.gutenberg.org/ebooks/2944"
+    "byline": "Ральф Уолдо Эмерсон · «Эссе»",
+    "credit": "Ральф Уолдо Эмерсон",
+    "title": "Эссе. Первая серия",
+    "url": "https://www.gutenberg.org/ebooks/2944",
+    "originalTitle": "Essays — First Series"
   },
   "selfhelp": {
-    "byline": "Smiles · Self Help",
-    "credit": "Samuel Smiles",
-    "title": "Self Help; with Illustrations of Conduct and Perseverance",
-    "url": "https://www.gutenberg.org/ebooks/935"
+    "byline": "Сэмюэл Смайлс · «Самопомощь»",
+    "credit": "Сэмюэл Смайлс",
+    "title": "Самопомощь: примеры поведения и настойчивости",
+    "url": "https://www.gutenberg.org/ebooks/935",
+    "originalTitle": "Self Help; with Illustrations of Conduct and Perseverance"
   }
 } as const;
 

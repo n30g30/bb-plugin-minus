@@ -1,0 +1,72 @@
+{
+  "target": "group-tools.ts",
+  "targetSlug": "group-tools-ts",
+  "ignoreList": "not present",
+  "detectorMode": "Non-HTML TypeScript regex pattern matching, not browser rendering",
+  "detectorExitCode": 0,
+  "detectorPrimaryFindings": 0,
+  "detectorAdvisories": 0,
+  "sources": [
+    {
+      "key": "dhammapada",
+      "byline": "Буддийский канон · «Дхаммапада»",
+      "urlUnchanged": true,
+      "originalTitlePreserved": true,
+      "russianDisplay": true
+    },
+    {
+      "key": "tao",
+      "byline": "Лао-цзы · «Дао дэ цзин»",
+      "urlUnchanged": true,
+      "originalTitlePreserved": true,
+      "russianDisplay": true
+    },
+    {
+      "key": "meditations",
+      "byline": "Марк Аврелий · «Наедине с собой»",
+      "urlUnchanged": true,
+      "originalTitlePreserved": true,
+      "russianDisplay": true
+    },
+    {
+      "key": "analects",
+      "byline": "Конфуций · «Беседы и суждения»",
+      "urlUnchanged": true,
+      "originalTitlePreserved": true,
+      "russianDisplay": true
+    },
+    {
+      "key": "franklin",
+      "byline": "Бенджамин Франклин · «Автобиография»",
+      "urlUnchanged": true,
+      "originalTitlePreserved": true,
+      "russianDisplay": true
+    },
+    {
+      "key": "walden",
+      "byline": "Генри Дэвид Торо · «Уолден»",
+      "urlUnchanged": true,
+      "originalTitlePreserved": true,
+      "russianDisplay": true
+    },
+    {
+      "key": "emerson",
+      "byline": "Ральф Уолдо Эмерсон · «Эссе»",
+      "urlUnchanged": true,
+      "originalTitlePreserved": true,
+      "russianDisplay": true
+    },
+    {
+      "key": "selfhelp",
+      "byline": "Сэмюэл Смайлс · «Самопомощь»",
+      "urlUnchanged": true,
+      "originalTitlePreserved": true,
+      "russianDisplay": true
+    }
+  ],
+  "quotesUnchanged": 73,
+  "sourceHashes": {
+    "group-tools.ts": "35eae0cb7d82255f95bb314655e39aec9d8e0446e077cd2a24b43883921047d9",
+    "quotes.ts": "f0602bcffd488c315c68af1a0ab4adce84dccd4cfa35bbfae68f67744bd8806a"
+  }
+}

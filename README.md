@@ -45,6 +45,8 @@ currently mounted. Concurrent calls are added together, so the total can exceed
 the group's wall-clock duration. A manual "Stopped manually" row stays visible
 outside the group and is excluded from both metrics.
 
+Author names and work titles in the visible source link are shown in Russian. The complete link label wraps with the chat width; the original source URL stays unchanged.
+
 ## License
 
 MIT
