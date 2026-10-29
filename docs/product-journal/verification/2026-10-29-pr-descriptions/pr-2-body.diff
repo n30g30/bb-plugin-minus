@@ -1,10 +1,9 @@
 --- PR-2-before.md
 +++ PR-2-approved.md
-@@ -1,12 +1,17 @@
+@@ -1 +1 @@
 -With the Minus plugin enabled, people who collapse consecutive tool calls can scan each group in one muted line with a short Russian quote, its linked author and source, the number of calls, and their summed duration. They can expand the row to inspect the original calls. A manually stopped call stays visible outside the group and is excluded from both metrics.
 +With Minus enabled, people who collapse consecutive tool calls can scan each group in one muted line with a short Russian quote, its linked author and source, the number of calls, and their summed duration. They can expand the row to inspect the original calls. Manual stops stay visible outside the group, and timeline refreshes or scrolling preserve the user’s latest expand/collapse choice.
- 
- ## Implementation
+@@ -4,3 +4,4 @@
 -- Add a local collection of Russian quotes with links to their sources; displaying a quote does not make a network request.
 -- Show the quote, author/source, call count, and summed per-call duration in the collapsed row, including calls outside the mounted DOM.
 -- Keep `Stopped manually` separate from grouping and metrics. Concurrent calls contribute individual durations, so the sum can exceed wall-clock time.
@@ -12,8 +11,7 @@
 +- Count and sum individual tool durations from the complete timeline, including virtualized calls. Parallel durations are added together and may exceed wall-clock time.
 +- Keep `Stopped manually` outside grouping and metrics. When the timeline is unavailable, do not group across an unverified virtualization boundary.
 +- Preserve the latest explicit disclosure choice across fallback/API changes, group splits and merges, and returning virtualized rows.
- 
- ## Validation
+@@ -9,4 +10,8 @@
 -- 20 DOM tests pass, including mounted groups of 1, 2, and 3 calls, expand/collapse, virtualization, and manual interruption.
 -- `npx tsc --noEmit --pretty false` passes.
 -- `bb plugin build .` passes.
