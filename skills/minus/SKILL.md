@@ -17,7 +17,9 @@ Keys: `hideWindowFrame` (macOS app workbench padding and rounded corners), `hide
 `hideOpenIn` (⌘O still opens the default app), `hideCommit`, `collapseQueue` (queue starts collapsed), `hidePromptCollapse`, `hidePromptPlaceholder`, `hideClosePane`, `hideComposerFolder`, `hideComposerCheckout`, `hideComposerBranch`, `hideComposerNewThread`, `hideComposerContext`, `hidePromptPlus`, `hideModelSelector`, `hidePromptProviderIcon`, `hideMic`, `hideSend` (send, send options and stop; Enter still sends), `hideMessageActions` (copy/edit/side chat/"..." under messages), `hideSteerLabel`, `hideCodeBlockActions` (wrap/copy on code blocks), `hideMessageNav` (the jump-to-message rail), `hideThinking`, `hideThreadIcons`, `collapseToolCalls` (groups each run of tool/thinking rows behind a short Russian quote with its source link; the count and expand/collapse action remain accessible).
 
 When `collapseToolCalls` is enabled, the collapsed row keeps the Russian quote,
-author/source link, visible tool count, and summed tool runtime together in one
-muted line. Parallel calls contribute their individual runtimes to the sum;
+author/source link, visible tool count, and summed tool runtime in a muted
+summary. Its text wraps as the chat narrows; the quote, metrics and source stay
+gray on hover and focus, with a visible keyboard focus ring. Quotes are curated
+to read as self-contained thoughts. Parallel calls contribute their individual runtimes to the sum;
 the manual "Stopped manually" row stays separate and is not counted.
 Users can also flip the settings in Settings → Plugins → Minus.
