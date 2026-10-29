@@ -1,0 +1,14 @@
+{
+  "base": "e12d900b35925c454d92d223a1ff21811d757fad",
+  "hashes": {
+    "group-tools.ts": "ee3f1adb8e2b166e64cc52ad56d47508cb9e955be96f337a44e1f3e1bb59ca34",
+    "group-tools.test.mjs": "0bd26f6d5ce18e211529dd209b2bbd9bb734592ee3de53566b6f4acbfdf3ee18",
+    "quotes.ts": "4ce3fd8010d042b35b6d675a5db7518c642735cb76c1b4cf81b30dbd111e7574"
+  },
+  "tests": 23,
+  "browserCases": 12,
+  "bb": "0.48.0",
+  "typeSdkPin": "0.6.79",
+  "artifactSdk": "0.6.94",
+  "kind": "isolated Chromium fixture of actual modules and BB CSS; candidate not installed"
+}

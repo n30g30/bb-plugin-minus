@@ -144,7 +144,10 @@ export function mountToolGrouping(
   clock: Clock = systemClock,
 ): () => void {
   const expanded = new Set<string>();
-  const expandedSplitTransitions = new Set<string>();
+  const groupKeyByRow = new Map<string, string>();
+  // Explicit user choices are ordered so a returning row cannot revive an older choice.
+  const disclosureChoices = new Map<string, { revision: number; open: boolean }>();
+  let disclosureRevision = 0;
   const quoteByGroup = new Map<string, QuoteEntry>();
   const quoteByRow = new Map<string, QuoteEntry>();
   const threads = new Map<string, ThreadRuns>();
@@ -184,7 +187,13 @@ export function mountToolGrouping(
     inFlight.add(threadId);
     lastFetch.set(threadId, now);
     fetchTimeline(threadId)
-      .then((rows) => threads.set(threadId, indexRuns(rows, clock.now())), () => {})
+      .then(
+        (rows) => threads.set(threadId, indexRuns(rows, clock.now())),
+        () => {
+          // A failed refresh cannot prove that a spacer does not hide a new run boundary.
+          threads.delete(threadId);
+        },
+      )
       .finally(() => {
         inFlight.delete(threadId);
         schedule();
@@ -288,38 +297,6 @@ export function mountToolGrouping(
     if (group.length > 0) groups.push(group);
     for (const spacer of pendingSpacers) spacer.removeAttribute(HIDDEN);
 
-    if (groups.length > 1) {
-      const firstRow = rows.find((row) => row.dataset.timelineRowId !== undefined);
-      if (firstRow !== undefined) {
-        const fallbackKey = `row:${threadId}:${rowKey(firstRow)}`;
-        // Only migrate an expansion that predates the API mapping. A mounted API group
-        // being open must not expand a newly visible neighbor after virtualization shifts.
-        const wasExpanded = expanded.has(fallbackKey);
-        const groupKeys = groups.map((part) => {
-          const groupFirstRow = part.find((row) => row.dataset.timelineRowId !== undefined)!;
-          const run = api.runOf.get(apiId(groupFirstRow));
-          const groupFirstId = run === undefined ? undefined : api.firstIds[run];
-          return groupFirstId === undefined
-            ? `row:${threadId}:${rowKey(groupFirstRow)}`
-            : `timeline:${threadId}:${groupFirstId}`;
-        });
-        const apiGroupKeys = groups.flatMap((part) => {
-          const mappedRow = part.find((row) => {
-            const id = row.dataset.timelineRowId;
-            return id !== undefined && api.runOf.has(apiId(row));
-          });
-          if (mappedRow === undefined) return [];
-          const run = api.runOf.get(apiId(mappedRow));
-          const firstId = run === undefined ? undefined : api.firstIds[run];
-          return firstId === undefined ? [] : [`timeline:${threadId}:${firstId}`];
-        });
-        const transition = threadId + "\0" + [...new Set(apiGroupKeys)].join("\0");
-        if (!expandedSplitTransitions.has(transition)) {
-          expandedSplitTransitions.add(transition);
-          if (wasExpanded) for (const key of groupKeys) expanded.add(key);
-        }
-      }
-    }
     return groups.length > 0 ? groups : [rows];
   }
 
@@ -331,17 +308,37 @@ export function mountToolGrouping(
     el.innerHTML = TOGGLE_HTML;
     el.querySelector("button")!.addEventListener("click", () => {
       if (!expanded.delete(key)) expanded.add(key);
+      disclosureChoices.set(key, { revision: ++disclosureRevision, open: expanded.has(key) });
       schedule();
     });
     return el;
   }
 
+  function hasStableTimelineForSpacer(left: HTMLElement, right: HTMLElement): boolean {
+    const threadId = left.dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
+    const rightThreadId = right.dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
+    if (
+      threadId === undefined ||
+      threadId !== rightThreadId ||
+      inFlight.has(threadId)
+    ) return false;
+    const runs = threads.get(threadId);
+    return (
+      runs !== undefined &&
+      !runs.pending.some(Boolean) &&
+      runs.runOf.has(apiId(right))
+    );
+  }
+
   function pass() {
     frame = 0;
+    // Snapshot before rendering so splitting a group can migrate every visible part.
+    const previousGroupByRow = new Map(groupKeyByRow);
+    const previousChoices = new Map(disclosureChoices);
     const used = new Set<Element>();
     for (const container of document.querySelectorAll("[data-timeline-items]")) {
       if (container.closest("[data-timeline-row-list]")?.getAttribute("data-timeline-row-list") !== "top-level") continue;
-      // Virtualization spacers inside a run stand for unmounted tool rows: they join the run.
+      // Join across a spacer only when the current API maps both mounted rows to the same run.
       const runs: HTMLElement[][] = [];
       let run: HTMLElement[] = [];
       let spacers: HTMLElement[] = [];
@@ -352,6 +349,16 @@ export function mountToolGrouping(
           continue;
         }
         if (child.dataset.timelineRowId !== undefined && isToolRow(child)) {
+          if (
+            run.length > 0 &&
+            spacers.length > 0 &&
+            !hasStableTimelineForSpacer(run[run.length - 1], child)
+          ) {
+            runs.push(run);
+            run = [];
+            for (const spacer of spacers) spacer.removeAttribute(HIDDEN);
+            spacers = [];
+          }
           run.push(...spacers, child);
           spacers = [];
           continue;
@@ -387,12 +394,31 @@ export function mountToolGrouping(
         quoteByGroup.set(key, quote);
         quoteByGroup.set(fallbackKey, quote);
         for (const id of mountedIds) quoteByRow.set(id, quote);
-        if (api !== null && expanded.delete(fallbackKey)) expanded.add(key);
+        const previousKeys = mountedIds.flatMap((id) => {
+          const previous = previousGroupByRow.get(id);
+          return previous === undefined ? [] : [previous];
+        });
+        if (previousKeys.some((previous) => previous !== key)) {
+          let latestChoice = previousChoices.get(key);
+          for (const previous of previousKeys) {
+            const choice = previousChoices.get(previous);
+            if (choice !== undefined && (latestChoice === undefined || choice.revision > latestChoice.revision)) {
+              latestChoice = choice;
+            }
+          }
+          if (latestChoice !== undefined) {
+            if (latestChoice.open) expanded.add(key);
+            else expanded.delete(key);
+            disclosureChoices.set(key, latestChoice);
+          }
+        }
+        for (const id of mountedIds) groupKeyByRow.set(id, key);
         const open = expanded.has(key);
         const el = marker(container, key);
         used.add(el);
         const quoteText = el.querySelector<HTMLElement>("[data-quote]")!;
         if (quoteText.textContent !== quote.text) quoteText.textContent = quote.text;
+        if (quoteText.title !== quote.text) quoteText.title = quote.text;
         const quoteId = "bb-minus-quote-" + encodeURIComponent(key);
         if (quoteText.id !== quoteId) quoteText.id = quoteId;
         const source = QUOTE_SOURCES[quote.source];
@@ -450,6 +476,7 @@ export function mountToolGrouping(
     quoteByGroup.clear();
     quoteByRow.clear();
     expanded.clear();
-    expandedSplitTransitions.clear();
+    groupKeyByRow.clear();
+    disclosureChoices.clear();
   };
 }

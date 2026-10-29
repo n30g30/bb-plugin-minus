@@ -135,6 +135,7 @@ for (const count of [1, 2, 3]) {
       assert.ok(marker.querySelector("[data-row]").classList.contains("flex-nowrap"));
       assert.equal(button.getAttribute("aria-describedby"), quote.id);
       assert.equal(quote.textContent, QUOTES[0].text);
+      assert.equal(quote.title, QUOTES[0].text);
       assert.ok(quote.classList.contains("italic"));
       assert.ok(quote.classList.contains("truncate"));
       assert.equal(source.textContent, QUOTE_SOURCES[QUOTES[0].source].byline);
@@ -293,11 +294,20 @@ test("keeps a manual stop visible and outside collapsed tool-call groups", async
 });
 
 test("splits a virtualized tool run at an API interruption boundary", async () => {
+  let rejectFirstTimeline;
   let resolveTimeline;
-  const timelineResult = new Promise((resolve) => { resolveTimeline = resolve; });
+  const firstTimeline = new Promise((_, reject) => { rejectFirstTimeline = reject; });
+  const clock = makeClock(1000);
+  let fetchCount = 0;
   const dom = mountDom({
     rowIds: ["tool-1", "tool-2"],
-    fetchTimeline: () => timelineResult,
+    clock,
+    fetchTimeline: () => {
+      fetchCount++;
+      return fetchCount === 1
+        ? firstTimeline
+        : new Promise((resolve) => { resolveTimeline = resolve; });
+    },
   });
   const spacer = dom.window.document.createElement("div");
   spacer.setAttribute("data-timeline-window-spacer", "");
@@ -305,11 +315,22 @@ test("splits a virtualized tool run at an API interruption boundary", async () =
   try {
     await dom.flush();
     let markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
-    assert.equal(markers.length, 1);
+    assert.equal(markers.length, 2);
     assert.equal(
       markers[0].querySelector("button").getAttribute("aria-label"),
-      "Show 2 tool calls. Total tool time: time unavailable.",
+      "Show 1 tool call. Total tool time: time unavailable.",
     );
+    assert.equal(markers[1].querySelector("button").getAttribute("aria-label"),
+      "Show 1 tool call. Total tool time: time unavailable.");
+    assert.equal(spacer.hasAttribute(HIDDEN), false);
+
+    rejectFirstTimeline(new Error("timeline temporarily unavailable"));
+    await dom.flush();
+    assert.equal(dom.container.querySelectorAll("[data-bb-minus-group]").length, 2);
+
+    clock.advance(2000);
+    await dom.flush();
+    assert.equal(fetchCount, 2);
 
     resolveTimeline(timeline([
       ["tool-1"],
@@ -339,6 +360,90 @@ test("splits a virtualized tool run at an API interruption boundary", async () =
   }
 });
 
+test("keeps an expanded API group open after refresh rejection and recovery", async () => {
+  const clock = makeClock(10000);
+  let fetchCount = 0;
+  const dom = mountDom({
+    rowIds: ["tool-1"], clock,
+    fetchTimeline: async () => {
+      fetchCount++;
+      if (fetchCount === 2) throw new Error("refresh temporarily unavailable");
+      return timeline([["tool-1", "work", undefined, 10000, null]]);
+    },
+  });
+  try {
+    await dom.flush();
+    dom.container.querySelector("button").click();
+    await dom.flush();
+    for (const advance of [2000, 2000]) {
+      clock.advance(advance);
+      await dom.flush();
+      assert.equal(dom.container.querySelector("button").getAttribute("aria-expanded"), "true");
+      assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+    }
+    assert.equal(fetchCount, 3);
+    dom.container.querySelector("button").click();
+    await dom.flush();
+    clock.advance(2000);
+    await dom.flush();
+    assert.equal(dom.container.querySelector("button").getAttribute("aria-expanded"), "false");
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+  } finally { dom.cleanup(); }
+});
+
+test("keeps an expanded right fallback part open when the API joins both parts", async () => {
+  let resolveTimeline;
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-2"],
+    fetchTimeline: () => new Promise((resolve) => { resolveTimeline = resolve; }),
+  });
+  const spacer = dom.window.document.createElement("div");
+  spacer.setAttribute("data-timeline-window-spacer", "");
+  dom.container.insertBefore(spacer, dom.rows[1]);
+  try {
+    await dom.flush();
+    const buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
+    assert.equal(buttons.length, 2);
+    buttons[1].click();
+    await dom.flush();
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [true, false]);
+    resolveTimeline(timeline([["tool-1"], ["tool-2"]]));
+    await dom.flush();
+    assert.equal(dom.container.querySelectorAll("[data-bb-minus-group]").length, 1);
+    assert.equal(dom.container.querySelector("button").getAttribute("aria-expanded"), "true");
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [false, false]);
+    dom.container.querySelector("button").click();
+    await dom.flush();
+    assert.equal(dom.container.querySelector("button").getAttribute("aria-expanded"), "false");
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [true, true]);
+  } finally { dom.cleanup(); }
+});
+
+test("does not revive a stale fallback choice when an unmounted row returns", async () => {
+  let resolveTimeline;
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-2"],
+    fetchTimeline: () => new Promise((resolve) => { resolveTimeline = resolve; }),
+  });
+  try {
+    await dom.flush();
+    dom.container.querySelector("button").click();
+    await dom.flush();
+    dom.rows[1].remove();
+    await dom.flush();
+    resolveTimeline(timeline([["tool-1"], ["tool-2"]]));
+    await dom.flush();
+    assert.equal(dom.container.querySelector("button").getAttribute("aria-expanded"), "true");
+    dom.container.querySelector("button").click();
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+    dom.container.append(dom.rows[1]);
+    await dom.flush();
+    assert.equal(dom.container.querySelector("button").getAttribute("aria-expanded"), "false");
+    assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [true, true]);
+  } finally { dom.cleanup(); }
+});
+
 test("keeps all split groups expanded when the API resolves after fallback expansion", async () => {
   let resolveTimeline;
   const timelineResult = new Promise((resolve) => { resolveTimeline = resolve; });
@@ -351,7 +456,9 @@ test("keeps all split groups expanded when the API resolves after fallback expan
   dom.container.insertBefore(spacer, dom.rows[1]);
   try {
     await dom.flush();
-    dom.container.querySelector("[data-bb-minus-group] button").click();
+    const fallbackButtons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
+    assert.equal(fallbackButtons.length, 2);
+    fallbackButtons.forEach((button) => button.click());
     await dom.flush();
     assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), [false, false]);
 
@@ -444,7 +551,10 @@ test("does not reopen a collapsed API group when virtualization replaces its fir
   dom.container.insertBefore(spacer, dom.rows[1]);
   try {
     await dom.flush();
-    dom.container.querySelector("[data-bb-minus-group] button").click();
+    const fallbackButtons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
+    assert.equal(fallbackButtons.length, 2);
+    fallbackButtons[0].click();
+    fallbackButtons[1].click();
     await dom.flush();
     resolveTimeline(timeline([
       ["tool-1"],
@@ -557,11 +667,16 @@ test("keeps the quote stable when virtualization mounts another row in the same 
   try {
     await dom.flush();
     const before = dom.container.querySelector("[data-quote]").textContent;
-    dom.rows[0].remove();
-    dom.container.append(dom.makeRow("tool-2"));
+    const spacer = dom.window.document.createElement("div");
+    spacer.setAttribute("data-timeline-window-spacer", "");
+    const nextRow = dom.makeRow("tool-2");
+    dom.container.append(nextRow);
+    dom.container.insertBefore(spacer, nextRow);
     await dom.flush();
     const after = dom.container.querySelector("[data-quote]").textContent;
     assert.equal(after, before);
+    assert.equal(dom.container.querySelectorAll("[data-bb-minus-group]").length, 1);
+    assert.equal(dom.container.querySelector("[data-metrics]").textContent, "3 tools · 900ms");
     assert.equal(chooseCount, 1);
   } finally {
     dom.cleanup();

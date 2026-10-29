@@ -1,0 +1,338 @@
+[
+  {
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "quote": "shortest",
+    "missing": false,
+    "rowWidth": 710,
+    "quoteWidth": 439.21875,
+    "quoteTitle": "В тридцать лет я обрёл твёрдость.",
+    "quoteText": "В тридцать лет я обрёл твёрдость.",
+    "metrics": "2 tools · 600ms",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "quote": "shortest",
+    "missing": true,
+    "rowWidth": 710,
+    "quoteWidth": 386.96875,
+    "quoteTitle": "В тридцать лет я обрёл твёрдость.",
+    "quoteText": "В тридцать лет я обрёл твёрдость.",
+    "metrics": "2 tools · time unavailable",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "quote": "longest",
+    "missing": false,
+    "rowWidth": 710,
+    "quoteWidth": 456.40625,
+    "quoteTitle": "Если человек свободен от мысли, фантазии и воображения, а несуществующее не может долго казаться ему существующим, неразумные правители и реформаторы не смогут сломить его.",
+    "quoteText": "Если человек свободен от мысли, фантазии и воображения, а несуществующее не может долго казаться ему существующим, неразумные правители и реформаторы не смогут сломить его.",
+    "metrics": "2 tools · 600ms",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "quote": "longest",
+    "missing": true,
+    "rowWidth": 710,
+    "quoteWidth": 404.15625,
+    "quoteTitle": "Если человек свободен от мысли, фантазии и воображения, а несуществующее не может долго казаться ему существующим, неразумные правители и реформаторы не смогут сломить его.",
+    "quoteText": "Если человек свободен от мысли, фантазии и воображения, а несуществующее не может долго казаться ему существующим, неразумные правители и реформаторы не смогут сломить его.",
+    "metrics": "2 tools · time unavailable",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "quote": "first",
+    "missing": false,
+    "rowWidth": 710,
+    "quoteWidth": 432.203125,
+    "quoteTitle": "Счастливы пробуждение и учение Истинного Закона; счастлива мирная община и преданность тех, кто пребывает в мире.",
+    "quoteText": "Счастливы пробуждение и учение Истинного Закона; счастлива мирная община и преданность тех, кто пребывает в мире.",
+    "metrics": "2 tools · 600ms",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "quote": "first",
+    "missing": true,
+    "rowWidth": 710,
+    "quoteWidth": 379.953125,
+    "quoteTitle": "Счастливы пробуждение и учение Истинного Закона; счастлива мирная община и преданность тех, кто пребывает в мире.",
+    "quoteText": "Счастливы пробуждение и учение Истинного Закона; счастлива мирная община и преданность тех, кто пребывает в мире.",
+    "metrics": "2 tools · time unavailable",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "quote": "shortest",
+    "missing": false,
+    "rowWidth": 390,
+    "quoteWidth": 119.21875,
+    "quoteTitle": "В тридцать лет я обрёл твёрдость.",
+    "quoteText": "В тридцать лет я обрёл твёрдость.",
+    "metrics": "2 tools · 600ms",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "quote": "shortest",
+    "missing": true,
+    "rowWidth": 390,
+    "quoteWidth": 66.96875,
+    "quoteTitle": "В тридцать лет я обрёл твёрдость.",
+    "quoteText": "В тридцать лет я обрёл твёрдость.",
+    "metrics": "2 tools · time unavailable",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "quote": "longest",
+    "missing": false,
+    "rowWidth": 390,
+    "quoteWidth": 136.40625,
+    "quoteTitle": "Если человек свободен от мысли, фантазии и воображения, а несуществующее не может долго казаться ему существующим, неразумные правители и реформаторы не смогут сломить его.",
+    "quoteText": "Если человек свободен от мысли, фантазии и воображения, а несуществующее не может долго казаться ему существующим, неразумные правители и реформаторы не смогут сломить его.",
+    "metrics": "2 tools · 600ms",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "quote": "longest",
+    "missing": true,
+    "rowWidth": 390,
+    "quoteWidth": 84.15625,
+    "quoteTitle": "Если человек свободен от мысли, фантазии и воображения, а несуществующее не может долго казаться ему существующим, неразумные правители и реформаторы не смогут сломить его.",
+    "quoteText": "Если человек свободен от мысли, фантазии и воображения, а несуществующее не может долго казаться ему существующим, неразумные правители и реформаторы не смогут сломить его.",
+    "metrics": "2 tools · time unavailable",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "quote": "first",
+    "missing": false,
+    "rowWidth": 390,
+    "quoteWidth": 112.203125,
+    "quoteTitle": "Счастливы пробуждение и учение Истинного Закона; счастлива мирная община и преданность тех, кто пребывает в мире.",
+    "quoteText": "Счастливы пробуждение и учение Истинного Закона; счастлива мирная община и преданность тех, кто пребывает в мире.",
+    "metrics": "2 tools · 600ms",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "quote": "first",
+    "missing": true,
+    "rowWidth": 390,
+    "quoteWidth": 59.953125,
+    "quoteTitle": "Счастливы пробуждение и учение Истинного Закона; счастлива мирная община и преданность тех, кто пребывает в мире.",
+    "quoteText": "Счастливы пробуждение и учение Истинного Закона; счастлива мирная община и преданность тех, кто пребывает в мире.",
+    "metrics": "2 tools · time unavailable",
+    "nowrap": "nowrap",
+    "overflow": false,
+    "sourceSeparate": true,
+    "style": {
+      "fontFamily": "\"Inter Variable\", Inter, sans-serif",
+      "fontSize": "13px",
+      "lineHeight": "20px",
+      "color": "oklch(0.44 0 0)",
+      "fontStyle": "italic"
+    },
+    "bodyStyle": {
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.3211 0 0)"
+    },
+    "keyboard": "passed"
+  }
+]
