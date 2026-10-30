@@ -17,6 +17,27 @@ type TimelineRow = {
 type FetchTimeline = (threadId: string) => Promise<TimelineRow[]>;
 type SubscribeTimeline = (notify: (threadId: string | undefined, finished: boolean) => void) => () => void;
 type DisclosureChoice = { revision: number; open: boolean };
+type ToolActivity = "pending" | "completed" | "error" | "cancelled" | "unknown";
+const ACTIVITY_LABELS: Record<ToolActivity, string> = {
+  pending: "Выполняется", completed: "Завершено", error: "Завершено с ошибкой",
+  cancelled: "Остановлено", unknown: "Статус выполнения уточняется",
+};
+// Native-sized, currentColor SVG geometry; the spinner uses BB's animate-spin token.
+const ACTIVITY_ICONS: Record<ToolActivity, string> = {
+  pending: '<path d="M12 2a10 10 0 1 0 10 10"/>',
+  completed: '<circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/>',
+  error: '<circle cx="12" cy="12" r="10"/><path d="M12 7v6m0 4h.01"/>',
+  cancelled: '<circle cx="12" cy="12" r="10"/><path d="m8 8 8 8m0-8-8 8"/>',
+  unknown: '<circle cx="12" cy="12" r="10" stroke-dasharray="2 3"/>',
+};
+function toolActivity(row: TimelineRow): ToolActivity {
+  if (row.status === "pending" || row.status === "completed" || row.status === "error" || row.status === "cancelled") return row.status;
+  return "unknown";
+}
+function combinedActivity(states: ToolActivity[]): ToolActivity {
+  return (["pending", "error", "cancelled", "unknown"] as const).find(state => states.includes(state)) ??
+    (states.length > 0 ? "completed" : "unknown");
+}
 type Clock = {
   now: () => number;
   setTimeout: (callback: () => void, delayMs: number) => ReturnType<typeof setTimeout>;
@@ -47,7 +68,7 @@ const REFETCH_MS = 2000;
 const TOGGLE_HTML = `<div class="rounded-md text-subtle-foreground w-full">
   <div data-row class="group/timeline-row min-w-0 px-2 text-sm leading-5">
     <button data-toggle="quote" type="button" aria-expanded="false" class="group/toggle inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="mr-1.5 inline-block size-3.5 align-text-bottom text-subtle-foreground opacity-40" aria-hidden="true" data-minus-icon="called-tools"><path d="M12 8.5L3.12132 17.3787C2.72349 17.7765 2.5 18.3161 2.5 18.8787C2.5 20.0503 3.44975 21 4.62132 21C5.18393 21 5.72349 20.7765 6.12132 20.3787L15 11.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.1207 5.03693L20.3682 9.3197C21.014 9.97093 21.3369 10.2966 21.4435 10.6774C21.5188 10.9467 21.5188 11.2317 21.4435 11.501C21.3369 11.8819 21.014 12.2075 20.3682 12.8587C19.7223 13.51 19.3994 13.8356 19.0216 13.943C18.7546 14.019 18.4719 14.019 18.2048 13.943C17.8271 13.8356 17.5042 13.51 16.8583 12.8587L10.0245 5.96802C8.99015 4.92507 8.47297 4.40359 8.50109 3.94831C8.51495 3.7239 8.60259 3.51054 8.75017 3.34197C9.04956 3 9.78095 3 11.2437 3C12.4209 3 13.0095 3 13.5574 3.16035C13.8406 3.24325 14.1139 3.3574 14.3723 3.50071C14.8721 3.77792 15.2883 4.19759 16.1207 5.03693Z" stroke="currentColor" stroke-width="1.5"/></svg><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-subtle-foreground"><span data-quote-start></span><span class="whitespace-nowrap"><span data-quote-end class="inline-block whitespace-normal break-words" style="max-width:calc(100% - 4.5 * var(--spacing))"></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-subtle-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></span></span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mr-1.5 inline-block size-3.5 align-text-bottom text-subtle-foreground" aria-hidden="true" data-minus-icon="activity"></svg><span data-activity-label class="sr-only"></span><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-subtle-foreground"><span data-quote-start></span><span class="whitespace-nowrap"><span data-quote-end class="inline-block whitespace-normal break-words" style="max-width:calc(100% - 4.5 * var(--spacing))"></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-subtle-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></span></span>
     </button>
     <a data-source class="mr-1.5 break-words text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
     <button data-metrics data-toggle="metrics" type="button" aria-expanded="false" class="inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><span data-count class="whitespace-nowrap"></span> · <span data-time class="whitespace-nowrap"></span></button>
@@ -130,6 +151,7 @@ type ThreadRuns = {
   memberIds: string[][];
   durationMs: Array<number | null>;
   pending: boolean[];
+  activity: ToolActivity[];
 };
 
 // Native work summaries can span reasoning boundaries and therefore several
@@ -173,6 +195,7 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): 
   const durationMs: number[] = [];
   const durationKnown: boolean[] = [];
   const pending: boolean[] = [];
+  const activity: ToolActivity[] = [];
   const visit = (source: TimelineRow[]) => {
     let open = false;
     for (const [index, row] of source.entries()) {
@@ -196,6 +219,7 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): 
         durationMs.push(0);
         durationKnown.push(true);
         pending.push(false);
+        activity.push("completed");
       }
       open = true;
       runOf.set(row.id, counts.length - 1);
@@ -203,6 +227,7 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): 
       if (row.kind === "work") {
         const index = counts.length - 1;
         counts[index]++;
+        activity[index] = combinedActivity([activity[index], toolActivity(row)]);
         const startedAt = row.startedAt;
         const endedAt = row.completedAt ?? (row.status === "pending" ? now : undefined);
         if (!Number.isFinite(startedAt) || endedAt === undefined) {
@@ -225,6 +250,7 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): 
     memberIds,
     durationMs: durationMs.map((duration, index) => durationKnown[index] ? duration : null),
     pending,
+    activity,
   };
 }
 
@@ -290,7 +316,25 @@ export function mountToolGrouping(
 [${TURN_SHELL}]{display:contents}
 [${TURN_SHELL}]::before,[${TURN_SHELL}]::after{display:none}
 [${STREAM_FOCUS}]:focus-visible{outline:1px solid var(--ring)}`;
+  style.textContent += `
+[${MARKER}][data-tool-state="pending"] [data-minus-icon]{animation:var(--animate-spin);opacity:1}
+@media(prefers-reduced-motion:reduce){[${MARKER}][data-tool-state="pending"] [data-minus-icon]{animation:none}}`;
   document.head.append(style);
+
+  const iconInView = new WeakMap<Element, boolean>();
+  const updateIconMotion = (icon: SVGElement) => {
+    icon.style.animationPlayState = document.hidden || iconInView.get(icon) === false ? "paused" : "";
+  };
+  const iconObserver = typeof IntersectionObserver === "undefined" ? null : new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      iconInView.set(entry.target, entry.isIntersecting);
+      updateIconMotion(entry.target as SVGElement);
+    }
+  });
+  const updateVisibleIcons = () => {
+    for (const icon of document.querySelectorAll<SVGElement>(`[${MARKER}] [data-minus-icon]`)) updateIconMotion(icon);
+  };
+  document.addEventListener("visibilitychange", updateVisibleIcons);
 
   let frame = 0;
   const schedule = () => {
@@ -427,6 +471,7 @@ export function mountToolGrouping(
     count: number;
     durationMs: number | null;
     pending: boolean;
+    activity: ToolActivity;
     memberIds: readonly string[];
   } | null {
     const threadId = rows[0].dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
@@ -472,7 +517,8 @@ export function mountToolGrouping(
       if (pending || unknownCount > 0) refresh(threadId);
       const ids = [...members.keys()];
       if (ids.length === 0) return null;
-      return { key: "timeline:" + threadId + ":" + ids[0], count: ids.length + unknownCount, durationMs, pending, memberIds: ids };
+      const activity = combinedActivity([...members.values()].map(toolActivity).concat(unknownCount > 0 ? ["unknown"] : []));
+      return { key: "timeline:" + threadId + ":" + ids[0], count: ids.length + unknownCount, durationMs, pending, activity, memberIds: ids };
     }
     const ids = rows.filter((row) => row.dataset.timelineRowId !== undefined).map(apiId);
     const knownIds = ids.filter((id) => runs.runOf.has(id));
@@ -495,6 +541,7 @@ export function mountToolGrouping(
       count: runs.counts[first] + unknownCount,
       durationMs: unknownRows.length > 0 ? null : runs.durationMs[first],
       pending: runs.pending[first],
+      activity: combinedActivity([runs.activity[first], ...(unknownRows.length > 0 ? ["unknown" as const] : [])]),
       memberIds: runs.memberIds[first],
     };
   }
@@ -583,6 +630,9 @@ export function mountToolGrouping(
     const el = document.createElement("div");
     el.setAttribute(MARKER, key);
     el.innerHTML = TOGGLE_HTML;
+    const icon = el.querySelector<SVGElement>("[data-minus-icon]")!;
+    iconObserver?.observe(icon);
+    updateIconMotion(icon);
     const toggle = () => {
       if (!expanded.delete(key)) expanded.add(key);
       const choice = { revision: ++disclosureRevision, open: expanded.has(key) };
@@ -777,6 +827,16 @@ export function mountToolGrouping(
         if (quoteText.title !== quote.text) quoteText.title = quote.text;
         const quoteId = "bb-minus-quote-" + encodeURIComponent(key);
         if (quoteText.id !== quoteId) quoteText.id = quoteId;
+        const activity = api?.activity ?? "unknown";
+        const icon = el.querySelector<SVGElement>("[data-minus-icon]")!;
+        if (el.getAttribute("data-tool-state") !== activity) {
+          el.setAttribute("data-tool-state", activity);
+          icon.innerHTML = ACTIVITY_ICONS[activity];
+        }
+        icon.setAttribute("title", ACTIVITY_LABELS[activity]);
+        const activityLabel = el.querySelector<HTMLElement>("[data-activity-label]")!;
+        activityLabel.id = quoteId + "-activity";
+        if (activityLabel.textContent !== ACTIVITY_LABELS[activity]) activityLabel.textContent = ACTIVITY_LABELS[activity];
         const source = QUOTE_SOURCES[quote.source];
         const sourceLocator = quote.locator.replace(
           /^Project Gutenberg plain-text line (\d+)$/,
@@ -810,7 +870,7 @@ export function mountToolGrouping(
           ".";
         for (const button of el.querySelectorAll<HTMLButtonElement>("[data-toggle]")) {
           button.setAttribute("aria-label", accessibleLabel);
-          button.setAttribute("aria-describedby", quoteId);
+          button.setAttribute("aria-describedby", quoteId + " " + activityLabel.id);
           button.setAttribute("aria-expanded", String(open));
         }
         el.querySelector<SVGElement>("svg.bb-icon-stroke")!.style.rotate = open ? "90deg" : "";
@@ -830,7 +890,11 @@ export function mountToolGrouping(
     for (const el of document.querySelectorAll(`[${FLAT_TURN}], [${FLAT_SUMMARY}], [${TURN_SHELL}], [${STREAM_FOCUS}]`)) {
       if (!turnPresentation.has(el)) clearTurnPresentation(el);
     }
-    for (const el of document.querySelectorAll(`[${MARKER}], [${GROUP_END}]`)) if (!used.has(el)) el.remove();
+    for (const el of document.querySelectorAll(`[${MARKER}], [${GROUP_END}]`)) if (!used.has(el)) {
+      const icon = el.querySelector("[data-minus-icon]");
+      if (icon !== null) iconObserver?.unobserve(icon);
+      el.remove();
+    }
     // Replacing a fallback header with an API header must preserve keyboard
     // focus, so the next Enter/Space still acts on the same visible group.
     if (focusedMarker !== null && document.activeElement !== focused) {
@@ -869,6 +933,8 @@ export function mountToolGrouping(
     disposed = true;
     unsubscribe?.();
     observer.disconnect();
+    iconObserver?.disconnect();
+    document.removeEventListener("visibilitychange", updateVisibleIcons);
     document.removeEventListener("click", trackTurnChoice, true);
     cancelAnimationFrame(frame);
     for (const timer of refreshTimers.values()) clock.clearTimeout(timer);

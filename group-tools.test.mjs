@@ -138,7 +138,7 @@ for (const count of [1, 2, 3]) {
         metrics.textContent,
         count + " tool" + (count === 1 ? "" : "s") + " · " + count * 300 + "ms",
       );
-      assert.equal(button.getAttribute("aria-describedby"), quote.id);
+      assert.equal(button.getAttribute("aria-describedby"), quote.id + " " + quote.id + "-activity");
       assert.equal(quote.textContent, QUOTES[0].text);
       assert.equal(quote.title, QUOTES[0].text);
       assert.ok(quote.classList.contains("italic"));
@@ -1558,3 +1558,82 @@ for (const failedApi of [false, true]) {
     } finally { dom.cleanup(); }
   });
 }
+
+test('activity changes from working to finished after the terminal refresh', async () => {
+  let notify, finished = false;
+  const dom = mountDom({ rowIds: ['tool-1'], fetchTimeline: async () => timeline([['tool-1', 'work', undefined, 1000, finished ? 1600 : null]]), subscribeTimeline: callback => { notify = callback; return () => {}; } });
+  try {
+    await dom.flush();
+    const marker = dom.container.querySelector('[data-bb-minus-group]');
+    assert.equal(marker.getAttribute('data-tool-state'), 'pending');
+    assert.equal(marker.querySelector('[data-activity-label]').textContent, 'Выполняется');
+    const before = marker.querySelector('[data-minus-icon]').innerHTML;
+    finished = true;notify('thr_test', true);await dom.flush();
+    assert.equal(marker.getAttribute('data-tool-state'), 'completed');
+    assert.equal(marker.querySelector('[data-activity-label]').textContent, 'Завершено');
+    assert.notEqual(marker.querySelector('[data-minus-icon]').innerHTML, before);
+    assert.equal(marker.querySelector('[data-metrics]').textContent, '1 tool · 600ms');
+  } finally { dom.cleanup(); }
+});
+
+for (const [status, label] of [['error', 'Завершено с ошибкой'], ['cancelled', 'Остановлено'], ['unknown-provider-state', 'Статус выполнения уточняется']]) {
+  test('activity never announces success for ' + status, async () => {
+    const dom = mountDom({ rowIds: ['tool-1'], fetchTimeline: async () => timeline([['tool-1']]).map(row => ({ ...row, status })) });
+    try {
+      await dom.flush();
+      const marker = dom.container.querySelector('[data-bb-minus-group]');
+      assert.equal(marker.querySelector('[data-activity-label]').textContent, label);
+      assert.notEqual(marker.getAttribute('data-tool-state'), 'completed');
+    } finally { dom.cleanup(); }
+  });
+}
+
+test('a lost API snapshot removes the finished state until recovery', async () => {
+  let notify, fail = false;
+  const dom = mountDom({ rowIds: ['tool-1'], fetchTimeline: async () => {
+    if (fail) throw Error('temporary API failure');
+    return timeline([['tool-1']]);
+  }, subscribeTimeline: callback => { notify = callback; return () => {}; } });
+  try {
+    await dom.flush();
+    assert.equal(dom.container.querySelector('[data-bb-minus-group]').getAttribute('data-tool-state'), 'completed');
+    fail = true;notify('thr_test', true);await dom.flush();
+    assert.equal(dom.container.querySelector('[data-activity-label]').textContent, 'Статус выполнения уточняется');
+    fail = false;notify('thr_test', true);await dom.flush();
+    assert.equal(dom.container.querySelector('[data-activity-label]').textContent, 'Завершено');
+  } finally { dom.cleanup(); }
+});
+
+test('activity animation pauses outside the viewport and in background, and disposes its observers', async () => {
+  const original = Object.getOwnPropertyDescriptor(globalThis, 'IntersectionObserver');
+  let callback, observed = [], disconnected = 0;
+  Object.defineProperty(globalThis, 'IntersectionObserver', { configurable: true, value: class {
+    constructor(notify) { callback = notify; }
+    observe(el) { observed.push(el); }
+    unobserve(el) { observed = observed.filter(x => x !== el); }
+    disconnect() { disconnected++; }
+  } });
+  const dom = mountDom({ rowIds: ['tool-1'], fetchTimeline: async () => timeline([['tool-1', 'work', undefined, 1000, null]]) });
+  try {
+    await dom.flush();
+    const icon = dom.container.querySelector('[data-minus-icon]');
+    assert(observed.includes(icon));
+    callback([{ target: icon, isIntersecting: false }]);
+    assert.equal(icon.style.animationPlayState, 'paused');
+    callback([{ target: icon, isIntersecting: true }]);
+    assert.equal(icon.style.animationPlayState, '');
+    let hidden = true;
+    Object.defineProperty(dom.window.document, 'hidden', { configurable: true, get: () => hidden });
+    dom.window.document.dispatchEvent(new dom.window.Event('visibilitychange'));
+    assert.equal(icon.style.animationPlayState, 'paused');
+    hidden = false;dom.window.document.dispatchEvent(new dom.window.Event('visibilitychange'));
+    assert.equal(icon.style.animationPlayState, '');
+    dom.dispose();assert.equal(disconnected, 1);
+    hidden = true;dom.window.document.dispatchEvent(new dom.window.Event('visibilitychange'));
+    assert.equal(icon.style.animationPlayState, '');
+  } finally {
+    dom.cleanup();
+    if (original) Object.defineProperty(globalThis, 'IntersectionObserver', original);
+    else delete globalThis.IntersectionObserver;
+  }
+});
