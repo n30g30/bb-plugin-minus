@@ -1,0 +1,206 @@
+diff --git a/group-tools.test.mjs b/group-tools.test.mjs
+index 9aecb6a..c11e378 100644
+--- a/group-tools.test.mjs
++++ b/group-tools.test.mjs
+@@ -124,7 +124,7 @@ for (const count of [1, 2, 3]) {
+       const quote = marker.querySelector("[data-quote]");
+       const source = marker.querySelector("[data-source]");
+       const metrics = marker.querySelector("[data-metrics]");
+-      assert.deepEqual([...marker.querySelector("[data-row]").children].map(el => el.tagName), ["BUTTON", "A", "BUTTON"]);
++      assert.deepEqual([...marker.querySelector("[data-row]").children].map(el => el.tagName), ["BUTTON", "LABEL", "BUTTON"]);
+       assert.equal(marker.textContent.includes("Called"), false);
+       assert.ok(button.classList.contains("text-subtle-foreground"));
+       assert.ok(quote.classList.contains("text-subtle-foreground"));
+@@ -143,18 +143,19 @@ for (const count of [1, 2, 3]) {
+       assert.equal(quote.title, QUOTES[0].text);
+       assert.ok(quote.classList.contains("italic"));
+       assert.equal(source.textContent, QUOTE_SOURCES[QUOTES[0].source].byline);
+-      assert.equal(source.href, QUOTE_SOURCES[QUOTES[0].source].url);
+-      assert.equal(source.target, "_blank");
+-      assert.equal(source.rel, "noopener noreferrer");
++      assert.equal(button.getAttribute("aria-labelledby"), quote.id + " " + source.id);
++      assert.equal(source.tagName, "SPAN");
++      assert.equal(marker.querySelector("a"), null);
+       assert.ok(source.classList.contains("text-subtle-foreground"));
+-      assert.ok(source.classList.contains("underline"));
++      assert.equal(source.classList.contains("underline"), false);
+       assert.equal(source.classList.contains("text-primary"), false);
+       assert.ok(button.classList.contains("focus-visible:ring-1"));
+-      assert.ok(source.classList.contains("focus-visible:ring-1"));
++      assert.equal(source.hasAttribute("tabindex"), false);
+       assert.equal(button.contains(source), false);
+       source.dispatchEvent(new dom.window.MouseEvent("click", { bubbles: true, cancelable: true }));
+       await dom.flush();
+-      assert.equal(button.getAttribute("aria-expanded"), "false");
++      assert.equal(button.getAttribute("aria-expanded"), "true");
++      button.click();await dom.flush();
+       assert.ok(source.getAttribute("aria-label").includes("Русский перевод Minus"));
+       assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), rowIds.map(() => true));
+ 
+@@ -216,7 +217,7 @@ test("shows the sum of individual tool runtimes rather than group wall time", as
+   }
+ });
+ 
+-test("updates the visible duration while a tool call is pending", async () => {
++test("shows duration only after the tool cycle finishes", async () => {
+   const clock = makeClock(10000);
+   const rowIds = ["tool-1"];
+   let fetchCount = 0;
+@@ -233,7 +234,7 @@ test("updates the visible duration while a tool call is pending", async () => {
+   try {
+     await dom.flush();
+     const metrics = dom.container.querySelector("[data-metrics]");
+-    assert.equal(metrics.textContent, "1 tool · 0ms");
++    assert.equal(metrics.textContent, "1 tool");
+     clock.advance(2000);
+     await dom.flush();
+     assert.equal(fetchCount, 2);
+@@ -1040,7 +1041,7 @@ test("keeps the rendered API membership when collapse happens after rejection bu
+   } finally { globalThis.requestAnimationFrame = originalRaf; dom.cleanup(); }
+ });
+ 
+-for (const focusSelector of ["button", "[data-source]", "[data-toggle=metrics]"]) {
++for (const focusSelector of ["button", "[data-toggle=metrics]"]) {
+   test("keeps focus on " + focusSelector + " when an expanded fallback becomes an API group", async () => {
+     let resolveTimeline;
+     const dom = mountDom({
+@@ -1349,7 +1350,7 @@ test('a terminal realtime event refreshes final duration without a DOM change or
+   try {
+     await dom.flush();
+     const metrics = dom.container.querySelector('[data-metrics]');
+-    assert.equal(metrics.textContent, '1 tool · 0ms');
++    assert.equal(metrics.textContent, '1 tool');
+     clock.advance(1500);
+     notify('thr_unrelated', true);
+     await dom.flush();assert.equal(fetchCount, 1);
+@@ -1637,3 +1638,31 @@ test('activity animation pauses outside the viewport and in background, and disp
+     else delete globalThis.IntersectionObserver;
+   }
+ });
++
++test('a multi-call cycle never exposes partial seconds and publishes the final sum once finished', async () => {
++  let notify, finished = false;
++  const clock = makeClock(10000);
++  const dom = mountDom({ rowIds: ['tool-1', 'tool-2'], clock,
++    fetchTimeline: async () => timeline([['tool-1', 'work', undefined, 1000, 1300], ['tool-2', 'work', undefined, 1000, finished ? 4000 : null]]),
++    subscribeTimeline: cb => { notify = cb;return () => {}; },
++  });
++  try {
++    await dom.flush();
++    const metrics = dom.container.querySelector('[data-metrics]');
++    assert.equal(metrics.textContent, '2 tools');
++    clock.advance(2000);await dom.flush();
++    assert.equal(metrics.textContent, '2 tools');
++    assert.equal(metrics.querySelector('[data-time]').textContent, '');
++    assert.equal(metrics.querySelector('[data-time-separator]').textContent, '');
++    metrics.click();await dom.flush();
++    assert.equal(metrics.getAttribute('aria-expanded'), 'true');
++    finished = true;notify('thr_test', true);await dom.flush();
++    assert.equal(metrics.textContent, '2 tools · 3.3s');
++    assert.equal(metrics.getAttribute('aria-expanded'), 'true');
++    const caption = dom.container.querySelector('[data-quote-control]');
++    assert.equal(caption.tagName, 'LABEL');
++    assert.equal(caption.control, dom.container.querySelector('[data-toggle="quote"]'));
++    assert.equal(caption.querySelector('[data-source]').tagName, 'SPAN');
++    assert.equal(dom.container.querySelector('a, br'), null);
++  } finally { dom.cleanup(); }
++});
+diff --git a/group-tools.ts b/group-tools.ts
+index 2b9a29b..e0157d1 100644
+--- a/group-tools.ts
++++ b/group-tools.ts
+@@ -67,11 +67,8 @@ const REFETCH_MS = 2000;
+ 
+ const TOGGLE_HTML = `<div class="rounded-md text-subtle-foreground w-full">
+   <div data-row class="group/timeline-row min-w-0 px-2 text-sm leading-5">
+-    <button data-toggle="quote" type="button" aria-expanded="false" class="group/toggle inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer">
+-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mr-1.5 inline-block size-3.5 align-text-bottom text-subtle-foreground" aria-hidden="true" data-minus-icon="activity"></svg><span data-activity-label class="sr-only"></span><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-subtle-foreground"><span data-quote-start></span><span class="whitespace-nowrap"><span data-quote-end class="inline-block whitespace-normal break-words" style="max-width:calc(100% - 4.5 * var(--spacing))"></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-subtle-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></span></span>
+-    </button>
+-    <a data-source class="mr-1.5 break-words text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
+-    <button data-metrics data-toggle="metrics" type="button" aria-expanded="false" class="inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><span data-count class="whitespace-nowrap"></span> · <span data-time class="whitespace-nowrap"></span></button>
++    <button data-toggle="quote" type="button" aria-expanded="false" class="inline px-0 py-0 align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mr-1.5 inline-block size-3.5 align-text-bottom text-subtle-foreground" aria-hidden="true" data-minus-icon="activity"></svg><span data-activity-label class="sr-only"></span></button><label data-quote-control class="group/toggle inline whitespace-normal break-words cursor-pointer"><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-subtle-foreground"><span data-quote-start></span><span class="whitespace-nowrap"><span data-quote-end class="inline-block whitespace-normal break-words" style="max-width:calc(100% - 4.5 * var(--spacing))"></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-subtle-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-within/timeline-row:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></span></span> — <span data-source class="mr-1.5 break-words text-xs not-italic leading-5 text-subtle-foreground"></span></label>
++    <button data-metrics data-toggle="metrics" type="button" aria-expanded="false" class="inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><span data-count class="whitespace-nowrap"></span><span data-time-separator> · </span><span data-time class="whitespace-nowrap"></span></button>
+   </div>
+ </div>`;
+ 
+@@ -229,7 +226,7 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>):
+         counts[index]++;
+         activity[index] = combinedActivity([activity[index], toolActivity(row)]);
+         const startedAt = row.startedAt;
+-        const endedAt = row.completedAt ?? (row.status === "pending" ? now : undefined);
++        const endedAt = row.status === "pending" ? undefined : row.completedAt ?? undefined;
+         if (!Number.isFinite(startedAt) || endedAt === undefined) {
+           durationKnown[index] = false;
+         } else {
+@@ -509,7 +506,7 @@ export function mountToolGrouping(
+       let pending = false;
+       for (const member of members.values()) {
+         if (VISIBLE_WORK.has(member.workKind ?? "")) return null;
+-        const end = member.completedAt ?? (member.status === "pending" ? clock.now() : undefined);
++        const end = member.status === "pending" ? undefined : member.completedAt ?? undefined;
+         if (!Number.isFinite(member.startedAt) || end === undefined) durationMs = null;
+         else if (durationMs !== null) durationMs += Math.max(0, end - member.startedAt!);
+         if (member.status === "pending") pending = true;
+@@ -686,7 +683,7 @@ export function mountToolGrouping(
+     const focusedKey = focusedMarker?.getAttribute(MARKER);
+     const focusSelector = focused?.matches('[data-toggle="quote"]') ? '[data-toggle="quote"]' :
+       focused?.matches('[data-toggle="metrics"]') ? '[data-toggle="metrics"]' :
+-      focused?.matches("[data-source]") ? "[data-source]" : null;
++      null;
+     let migratedFocus: HTMLElement | null = null;
+     // Snapshot before rendering so splitting a group can migrate every visible part.
+     const previousGroupByRow = new Map(groupKeyByRow);
+@@ -827,6 +824,9 @@ export function mountToolGrouping(
+         if (quoteText.title !== quote.text) quoteText.title = quote.text;
+         const quoteId = "bb-minus-quote-" + encodeURIComponent(key);
+         if (quoteText.id !== quoteId) quoteText.id = quoteId;
++        const quoteButton = el.querySelector<HTMLButtonElement>('[data-toggle="quote"]')!;
++        quoteButton.id = quoteId + "-toggle";
++        el.querySelector<HTMLLabelElement>("[data-quote-control]")!.htmlFor = quoteButton.id;
+         const activity = api?.activity ?? "unknown";
+         const icon = el.querySelector<SVGElement>("[data-minus-icon]")!;
+         if (el.getAttribute("data-tool-state") !== activity) {
+@@ -842,32 +842,33 @@ export function mountToolGrouping(
+           /^Project Gutenberg plain-text line (\d+)$/,
+           "Строка $1 в тексте Project Gutenberg",
+         );
+-        const sourceLink = el.querySelector<HTMLAnchorElement>("[data-source]")!;
++        const sourceLink = el.querySelector<HTMLElement>("[data-source]")!;
++        sourceLink.id = quoteId + "-source";
++        quoteButton.setAttribute("aria-labelledby", quoteId + " " + sourceLink.id);
+         if (sourceLink.textContent !== source.byline) sourceLink.textContent = source.byline;
+-        if (sourceLink.href !== source.url) sourceLink.href = source.url;
+         sourceLink.setAttribute(
+           "aria-label",
+-          source.credit + ". «" + source.title + "». " + sourceLocator + ". Русский перевод Minus. Открыть источник.",
++          source.credit + ". «" + source.title + "». " + sourceLocator + ". Русский перевод Minus.",
+         );
+         sourceLink.title = source.credit + ". «" + source.title + "». " + sourceLocator + ". Русский перевод Minus.";
+-        const duration = formatToolTime(api?.durationMs ?? null);
++        const duration = api?.pending ? null : formatToolTime(api?.durationMs ?? null);
+         const metrics = el.querySelector<HTMLElement>("[data-metrics]")!;
+         const visibleCount = calls + " tool" + (calls === 1 ? "" : "s");
+-        if (metrics.textContent !== visibleCount + " · " + duration) {
++        if (metrics.textContent !== visibleCount + (duration === null ? "" : " · " + duration)) {
+           // Let count and time wrap independently at narrow widths/text zoom,
+           // keeping each value with its unit rather than overflowing the inset.
+           metrics.querySelector("[data-count]")!.textContent = visibleCount;
+-          metrics.querySelector("[data-time]")!.textContent = duration;
++          metrics.querySelector("[data-time]")!.textContent = duration ?? "";
++          metrics.querySelector("[data-time-separator]")!.textContent = duration === null ? "" : " · ";
+         }
+-        metrics.title = "Total time across individual tool calls; parallel calls are added together.";
++        metrics.title = duration === null ? "Время появится после завершения вызовов." :
++          "Total time across individual tool calls; parallel calls are added together.";
+         const accessibleLabel =
+           (open ? "Hide " : "Show ") +
+           calls +
+           " tool call" +
+           (calls === 1 ? "" : "s") +
+-          ". Total tool time: " +
+-          duration +
+-          ".";
++          (duration === null ? ". Время появится после завершения вызовов." : ". Total tool time: " + duration + ".");
+         for (const button of el.querySelectorAll<HTMLButtonElement>("[data-toggle]")) {
+           button.setAttribute("aria-label", accessibleLabel);
+           button.setAttribute("aria-describedby", quoteId + " " + activityLabel.id);

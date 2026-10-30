@@ -124,7 +124,7 @@ for (const count of [1, 2, 3]) {
       const quote = marker.querySelector("[data-quote]");
       const source = marker.querySelector("[data-source]");
       const metrics = marker.querySelector("[data-metrics]");
-      assert.deepEqual([...marker.querySelector("[data-row]").children].map(el => el.tagName), ["BUTTON", "A", "BUTTON"]);
+      assert.deepEqual([...marker.querySelector("[data-row]").children].map(el => el.tagName), ["BUTTON", "LABEL", "BUTTON"]);
       assert.equal(marker.textContent.includes("Called"), false);
       assert.ok(button.classList.contains("text-subtle-foreground"));
       assert.ok(quote.classList.contains("text-subtle-foreground"));
@@ -143,18 +143,19 @@ for (const count of [1, 2, 3]) {
       assert.equal(quote.title, QUOTES[0].text);
       assert.ok(quote.classList.contains("italic"));
       assert.equal(source.textContent, QUOTE_SOURCES[QUOTES[0].source].byline);
-      assert.equal(source.href, QUOTE_SOURCES[QUOTES[0].source].url);
-      assert.equal(source.target, "_blank");
-      assert.equal(source.rel, "noopener noreferrer");
+      assert.equal(button.getAttribute("aria-labelledby"), quote.id + " " + source.id);
+      assert.equal(source.tagName, "SPAN");
+      assert.equal(marker.querySelector("a"), null);
       assert.ok(source.classList.contains("text-subtle-foreground"));
-      assert.ok(source.classList.contains("underline"));
+      assert.equal(source.classList.contains("underline"), false);
       assert.equal(source.classList.contains("text-primary"), false);
       assert.ok(button.classList.contains("focus-visible:ring-1"));
-      assert.ok(source.classList.contains("focus-visible:ring-1"));
+      assert.equal(source.hasAttribute("tabindex"), false);
       assert.equal(button.contains(source), false);
       source.dispatchEvent(new dom.window.MouseEvent("click", { bubbles: true, cancelable: true }));
       await dom.flush();
-      assert.equal(button.getAttribute("aria-expanded"), "false");
+      assert.equal(button.getAttribute("aria-expanded"), "true");
+      button.click();await dom.flush();
       assert.ok(source.getAttribute("aria-label").includes("Русский перевод Minus"));
       assert.deepEqual(dom.rows.map((row) => row.hasAttribute(HIDDEN)), rowIds.map(() => true));
 
@@ -216,7 +217,7 @@ test("shows the sum of individual tool runtimes rather than group wall time", as
   }
 });
 
-test("updates the visible duration while a tool call is pending", async () => {
+test("shows duration only after the tool cycle finishes", async () => {
   const clock = makeClock(10000);
   const rowIds = ["tool-1"];
   let fetchCount = 0;
@@ -233,7 +234,7 @@ test("updates the visible duration while a tool call is pending", async () => {
   try {
     await dom.flush();
     const metrics = dom.container.querySelector("[data-metrics]");
-    assert.equal(metrics.textContent, "1 tool · 0ms");
+    assert.equal(metrics.textContent, "1 tool");
     clock.advance(2000);
     await dom.flush();
     assert.equal(fetchCount, 2);
@@ -1040,7 +1041,7 @@ test("keeps the rendered API membership when collapse happens after rejection bu
   } finally { globalThis.requestAnimationFrame = originalRaf; dom.cleanup(); }
 });
 
-for (const focusSelector of ["button", "[data-source]", "[data-toggle=metrics]"]) {
+for (const focusSelector of ["button", "[data-toggle=metrics]"]) {
   test("keeps focus on " + focusSelector + " when an expanded fallback becomes an API group", async () => {
     let resolveTimeline;
     const dom = mountDom({
@@ -1349,7 +1350,7 @@ test('a terminal realtime event refreshes final duration without a DOM change or
   try {
     await dom.flush();
     const metrics = dom.container.querySelector('[data-metrics]');
-    assert.equal(metrics.textContent, '1 tool · 0ms');
+    assert.equal(metrics.textContent, '1 tool');
     clock.advance(1500);
     notify('thr_unrelated', true);
     await dom.flush();assert.equal(fetchCount, 1);
@@ -1636,4 +1637,32 @@ test('activity animation pauses outside the viewport and in background, and disp
     if (original) Object.defineProperty(globalThis, 'IntersectionObserver', original);
     else delete globalThis.IntersectionObserver;
   }
+});
+
+test('a multi-call cycle never exposes partial seconds and publishes the final sum once finished', async () => {
+  let notify, finished = false;
+  const clock = makeClock(10000);
+  const dom = mountDom({ rowIds: ['tool-1', 'tool-2'], clock,
+    fetchTimeline: async () => timeline([['tool-1', 'work', undefined, 1000, 1300], ['tool-2', 'work', undefined, 1000, finished ? 4000 : null]]),
+    subscribeTimeline: cb => { notify = cb;return () => {}; },
+  });
+  try {
+    await dom.flush();
+    const metrics = dom.container.querySelector('[data-metrics]');
+    assert.equal(metrics.textContent, '2 tools');
+    clock.advance(2000);await dom.flush();
+    assert.equal(metrics.textContent, '2 tools');
+    assert.equal(metrics.querySelector('[data-time]').textContent, '');
+    assert.equal(metrics.querySelector('[data-time-separator]').textContent, '');
+    metrics.click();await dom.flush();
+    assert.equal(metrics.getAttribute('aria-expanded'), 'true');
+    finished = true;notify('thr_test', true);await dom.flush();
+    assert.equal(metrics.textContent, '2 tools · 3.3s');
+    assert.equal(metrics.getAttribute('aria-expanded'), 'true');
+    const caption = dom.container.querySelector('[data-quote-control]');
+    assert.equal(caption.tagName, 'LABEL');
+    assert.equal(caption.control, dom.container.querySelector('[data-toggle="quote"]'));
+    assert.equal(caption.querySelector('[data-source]').tagName, 'SPAN');
+    assert.equal(dom.container.querySelector('a, br'), null);
+  } finally { dom.cleanup(); }
 });

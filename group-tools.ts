@@ -67,11 +67,8 @@ const REFETCH_MS = 2000;
 
 const TOGGLE_HTML = `<div class="rounded-md text-subtle-foreground w-full">
   <div data-row class="group/timeline-row min-w-0 px-2 text-sm leading-5">
-    <button data-toggle="quote" type="button" aria-expanded="false" class="group/toggle inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mr-1.5 inline-block size-3.5 align-text-bottom text-subtle-foreground" aria-hidden="true" data-minus-icon="activity"></svg><span data-activity-label class="sr-only"></span><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-subtle-foreground"><span data-quote-start></span><span class="whitespace-nowrap"><span data-quote-end class="inline-block whitespace-normal break-words" style="max-width:calc(100% - 4.5 * var(--spacing))"></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-subtle-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></span></span>
-    </button>
-    <a data-source class="mr-1.5 break-words text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
-    <button data-metrics data-toggle="metrics" type="button" aria-expanded="false" class="inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><span data-count class="whitespace-nowrap"></span> · <span data-time class="whitespace-nowrap"></span></button>
+    <button data-toggle="quote" type="button" aria-expanded="false" class="inline px-0 py-0 align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mr-1.5 inline-block size-3.5 align-text-bottom text-subtle-foreground" aria-hidden="true" data-minus-icon="activity"></svg><span data-activity-label class="sr-only"></span></button><label data-quote-control class="group/toggle inline whitespace-normal break-words cursor-pointer"><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-subtle-foreground"><span data-quote-start></span><span class="whitespace-nowrap"><span data-quote-end class="inline-block whitespace-normal break-words" style="max-width:calc(100% - 4.5 * var(--spacing))"></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-subtle-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-within/timeline-row:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></span></span> — <span data-source class="mr-1.5 break-words text-xs not-italic leading-5 text-subtle-foreground"></span></label>
+    <button data-metrics data-toggle="metrics" type="button" aria-expanded="false" class="inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><span data-count class="whitespace-nowrap"></span><span data-time-separator> · </span><span data-time class="whitespace-nowrap"></span></button>
   </div>
 </div>`;
 
@@ -229,7 +226,7 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): 
         counts[index]++;
         activity[index] = combinedActivity([activity[index], toolActivity(row)]);
         const startedAt = row.startedAt;
-        const endedAt = row.completedAt ?? (row.status === "pending" ? now : undefined);
+        const endedAt = row.status === "pending" ? undefined : row.completedAt ?? undefined;
         if (!Number.isFinite(startedAt) || endedAt === undefined) {
           durationKnown[index] = false;
         } else {
@@ -509,7 +506,7 @@ export function mountToolGrouping(
       let pending = false;
       for (const member of members.values()) {
         if (VISIBLE_WORK.has(member.workKind ?? "")) return null;
-        const end = member.completedAt ?? (member.status === "pending" ? clock.now() : undefined);
+        const end = member.status === "pending" ? undefined : member.completedAt ?? undefined;
         if (!Number.isFinite(member.startedAt) || end === undefined) durationMs = null;
         else if (durationMs !== null) durationMs += Math.max(0, end - member.startedAt!);
         if (member.status === "pending") pending = true;
@@ -686,7 +683,7 @@ export function mountToolGrouping(
     const focusedKey = focusedMarker?.getAttribute(MARKER);
     const focusSelector = focused?.matches('[data-toggle="quote"]') ? '[data-toggle="quote"]' :
       focused?.matches('[data-toggle="metrics"]') ? '[data-toggle="metrics"]' :
-      focused?.matches("[data-source]") ? "[data-source]" : null;
+      null;
     let migratedFocus: HTMLElement | null = null;
     // Snapshot before rendering so splitting a group can migrate every visible part.
     const previousGroupByRow = new Map(groupKeyByRow);
@@ -827,6 +824,9 @@ export function mountToolGrouping(
         if (quoteText.title !== quote.text) quoteText.title = quote.text;
         const quoteId = "bb-minus-quote-" + encodeURIComponent(key);
         if (quoteText.id !== quoteId) quoteText.id = quoteId;
+        const quoteButton = el.querySelector<HTMLButtonElement>('[data-toggle="quote"]')!;
+        quoteButton.id = quoteId + "-toggle";
+        el.querySelector<HTMLLabelElement>("[data-quote-control]")!.htmlFor = quoteButton.id;
         const activity = api?.activity ?? "unknown";
         const icon = el.querySelector<SVGElement>("[data-minus-icon]")!;
         if (el.getAttribute("data-tool-state") !== activity) {
@@ -842,32 +842,33 @@ export function mountToolGrouping(
           /^Project Gutenberg plain-text line (\d+)$/,
           "Строка $1 в тексте Project Gutenberg",
         );
-        const sourceLink = el.querySelector<HTMLAnchorElement>("[data-source]")!;
+        const sourceLink = el.querySelector<HTMLElement>("[data-source]")!;
+        sourceLink.id = quoteId + "-source";
+        quoteButton.setAttribute("aria-labelledby", quoteId + " " + sourceLink.id);
         if (sourceLink.textContent !== source.byline) sourceLink.textContent = source.byline;
-        if (sourceLink.href !== source.url) sourceLink.href = source.url;
         sourceLink.setAttribute(
           "aria-label",
-          source.credit + ". «" + source.title + "». " + sourceLocator + ". Русский перевод Minus. Открыть источник.",
+          source.credit + ". «" + source.title + "». " + sourceLocator + ". Русский перевод Minus.",
         );
         sourceLink.title = source.credit + ". «" + source.title + "». " + sourceLocator + ". Русский перевод Minus.";
-        const duration = formatToolTime(api?.durationMs ?? null);
+        const duration = api?.pending ? null : formatToolTime(api?.durationMs ?? null);
         const metrics = el.querySelector<HTMLElement>("[data-metrics]")!;
         const visibleCount = calls + " tool" + (calls === 1 ? "" : "s");
-        if (metrics.textContent !== visibleCount + " · " + duration) {
+        if (metrics.textContent !== visibleCount + (duration === null ? "" : " · " + duration)) {
           // Let count and time wrap independently at narrow widths/text zoom,
           // keeping each value with its unit rather than overflowing the inset.
           metrics.querySelector("[data-count]")!.textContent = visibleCount;
-          metrics.querySelector("[data-time]")!.textContent = duration;
+          metrics.querySelector("[data-time]")!.textContent = duration ?? "";
+          metrics.querySelector("[data-time-separator]")!.textContent = duration === null ? "" : " · ";
         }
-        metrics.title = "Total time across individual tool calls; parallel calls are added together.";
+        metrics.title = duration === null ? "Время появится после завершения вызовов." :
+          "Total time across individual tool calls; parallel calls are added together.";
         const accessibleLabel =
           (open ? "Hide " : "Show ") +
           calls +
           " tool call" +
           (calls === 1 ? "" : "s") +
-          ". Total tool time: " +
-          duration +
-          ".";
+          (duration === null ? ". Время появится после завершения вызовов." : ". Total tool time: " + duration + ".");
         for (const button of el.querySelectorAll<HTMLButtonElement>("[data-toggle]")) {
           button.setAttribute("aria-label", accessibleLabel);
           button.setAttribute("aria-describedby", quoteId + " " + activityLabel.id);
