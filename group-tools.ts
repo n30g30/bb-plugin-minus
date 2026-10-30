@@ -13,6 +13,7 @@ type TimelineRow = {
   status?: string | null;
 };
 type FetchTimeline = (threadId: string) => Promise<TimelineRow[]>;
+type DisclosureChoice = { revision: number; open: boolean };
 type Clock = {
   now: () => number;
   setTimeout: (callback: () => void, delayMs: number) => ReturnType<typeof setTimeout>;
@@ -27,6 +28,7 @@ const systemClock: Clock = {
 
 const HIDDEN = "data-bb-minus-hidden";
 const MARKER = "data-bb-minus-group";
+const GROUP_END = "data-bb-minus-group-end";
 // Fallback IDs from the SDK's work row kinds. Unknown/streaming rows stay visible.
 const TOOL_ROW = /^(command|tool|file-change|web-search|web-fetch|image-generation|image-view|file-read|search|plan-steps|extension):/;
 // These work rows carry an agent stream or require the user's response.
@@ -85,6 +87,7 @@ type ThreadRuns = {
   runOf: Map<string, number>;
   counts: number[];
   firstIds: string[];
+  memberIds: string[][];
   durationMs: Array<number | null>;
   pending: boolean[];
 };
@@ -95,6 +98,7 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): 
   const runOf = new Map<string, number>();
   const counts: number[] = [];
   const firstIds: string[] = [];
+  const memberIds: string[][] = [];
   const durationMs: number[] = [];
   const durationKnown: boolean[] = [];
   const pending: boolean[] = [];
@@ -108,12 +112,14 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): 
     if (!open) {
       counts.push(0);
       firstIds.push(row.id);
+      memberIds.push([]);
       durationMs.push(0);
       durationKnown.push(true);
       pending.push(false);
     }
     open = true;
     runOf.set(row.id, counts.length - 1);
+    memberIds[counts.length - 1].push(row.id);
     if (row.kind === "work") {
       const index = counts.length - 1;
       counts[index]++;
@@ -133,6 +139,7 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): 
     runOf,
     counts,
     firstIds,
+    memberIds,
     durationMs: durationMs.map((duration, index) => durationKnown[index] ? duration : null),
     pending,
   };
@@ -166,7 +173,9 @@ export function mountToolGrouping(
   const expanded = new Set<string>();
   const groupKeyByRow = new Map<string, string>();
   // Explicit user choices are ordered so a returning row cannot revive an older choice.
-  const disclosureChoices = new Map<string, { revision: number; open: boolean }>();
+  const disclosureChoices = new Map<string, DisclosureChoice>();
+  const rowDisclosureChoices = new Map<string, DisclosureChoice>();
+  const renderedMembers = new WeakMap<HTMLElement, readonly string[]>();
   let disclosureRevision = 0;
   const quoteByGroup = new Map<string, QuoteEntry>();
   const quoteByRow = new Map<string, QuoteEntry>();
@@ -177,7 +186,12 @@ export function mountToolGrouping(
   const refreshTimers = new Map<string, ReturnType<typeof setTimeout>>();
   let disposed = false;
   const style = document.createElement("style");
-  style.textContent = `[${HIDDEN}]{display:none!important}`;
+  // Native 1px border and the approved 2 × spacing inset/padding. In an open
+  // group, the timeline's native gap supplies the space above the end divider.
+  style.textContent = `[${HIDDEN}]{display:none!important}
+[${MARKER}] [data-row]{margin-inline:calc(2 * var(--spacing));padding-inline:0;border-top:1px solid var(--border);padding-top:calc(2 * var(--spacing))}
+[${MARKER}]:has(button[aria-expanded="false"]) [data-row]{border-bottom:1px solid var(--border);padding-bottom:calc(2 * var(--spacing))}
+[${GROUP_END}]{margin-inline:calc(2 * var(--spacing));border-bottom:1px solid var(--border)}`;
   document.head.append(style);
 
   let frame = 0;
@@ -226,6 +240,7 @@ export function mountToolGrouping(
     count: number;
     durationMs: number | null;
     pending: boolean;
+    memberIds: readonly string[];
   } | null {
     const threadId = rows[0].dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
     if (threadId === undefined) return null;
@@ -255,6 +270,7 @@ export function mountToolGrouping(
       count: runs.counts[first] + unknownCount,
       durationMs: unknownRows.length > 0 ? null : runs.durationMs[first],
       pending: runs.pending[first],
+      memberIds: runs.memberIds[first],
     };
   }
 
@@ -296,7 +312,7 @@ export function mountToolGrouping(
         if (nextRun === undefined) {
           let next = rows[rows.length - 1].nextElementSibling;
           while (next instanceof HTMLElement) {
-            if (next.hasAttribute(MARKER) || next.hasAttribute("data-timeline-window-spacer")) {
+            if (next.hasAttribute(MARKER) || next.hasAttribute(GROUP_END) || next.hasAttribute("data-timeline-window-spacer")) {
               next = next.nextElementSibling;
               continue;
             }
@@ -344,9 +360,28 @@ export function mountToolGrouping(
     el.innerHTML = TOGGLE_HTML;
     el.querySelector("button")!.addEventListener("click", () => {
       if (!expanded.delete(key)) expanded.add(key);
-      disclosureChoices.set(key, { revision: ++disclosureRevision, open: expanded.has(key) });
+      const choice = { revision: ++disclosureRevision, open: expanded.has(key) };
+      disclosureChoices.set(key, choice);
+      for (const [id, groupKey] of groupKeyByRow) {
+        if (groupKey === key) rowDisclosureChoices.set(id, choice);
+      }
+      // An API group includes virtualized members too. Remember the explicit
+      // choice per member so a returning fallback part cannot revive an older
+      // choice, even if the next API refresh fails.
+      // Use the membership the user actually saw. A refresh can have already
+      // cleared/replaced the API index before the scheduled render runs.
+      for (const id of renderedMembers.get(el) ?? []) rowDisclosureChoices.set(id, choice);
       schedule();
     });
+    return el;
+  }
+
+  function groupEnd(container: Element, key: string): HTMLElement {
+    for (const el of container.querySelectorAll<HTMLElement>(`:scope > [${GROUP_END}]`))
+      if (el.getAttribute(GROUP_END) === key) return el;
+    const el = document.createElement("div");
+    el.setAttribute(GROUP_END, key);
+    el.setAttribute("aria-hidden", "true");
     return el;
   }
 
@@ -369,6 +404,11 @@ export function mountToolGrouping(
 
   function pass() {
     frame = 0;
+    const focused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const focusedMarker = focused?.closest<HTMLElement>(`[${MARKER}]`) ?? null;
+    const focusedKey = focusedMarker?.getAttribute(MARKER);
+    const focusSelector = focused?.matches("button") ? "button" : focused?.matches("[data-source]") ? "[data-source]" : null;
+    let migratedFocus: HTMLElement | null = null;
     // Snapshot before rendering so splitting a group can migrate every visible part.
     const previousGroupByRow = new Map(groupKeyByRow);
     const previousChoices = new Map(disclosureChoices);
@@ -391,7 +431,7 @@ export function mountToolGrouping(
       let run: HTMLElement[] = [];
       let spacers: HTMLElement[] = [];
       for (const child of container.children) {
-        if (!(child instanceof HTMLElement) || child.hasAttribute(MARKER)) continue;
+        if (!(child instanceof HTMLElement) || child.hasAttribute(MARKER) || child.hasAttribute(GROUP_END)) continue;
         if (child.hasAttribute("data-timeline-window-spacer") && run.length > 0) {
           spacers.push(child);
           continue;
@@ -421,8 +461,16 @@ export function mountToolGrouping(
       if (run.length > 0) runs.push(run);
       for (const el of spacers) el.removeAttribute(HIDDEN);
 
-      for (const rows of runs.flatMap(splitAtApiBoundaries)) {
-        const api = apiRun(rows);
+      const parts = runs.flatMap(splitAtApiBoundaries).map(rows => ({ rows, api: apiRun(rows) }));
+      const apiParts = new Map<string, number>();
+      for (const { api } of parts) {
+        if (api !== null) apiParts.set(api.key, (apiParts.get(api.key) ?? 0) + 1);
+      }
+      for (const { rows, api: candidate } of parts) {
+        // A pending/stale API run can span separate visible DOM parts. Give each
+        // part its row fallback identity rather than moving one header/end
+        // between them on every observer pass. Full-run metrics are ambiguous.
+        const api = candidate !== null && apiParts.get(candidate.key) === 1 ? candidate : null;
         const calls =
           api?.count ??
           rows.reduce((sum, row) => sum + (row.dataset.timelineRowId === undefined ? 0 : domCount(row)), 0);
@@ -448,13 +496,20 @@ export function mountToolGrouping(
           const previous = previousGroupByRow.get(id);
           return previous === undefined ? [] : [previous];
         });
-        if (previousKeys.some((previous) => previous !== key)) {
+        const rowChoices = mountedIds.flatMap(id => {
+          const choice = rowDisclosureChoices.get(id);
+          return choice === undefined ? [] : [choice];
+        });
+        if (previousKeys.some((previous) => previous !== key) || rowChoices.length > 0) {
           let latestChoice = previousChoices.get(key);
           for (const previous of previousKeys) {
             const choice = previousChoices.get(previous);
             if (choice !== undefined && (latestChoice === undefined || choice.revision > latestChoice.revision)) {
               latestChoice = choice;
             }
+          }
+          for (const choice of rowChoices) {
+            if (latestChoice === undefined || choice.revision > latestChoice.revision) latestChoice = choice;
           }
           if (latestChoice !== undefined) {
             if (latestChoice.open) expanded.add(key);
@@ -466,6 +521,12 @@ export function mountToolGrouping(
         const open = expanded.has(key);
         const el = marker(container, key);
         used.add(el);
+        renderedMembers.set(el, api?.memberIds ?? mountedIds);
+        if (
+          migratedFocus === null && focusSelector !== null && focusedKey !== null &&
+          focusedKey !== undefined && previousKeys.includes(focusedKey) &&
+          focusedMarker?.parentElement === container
+        ) migratedFocus = el.querySelector<HTMLElement>(focusSelector);
         const quoteText = el.querySelector<HTMLElement>("[data-quote]")!;
         if (quoteText.textContent !== quote.text) {
           // Keep the chevron with the last word: an invisible arrow on its own
@@ -520,9 +581,21 @@ export function mountToolGrouping(
           if (open) row.removeAttribute(HIDDEN);
           else if (!row.hasAttribute(HIDDEN)) row.setAttribute(HIDDEN, "");
         }
+        if (open) {
+          const end = groupEnd(container, key);
+          used.add(end);
+          const last = rows[rows.length - 1];
+          if (end.previousElementSibling !== last) container.insertBefore(end, last.nextSibling);
+        }
       }
     }
-    for (const el of document.querySelectorAll(`[${MARKER}]`)) if (!used.has(el)) el.remove();
+    for (const el of document.querySelectorAll(`[${MARKER}], [${GROUP_END}]`)) if (!used.has(el)) el.remove();
+    // Replacing a fallback header with an API header must preserve keyboard
+    // focus, so the next Enter/Space still acts on the same visible group.
+    if (focusedMarker !== null && document.activeElement !== focused) {
+      if (used.has(focusedMarker)) focused?.focus({ preventScroll: true });
+      else migratedFocus?.focus({ preventScroll: true });
+    }
   }
 
   const observer = new MutationObserver(schedule);
@@ -536,13 +609,14 @@ export function mountToolGrouping(
     for (const timer of refreshTimers.values()) clock.clearTimeout(timer);
     refreshTimers.clear();
     style.remove();
-    for (const el of document.querySelectorAll(`[${MARKER}]`)) el.remove();
+    for (const el of document.querySelectorAll(`[${MARKER}], [${GROUP_END}]`)) el.remove();
     for (const el of document.querySelectorAll(`[${HIDDEN}]`)) el.removeAttribute(HIDDEN);
     quoteByGroup.clear();
     quoteByRow.clear();
     expanded.clear();
     groupKeyByRow.clear();
     disclosureChoices.clear();
+    rowDisclosureChoices.clear();
     visibleRows.clear();
   };
 }

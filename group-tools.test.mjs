@@ -814,6 +814,219 @@ test("agent stream work and user interactions stay visible with their own API bo
   }
 });
 
+test("keeps the end divider after the last mounted call as calls appear and disappear", async () => {
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-2", "assistant:after"],
+    fetchTimeline: async () => timeline([["tool-1"], ["tool-2"], ["assistant:after", "conversation"]]),
+  });
+  try {
+    await dom.flush();
+    assert.equal(dom.container.querySelector("[data-bb-minus-group-end]"), null);
+    const button = dom.container.querySelector("[data-bb-minus-group] button");
+    button.click();
+    await dom.flush();
+    const end = dom.container.querySelector("[data-bb-minus-group-end]");
+    assert.equal(end.getAttribute("aria-hidden"), "true");
+    assert.equal(end.previousElementSibling, dom.rows[1]);
+    assert.equal(end.nextElementSibling, dom.rows[2]);
+    const returning = dom.makeRow("tool-3");
+    dom.container.insertBefore(returning, dom.rows[2]);
+    await dom.flush();
+    assert.equal(dom.container.querySelectorAll("[data-bb-minus-group-end]").length, 1);
+    assert.equal(end.previousElementSibling, returning);
+    assert.equal(end.nextElementSibling, dom.rows[2]);
+    returning.remove();
+    await dom.flush();
+    assert.equal(end.previousElementSibling, dom.rows[1]);
+    button.click();
+    await dom.flush();
+    assert.equal(dom.container.querySelector("[data-bb-minus-group-end]"), null);
+    assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [true, true, false]);
+  } finally { dom.cleanup(); }
+});
+
+test("keeps independent dividers outside the agent stream through virtualization", async () => {
+  const dom = mountDom({
+    rowIds: ["tool-1", "op:reasoning:live", "tool-2"],
+    fetchTimeline: async () => timeline([["tool-1"], ["op:reasoning:live", "system", "reasoning"], ["tool-2"]]),
+  });
+  try {
+    await dom.flush();
+    for (const button of dom.container.querySelectorAll("[data-bb-minus-group] button")) button.click();
+    await dom.flush();
+    let ends = [...dom.container.querySelectorAll("[data-bb-minus-group-end]")];
+    assert.equal(ends.length, 2);
+    assert.equal(ends[0].previousElementSibling, dom.rows[0]);
+    assert.equal(ends[0].nextElementSibling, dom.rows[1]);
+    assert.equal(ends[1].previousElementSibling, dom.rows[2]);
+    dom.rows[0].remove();
+    await dom.flush();
+    assert.equal(dom.container.querySelectorAll("[data-bb-minus-group-end]").length, 1);
+    assert.equal(dom.rows[1].hasAttribute(HIDDEN), false);
+    dom.container.insertBefore(dom.rows[0], dom.rows[1]);
+    await dom.flush();
+    ends = [...dom.container.querySelectorAll("[data-bb-minus-group-end]")];
+    assert.equal(ends.length, 2);
+    assert.equal(ends[0].previousElementSibling, dom.rows[0]);
+    assert.equal(ends[0].nextElementSibling, dom.rows[1]);
+    assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [false, false, false]);
+  } finally { dom.cleanup(); }
+});
+
+for (const boundary of ["pending-spacer", "stale-reasoning"]) {
+  test("settles independent headers and dividers for " + boundary + " parts sharing an API run", async () => {
+    const clock = makeClock(10000);
+    const pending = boundary === "pending-spacer";
+    const rowIds = pending
+      ? ["tool-1", "tool-2", "assistant:after"]
+      : ["tool-1", "op:reasoning:live", "tool-2", "assistant:after"];
+    const dom = mountDom({
+      rowIds, clock,
+      fetchTimeline: async () => timeline([
+        ["tool-1", "work", undefined, 1000, pending ? null : 1300],
+        ["tool-2", "work", undefined, 1000, pending ? null : 1300],
+        ["assistant:after", "conversation"],
+      ]),
+    });
+    const left = dom.rows[0], right = dom.rows[pending ? 1 : 2];
+    const separator = pending ? dom.window.document.createElement("div") : dom.rows[1];
+    if (pending) {
+      separator.setAttribute("data-timeline-window-spacer", "");
+      dom.container.insertBefore(separator, right);
+    }
+    const originalRaf = globalThis.requestAnimationFrame;
+    let requested = 0;
+    globalThis.requestAnimationFrame = callback => { requested++; return originalRaf(callback); };
+    try {
+      await dom.flush();
+      const markers = [...dom.container.querySelectorAll("[data-bb-minus-group]")];
+      assert.equal(markers.length, 2);
+      assert.equal(markers[0].nextElementSibling, left);
+      assert.equal(markers[1].nextElementSibling, right);
+      const settledClosed = requested;
+      await dom.flush();
+      assert.equal(requested, settledClosed, "closed DOM must not schedule itself forever");
+      for (const marker of markers) marker.querySelector("button").click();
+      await dom.flush();
+      const ends = [...dom.container.querySelectorAll("[data-bb-minus-group-end]")];
+      assert.equal(ends.length, 2);
+      assert.equal(ends[0].previousElementSibling, left);
+      assert.equal(ends[0].nextElementSibling, separator);
+      assert.equal(ends[1].previousElementSibling, right);
+      assert.equal(separator.hasAttribute(HIDDEN), false);
+      const settledOpen = requested;
+      await dom.flush();
+      assert.equal(requested, settledOpen, "open DOM must not schedule itself forever");
+    } finally { dom.cleanup(); }
+  });
+}
+
+for (const failRefresh of [false, true]) {
+  test("a returning fallback part keeps the latest API collapse" + (failRefresh ? " after API failure" : ""), async () => {
+    const clock = makeClock(10000);
+    let rejectRefresh = false;
+    const dom = mountDom({
+      rowIds: ["tool-1", "tool-2", "assistant:after"], clock,
+      fetchTimeline: async () => {
+        if (rejectRefresh) throw new Error("refresh failed");
+        return timeline([["tool-1", "work", undefined, 1000, null], ["tool-2", "work", undefined, 1000, null], ["assistant:after", "conversation"]]);
+      },
+    });
+    const spacer = dom.window.document.createElement("div");
+    spacer.setAttribute("data-timeline-window-spacer", "");
+    dom.container.insertBefore(spacer, dom.rows[1]);
+    try {
+      await dom.flush();
+      for (const button of dom.container.querySelectorAll("[data-bb-minus-group] button")) button.click();
+      await dom.flush();
+      assert.equal(dom.container.querySelectorAll("[data-bb-minus-group-end]").length, 2);
+      dom.rows[1].remove();
+      await dom.flush();
+      assert.equal(dom.container.querySelectorAll("[data-bb-minus-group]").length, 1);
+      const apiButton = dom.container.querySelector("[data-bb-minus-group] button");
+      assert.equal(apiButton.getAttribute("aria-expanded"), "true");
+      apiButton.click();
+      await dom.flush();
+      if (failRefresh) {
+        rejectRefresh = true;
+        clock.advance(2000);
+        await dom.flush();
+      }
+      dom.container.insertBefore(dom.rows[1], dom.rows[2]);
+      await dom.flush();
+      assert.deepEqual([...dom.container.querySelectorAll("[data-bb-minus-group] button")].map(x => x.getAttribute("aria-expanded")), ["false", "false"]);
+      assert.equal(dom.container.querySelectorAll("[data-bb-minus-group-end]").length, 0);
+      assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+      assert.equal(dom.rows[1].hasAttribute(HIDDEN), true);
+      assert.equal(spacer.hasAttribute(HIDDEN), false);
+    } finally { dom.cleanup(); }
+  });
+}
+
+test("keeps the rendered API membership when collapse happens after rejection but before its RAF", async () => {
+  const clock = makeClock(10000);
+  let rejectRefresh = false;
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-2", "assistant:after"], clock,
+    fetchTimeline: async () => {
+      if (rejectRefresh) throw new Error("refresh failed before render");
+      return timeline([["tool-1", "work", undefined, 1000, null], ["tool-2", "work", undefined, 1000, null], ["assistant:after", "conversation"]]);
+    },
+  });
+  const spacer = dom.window.document.createElement("div");
+  spacer.setAttribute("data-timeline-window-spacer", "");
+  dom.container.insertBefore(spacer, dom.rows[1]);
+  const originalRaf = globalThis.requestAnimationFrame;
+  try {
+    await dom.flush();
+    for (const button of dom.container.querySelectorAll("[data-bb-minus-group] button")) button.click();
+    await dom.flush();
+    dom.rows[1].remove();
+    await dom.flush();
+    const button = dom.container.querySelector("[data-bb-minus-group] button");
+    assert.equal(button.getAttribute("aria-expanded"), "true");
+    const queued = [];
+    let frameId = 0;
+    globalThis.requestAnimationFrame = callback => { queued.push(callback); return ++frameId; };
+    rejectRefresh = true;
+    clock.advance(2000);
+    await new Promise(resolve => dom.window.setTimeout(resolve, 0));
+    assert.equal(queued.length, 1, "hold the first render after rejection");
+    button.click();
+    globalThis.requestAnimationFrame = originalRaf;
+    for (const callback of queued.splice(0)) callback(dom.window.performance.now());
+    await dom.flush();
+    dom.container.insertBefore(dom.rows[1], dom.rows[2]);
+    await dom.flush();
+    assert.deepEqual([...dom.container.querySelectorAll("[data-bb-minus-group] button")].map(x => x.getAttribute("aria-expanded")), ["false", "false"]);
+    assert.equal(dom.container.querySelectorAll("[data-bb-minus-group-end]").length, 0);
+    assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [true, true, false]);
+  } finally { globalThis.requestAnimationFrame = originalRaf; dom.cleanup(); }
+});
+
+for (const focusSelector of ["button", "[data-source]"]) {
+  test("keeps focus on " + focusSelector + " when an expanded fallback becomes an API group", async () => {
+    let resolveTimeline;
+    const dom = mountDom({
+      rowIds: ["tool-1"],
+      fetchTimeline: () => new Promise(resolve => { resolveTimeline = resolve; }),
+    });
+    try {
+      await dom.flush();
+      const previous = dom.container.querySelector("[data-bb-minus-group]");
+      previous.querySelector("button").click();
+      await dom.flush();
+      previous.querySelector(focusSelector).focus();
+      resolveTimeline(timeline([["tool-1"]]));
+      await dom.flush();
+      const current = dom.container.querySelector("[data-bb-minus-group]");
+      assert.notEqual(current, previous);
+      assert.equal(dom.window.document.activeElement, current.querySelector(focusSelector));
+      assert.equal(current.querySelector("button").getAttribute("aria-expanded"), "true");
+    } finally { dom.cleanup(); }
+  });
+}
+
 test("dispose restores rows and removes injected DOM", async () => {
   const dom = mountDom({
     rowIds: ["tool-1"],
@@ -823,9 +1036,13 @@ test("dispose restores rows and removes injected DOM", async () => {
     await dom.flush();
     assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
     assert.ok(dom.window.document.head.querySelector("style"));
+    dom.container.querySelector("[data-bb-minus-group] button").click();
+    await dom.flush();
+    assert.ok(dom.container.querySelector("[data-bb-minus-group-end]"));
     dom.dispose();
     assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
     assert.equal(dom.container.querySelector("[data-bb-minus-group]"), null);
+    assert.equal(dom.container.querySelector("[data-bb-minus-group-end]"), null);
     assert.equal(dom.window.document.head.querySelector("style"), null);
   } finally {
     dom.cleanup();
