@@ -24,8 +24,10 @@ Changes apply in every open window within about a second, without a reload. Keyb
 
 ## Collapse tool calls
 
-One more switch folds each run of consecutive tool calls and thinking rows in the chat into a single row styled after the native "Worked for" row. The summary shows a curated, self-contained italic Russian quote, linked author/source, a visible tool count, and the summed runtime of those calls. Text wraps naturally as the chat narrows. Quote, metrics and source keep BB's muted foreground token on hover and focus, with a visible keyboard focus ring. Click the row to show the original calls again. Counts and runtimes come from the complete thread timeline, so they include virtualized calls and update while a call is running. Concurrent calls are added together, so the total can exceed the group's wall-clock duration. A manual "Stopped manually" row stays visible outside the group and is excluded from both metrics.
+One more switch folds each run of consecutive tool calls in the chat into a single row styled after the native "Worked for" row. The summary shows a curated, self-contained italic Russian quote, linked author/source, a visible tool count, and the summed runtime of those calls. Text wraps naturally as the chat narrows. Quote, metrics and source keep BB's muted foreground token on hover and focus, with a visible keyboard focus ring. Click the row to show the original calls again. Counts and runtimes come from the complete thread timeline, so they include virtualized calls and update while a call is running. Concurrent calls are added together, so the total can exceed the group's wall-clock duration. A manual "Stopped manually" row stays visible outside the group and is excluded from both metrics.
 
 ## How it works
 
 The plugin hides bb's own elements by their labels and data attributes. A bb update that renames an element brings it back until the plugin is updated. Agents can toggle the switches with `bb plugin config minus set <key> true`.
+
+Collapsing tools keeps reasoning, unknown streaming rows, nested agent timelines and delegation/workflow streams visible. Approval, question and form rows remain available for the user to respond. The summary reads quote → Russian author/source → tool count and total time, with a shared native horizontal inset.

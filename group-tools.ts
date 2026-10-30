@@ -1,4 +1,4 @@
-// Collapses each run of consecutive tool/thinking rows in the top-level thread timeline
+// Collapses each run of consecutive tool rows in the top-level thread timeline
 // behind one quote toggle styled like bb's "Worked for" row. bb owns the rows (React),
 // so this only sets an attribute on them and inserts its own sibling markers.
 // The timeline is virtualized, so counts come from the timeline API, not mounted rows.
@@ -7,6 +7,7 @@ import { pickRandomQuote, QUOTE_SOURCES, type QuoteEntry } from "./quotes.ts";
 type TimelineRow = {
   id: string;
   kind: string;
+  workKind?: string;
   startedAt?: number;
   completedAt?: number | null;
   status?: string | null;
@@ -26,17 +27,20 @@ const systemClock: Clock = {
 
 const HIDDEN = "data-bb-minus-hidden";
 const MARKER = "data-bb-minus-group";
-const NON_TOOL = /^(user|assistant|error|op:(?!reasoning:))|:turn(:|$)|kind:(assistant|user)/;
+// Fallback IDs from the SDK's work row kinds. Unknown/streaming rows stay visible.
+const TOOL_ROW = /^(command|tool|file-change|web-search|web-fetch|image-generation|image-view|file-read|search|plan-steps|extension):/;
+// These work rows carry an agent stream or require the user's response.
+const VISIBLE_WORK = new Set(["delegation", "workflow", "approval", "question", "form"]);
 const REFETCH_MS = 2000;
 
 const TOGGLE_HTML = `<div class="rounded-md text-muted-foreground w-full">
-  <div data-row class="group/timeline-row min-w-0 text-sm leading-5">
-    <button type="button" aria-expanded="false" class="group/toggle inline max-w-full whitespace-normal break-words px-2 py-0 text-left align-baseline text-sm leading-5 text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer">
+  <div data-row class="group/timeline-row min-w-0 px-2 text-sm leading-5">
+    <button type="button" aria-expanded="false" class="group/toggle inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-sm leading-5 text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="mr-1.5 inline-block size-3.5 align-text-bottom text-muted-foreground opacity-40" aria-hidden="true" data-minus-icon="called-tools"><path d="M12 8.5L3.12132 17.3787C2.72349 17.7765 2.5 18.3161 2.5 18.8787C2.5 20.0503 3.44975 21 4.62132 21C5.18393 21 5.72349 20.7765 6.12132 20.3787L15 11.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.1207 5.03693L20.3682 9.3197C21.014 9.97093 21.3369 10.2966 21.4435 10.6774C21.5188 10.9467 21.5188 11.2317 21.4435 11.501C21.3369 11.8819 21.014 12.2075 20.3682 12.8587C19.7223 13.51 19.3994 13.8356 19.0216 13.943C18.7546 14.019 18.4719 14.019 18.2048 13.943C17.8271 13.8356 17.5042 13.51 16.8583 12.8587L10.0245 5.96802C8.99015 4.92507 8.47297 4.40359 8.50109 3.94831C8.51495 3.7239 8.60259 3.51054 8.75017 3.34197C9.04956 3 9.78095 3 11.2437 3C12.4209 3 13.0095 3 13.5574 3.16035C13.8406 3.24325 14.1139 3.3574 14.3723 3.50071C14.8721 3.77792 15.2883 4.19759 16.1207 5.03693Z" stroke="currentColor" stroke-width="1.5"/></svg><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-muted-foreground"></span>
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-muted-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg>
     </button>
-    <span data-metrics class="mr-1.5 inline-block whitespace-nowrap text-xs leading-5 text-muted-foreground"></span>
-    <a data-source class="break-words text-xs leading-5 text-muted-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
+    <a data-source class="mr-1.5 break-words text-xs leading-5 text-muted-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
+    <span data-metrics class="inline-block whitespace-nowrap text-xs leading-5 text-muted-foreground"></span>
   </div>
 </div>`;
 
@@ -44,8 +48,19 @@ function rowKey(row: HTMLElement): string {
   return (row.dataset.timelineRowId ?? "").replace(/^thr_[a-z0-9]+:/, "");
 }
 
-function isToolRow(row: HTMLElement): boolean {
-  return !NON_TOOL.test(rowKey(row)) && row.querySelector(".group\\/message") === null;
+function hasAgentContent(row: HTMLElement): boolean {
+  return row.querySelector(".group\\/message, [data-timeline-row-list]") !== null;
+}
+
+function isToolRow(row: HTMLElement, collapsible?: Map<string, boolean>): boolean {
+  // A work/delegation row may contain live messages or an entire child timeline.
+  // Hiding its outer wrapper would also hide that useful agent stream.
+  if (hasAgentContent(row)) return false;
+  const key = rowKey(row);
+  if (/^(user|assistant|error|op:)|:turn(:|$)|kind:(assistant|user|reasoning)/.test(key)) return false;
+  const known = collapsible?.get(apiId(row));
+  if (known !== undefined) return known;
+  return TOOL_ROW.test(key) || key.includes(":work-summary:");
 }
 
 // A work summary's DOM id ends with the id of the first API row it covers.
@@ -64,15 +79,20 @@ function domCount(row: HTMLElement): number {
   return n || 1;
 }
 
-// API runs: consecutive work rows and reasoning rows; anything else breaks a run.
+// Only work rows belong to API runs. Streaming/reasoning rows break the run.
 type ThreadRuns = {
+  rows: TimelineRow[];
+  collapsible: Map<string, boolean>;
   runOf: Map<string, number>;
   counts: number[];
   firstIds: string[];
   durationMs: Array<number | null>;
   pending: boolean[];
 };
-function indexRuns(rows: TimelineRow[], now: number): ThreadRuns {
+function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): ThreadRuns {
+  const collapsible = new Map(rows.map((row) => [row.id,
+    row.kind === "work" && !VISIBLE_WORK.has(row.workKind ?? "") && !visibleRows.has(row.id),
+  ]));
   const runOf = new Map<string, number>();
   const counts: number[] = [];
   const firstIds: string[] = [];
@@ -81,7 +101,7 @@ function indexRuns(rows: TimelineRow[], now: number): ThreadRuns {
   const pending: boolean[] = [];
   let open = false;
   for (const row of rows) {
-    const tool = row.kind === "work" || (row.kind === "system" && row.id.includes(":op:reasoning:"));
+    const tool = collapsible.get(row.id);
     if (!tool) {
       open = false;
       continue;
@@ -109,6 +129,8 @@ function indexRuns(rows: TimelineRow[], now: number): ThreadRuns {
     }
   }
   return {
+    rows,
+    collapsible,
     runOf,
     counts,
     firstIds,
@@ -150,6 +172,7 @@ export function mountToolGrouping(
   const quoteByGroup = new Map<string, QuoteEntry>();
   const quoteByRow = new Map<string, QuoteEntry>();
   const threads = new Map<string, ThreadRuns>();
+  const visibleRows = new Set<string>();
   const lastFetch = new Map<string, number>();
   const inFlight = new Set<string>();
   const refreshTimers = new Map<string, ReturnType<typeof setTimeout>>();
@@ -187,7 +210,7 @@ export function mountToolGrouping(
     lastFetch.set(threadId, now);
     fetchTimeline(threadId)
       .then(
-        (rows) => threads.set(threadId, indexRuns(rows, clock.now())),
+        (rows) => threads.set(threadId, indexRuns(rows, clock.now(), visibleRows)),
         () => {
           // A failed refresh cannot prove that a spacer does not hide a new run boundary.
           threads.delete(threadId);
@@ -269,6 +292,21 @@ export function mountToolGrouping(
             break;
           }
         }
+        // The DOM scan may already have split at an unverified spacer. Preserve
+        // the API boundary beyond it when deciding where an uncached row belongs.
+        if (nextRun === undefined) {
+          let next = rows[rows.length - 1].nextElementSibling;
+          while (next instanceof HTMLElement) {
+            if (next.hasAttribute(MARKER) || next.hasAttribute("data-timeline-window-spacer")) {
+              next = next.nextElementSibling;
+              continue;
+            }
+            if (!isToolRow(next, api.collapsible)) break;
+            nextRun = api.runOf.get(apiId(next));
+            if (nextRun !== undefined) break;
+            next = next.nextElementSibling;
+          }
+        }
         if (openRun !== undefined && nextRun !== undefined && nextRun !== openRun) {
           for (const spacer of pendingSpacers) spacer.removeAttribute(HIDDEN);
           pendingSpacers = [];
@@ -325,7 +363,8 @@ export function mountToolGrouping(
     return (
       runs !== undefined &&
       !runs.pending.some(Boolean) &&
-      runs.runOf.has(apiId(right))
+      runs.runOf.has(apiId(left)) &&
+      runs.runOf.get(apiId(left)) === runs.runOf.get(apiId(right))
     );
   }
 
@@ -337,6 +376,17 @@ export function mountToolGrouping(
     const used = new Set<Element>();
     for (const container of document.querySelectorAll("[data-timeline-items]")) {
       if (container.closest("[data-timeline-row-list]")?.getAttribute("data-timeline-row-list") !== "top-level") continue;
+      // A streaming work row can acquire message content after the API response.
+      // Keep it as a boundary in the API index too, so adjacent tools do not share a marker.
+      for (const row of container.children) {
+        if (!(row instanceof HTMLElement) || row.dataset.timelineRowId === undefined || !hasAgentContent(row)) continue;
+        const id = apiId(row);
+        if (visibleRows.has(id)) continue;
+        visibleRows.add(id);
+        const threadId = row.dataset.timelineRowId.match(/^thr_[a-z0-9]+/)?.[0];
+        const api = threads.get(threadId ?? "");
+        if (api !== undefined && api.runOf.has(id)) threads.set(threadId!, indexRuns(api.rows, clock.now(), visibleRows));
+      }
       // Join across a spacer only when the current API maps both mounted rows to the same run.
       const runs: HTMLElement[][] = [];
       let run: HTMLElement[] = [];
@@ -347,7 +397,9 @@ export function mountToolGrouping(
           spacers.push(child);
           continue;
         }
-        if (child.dataset.timelineRowId !== undefined && isToolRow(child)) {
+        const threadId = child.dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
+        if (threadId !== undefined && !threads.has(threadId)) refresh(threadId);
+        if (child.dataset.timelineRowId !== undefined && isToolRow(child, threads.get(threadId ?? "")?.collapsible)) {
           if (
             run.length > 0 &&
             spacers.length > 0 &&
@@ -481,5 +533,6 @@ export function mountToolGrouping(
     expanded.clear();
     groupKeyByRow.clear();
     disclosureChoices.clear();
+    visibleRows.clear();
   };
 }

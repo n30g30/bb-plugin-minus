@@ -33,8 +33,7 @@ switches grouped by area in a plugin settings section, which replaces bb's flat
 form on that page. Add an element by appending `{ key, label, selectors }` to
 an area. Prefer bb's aria labels and `data-*` attributes over Tailwind classes.
 
-`collapseToolCalls` is not CSS: `group-tools.ts` hides each run of tool and
-thinking rows in the top-level timeline and inserts a row styled after the native
+`collapseToolCalls` is not CSS: `group-tools.ts` hides each run of tool rows in the top-level timeline and inserts a row styled after the native
 "Worked for" row. The summary shows a curated, self-contained Russian quote, linked
 author/source, a visible tool count, and the summed runtime across those calls.
 The text wraps naturally as the chat narrows. Quote, metrics and source keep
@@ -50,3 +49,5 @@ Author names and work titles in the visible source link are shown in Russian. Th
 ## License
 
 MIT
+
+Collapsing tools keeps reasoning, unknown streaming rows, nested agent timelines and delegation/workflow streams visible. Approval, question and form rows remain available for the user to respond. The summary reads quote → Russian author/source → tool count and total time, with a shared native horizontal inset.

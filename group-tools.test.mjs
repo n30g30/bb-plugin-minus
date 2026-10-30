@@ -6,9 +6,13 @@ import { QUOTE_SOURCES, QUOTES, pickRandomQuote } from "./quotes.ts";
 
 const HIDDEN = "data-bb-minus-hidden";
 
+function fullId(id) {
+  return id.startsWith("thr_") ? id : "thr_test:" + (id.startsWith("tool-") ? "tool:" : "") + id;
+}
+
 function makeRow(window, id) {
   const row = window.document.createElement("div");
-  row.setAttribute("data-timeline-row-id", id.startsWith("thr_") ? id : "thr_test:" + id);
+  row.setAttribute("data-timeline-row-id", fullId(id));
   return row;
 }
 
@@ -67,8 +71,8 @@ function mountDom({ rowIds, fetchTimeline, chooseQuote = () => QUOTES[0], clock 
 }
 
 function timeline(rows) {
-  return rows.map(([id, kind = "work", operationKind, startedAt = 1000, completedAt = 1300]) => ({
-    id: "thr_test:" + id,
+  return rows.map(([id, kind = "work", operationKind, startedAt = 1000, completedAt = 1300, workKind]) => ({
+    id: fullId(id),
     kind,
     startedAt,
     ...(kind === "work" ? {
@@ -76,6 +80,7 @@ function timeline(rows) {
       status: completedAt === null ? "pending" : "completed",
     } : {}),
     ...(operationKind === undefined ? {} : { operationKind }),
+    ...(workKind === undefined ? {} : { workKind }),
   }));
 }
 
@@ -119,6 +124,7 @@ for (const count of [1, 2, 3]) {
       const quote = marker.querySelector("[data-quote]");
       const source = marker.querySelector("[data-source]");
       const metrics = marker.querySelector("[data-metrics]");
+      assert.deepEqual([...marker.querySelector("[data-row]").children].map(el => el.tagName), ["BUTTON", "A", "SPAN"]);
       assert.equal(marker.textContent.includes("Called"), false);
       assert.ok(button.classList.contains("text-muted-foreground"));
       assert.ok(quote.classList.contains("text-muted-foreground"));
@@ -702,6 +708,109 @@ test("keeps separate tool runs independently expandable", async () => {
     assert.equal(dom.rows[2].hasAttribute(HIDDEN), false);
   } finally {
     dom.cleanup();
+  }
+});
+
+test("keeps reasoning and unknown live rows visible before, during and after the API response", async () => {
+  let resolveTimeline;
+  const dom = mountDom({
+    rowIds: ["tool-1", "op:reasoning:live", "live-agent-stream", "tool-2"],
+    fetchTimeline: () => new Promise(resolve => { resolveTimeline = resolve; }),
+  });
+  try {
+    dom.rows[1].textContent = "Проверяю результат агента";
+    dom.rows[2].textContent = "Промежуточный ответ";
+    await dom.flush();
+    assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [true, false, false, true]);
+    resolveTimeline(timeline([["tool-1"], ["op:reasoning:live", "system", "reasoning"], ["live-agent-stream", "system"], ["tool-2"]]));
+    await dom.flush();
+    dom.rows[1].append(" — поток продолжается");
+    dom.rows[2].append(" — новые данные");
+    await dom.flush();
+    assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [true, false, false, true]);
+    const buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
+    assert.equal(buttons.length, 2);
+    assert.ok(buttons.every(button => button.getAttribute("aria-label") === "Show 1 tool call. Total tool time: 300ms."));
+    buttons[0].click();
+    await dom.flush();
+    assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [false, false, false, true]);
+  } finally { dom.cleanup(); }
+});
+
+test("does not join tool runs across virtualized reasoning", async () => {
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-2"],
+    fetchTimeline: async () => timeline([["tool-1"], ["op:reasoning:virtual", "system", "reasoning"], ["tool-2"]]),
+  });
+  const spacer = dom.window.document.createElement("div");
+  spacer.setAttribute("data-timeline-window-spacer", "");
+  dom.container.insertBefore(spacer, dom.rows[1]);
+  try {
+    await dom.flush();
+    assert.equal(dom.container.querySelectorAll("[data-bb-minus-group]").length, 2);
+    assert.equal(spacer.hasAttribute(HIDDEN), false);
+  } finally { dom.cleanup(); }
+});
+
+test("an uncached tool cannot bridge a spacer containing an agent stream", async () => {
+  const dom = mountDom({
+    rowIds: ["tool-uncached", "tool-right"],
+    fetchTimeline: async () => timeline([["tool-left"], ["delegation:child", "work", undefined, 1000, null, "delegation"], ["tool-right"]]),
+  });
+  const spacer = dom.window.document.createElement("div");
+  spacer.setAttribute("data-timeline-window-spacer", "");
+  dom.container.insertBefore(spacer, dom.rows[1]);
+  try {
+    await dom.flush();
+    assert.equal(dom.container.querySelectorAll("[data-bb-minus-group]").length, 2);
+    assert.equal(spacer.hasAttribute(HIDDEN), false);
+    assert.deepEqual([...dom.container.querySelectorAll("[data-metrics]")].map(x => x.textContent), ["1 tool · time unavailable", "1 tool · 300ms"]);
+  } finally { dom.cleanup(); }
+});
+
+test("a work row acquiring nested agent content becomes a visible independent boundary", async () => {
+  const dom = mountDom({
+    rowIds: ["tool-1", "tool-agent", "tool-2"],
+    fetchTimeline: async () => timeline([["tool-1"], ["tool-agent"], ["tool-2"]]),
+  });
+  try {
+    await dom.flush();
+    assert.equal(dom.container.querySelectorAll("[data-bb-minus-group]").length, 1);
+    const list = dom.window.document.createElement("div");
+    list.setAttribute("data-timeline-row-list", "child");
+    const items = dom.window.document.createElement("div");
+    items.setAttribute("data-timeline-items", "");
+    const message = dom.makeRow("assistant:kind:assistant|stream");
+    message.textContent = "Агент проверил первый файл";
+    items.append(message);
+    list.append(items);
+    dom.rows[1].append(list);
+    await dom.flush();
+    assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [true, false, true]);
+    const markers = [...dom.container.querySelectorAll(":scope > [data-bb-minus-group]")];
+    assert.equal(markers.length, 2);
+    assert.ok(markers.every(marker => marker.querySelector("[data-metrics]").textContent === "1 tool · 300ms"));
+    assert.equal(message.hasAttribute(HIDDEN), false);
+    message.append("; проверяю следующий");
+    await dom.flush();
+    assert.equal(dom.rows[1].hasAttribute(HIDDEN), false);
+    markers[1].querySelector("button").click();
+    await dom.flush();
+    assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [true, false, false]);
+  } finally { dom.cleanup(); }
+});
+
+test("agent stream work and user interactions stay visible with their own API boundaries", async () => {
+  for (const workKind of ["delegation", "workflow", "approval", "question", "form"]) {
+    const dom = mountDom({
+      rowIds: ["tool-1", workKind + ":live", "tool-2"],
+      fetchTimeline: async () => timeline([["tool-1"], [workKind + ":live", "work", undefined, 1000, null, workKind], ["tool-2"]]),
+    });
+    try {
+      await dom.flush();
+      assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [true, false, true], workKind);
+      assert.equal(dom.container.querySelectorAll("[data-bb-minus-group]").length, 2, workKind);
+    } finally { dom.cleanup(); }
   }
 });
 
