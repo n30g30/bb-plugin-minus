@@ -186,12 +186,14 @@ export function mountToolGrouping(
   const refreshTimers = new Map<string, ReturnType<typeof setTimeout>>();
   let disposed = false;
   const style = document.createElement("style");
-  // Native 1px border and the approved 2 × spacing inset/padding. In an open
-  // group, the timeline's native gap supplies the space above the end divider.
+  // Keep the native border/inset. The owner's roomier reading rhythm doubles
+  // inner padding from 2 to 4 spacing steps; 2 extra steps + native gap 2 = 4
+  // steps after the lower divider (and around the open group's end marker).
   style.textContent = `[${HIDDEN}]{display:none!important}
-[${MARKER}] [data-row]{margin-inline:calc(2 * var(--spacing));padding-inline:0;border-top:1px solid var(--border);padding-top:calc(2 * var(--spacing))}
-[${MARKER}]:has(button[aria-expanded="false"]) [data-row]{border-bottom:1px solid var(--border);padding-bottom:calc(2 * var(--spacing))}
-[${GROUP_END}]{margin-inline:calc(2 * var(--spacing));border-bottom:1px solid var(--border)}`;
+[${MARKER}]{padding-bottom:calc(2 * var(--spacing))}
+[${MARKER}] [data-row]{margin-inline:calc(2 * var(--spacing));padding-inline:0;border-top:1px solid var(--border);padding-top:calc(4 * var(--spacing))}
+[${MARKER}]:has(button[aria-expanded="false"]) [data-row]{border-bottom:1px solid var(--border);padding-bottom:calc(4 * var(--spacing))}
+[${GROUP_END}]{margin-inline:calc(2 * var(--spacing));margin-block:calc(2 * var(--spacing));border-bottom:1px solid var(--border)}`;
   document.head.append(style);
 
   let frame = 0;
