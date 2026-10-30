@@ -40,7 +40,13 @@ updated: 2026-10-30
 
 ![После завершения](verification/2026-10-30-activity-icon/dark-completed-390x600.png)
 
-На момент этой записи кандидат ещё не установлен. Обратный источник — установленный `0f0175fb81393641a9648a97282ad66a54856478`, актуальные 31 настройки сохраняются перед заменой.
+Установлен exact source `9a8c46d92fc66a1d5380cb0412c7eb74afc1608c`, bundle `e3d47ae53f51bdb6`. Штатное install job `d3523217-a334-4fc8-98d2-0ff04447ed2a` завершилось `succeeded`. Перед заменой перечитаны source/artifact, jobs, settings и health; активных конфликтующих jobs не было. Обратный источник — `0f0175fb81393641a9648a97282ad66a54856478` с непосредственно сохранёнными settings. Backend определяет только settings, не объявляет secrets/storage/schedules/host entry.
+
+[Отдельное чтение после установки](verification/2026-10-30-activity-icon/installed.json) подтвердило exact source/bundle, enabled/running, statusDetail=null, совпадение установленных исходников с проверенными, все 31 настройки и health 200 до/после UI. `quotes.ts` совпадает с рабочим источником и не менялся. [Настоящий установленный frontend](verification/2026-10-30-activity-icon/installed-native.json) без перехвата API/JS/CSS прошёл 1280 и 390: состояния, доступные описания и CSS-анимация соответствуют данным.
+
+[Реальный переход установленной иконки](verification/2026-10-30-activity-icon/installed-transition.json) подтверждён в текущем треде на настоящем tool call: `pending` с native spin → `completed` без animation, SVG и доступная подпись сменились, ошибок браузера нет. Для наблюдения использовался одноразовый headless-клиент без API/asset interception. Проверочный промежуток 4 секунды выбран как две существующие 2-секундные cadence-итерации refresh; production-таймауты не менялись.
+
+Изменение опубликовано в текущей ветке/upstream PR #2, merge не выполнялся. Workflows в проверенных HEAD/origin/main/upstream/main отсутствуют; GitHub Actions не запускались. Общий BB/сервер не останавливался и не перезапускался. Следующий документационный commit не меняет установленный исполняемый source. Собственные браузеры/серверы завершены; временные зависимости и сборка удаляются после проверки.
 
 Отдельная попытка native capture не удержала цель в viewport из-за автопрокрутки; её отказ не объявляется PASS. В последующем прогоне функциональные assertions отделены от supplemental screenshotAccepted; для visual evidence используются восемь стабильных санитизированных PNG штатного local-ui-capture.
 
