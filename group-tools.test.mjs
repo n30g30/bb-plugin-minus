@@ -126,9 +126,9 @@ for (const count of [1, 2, 3]) {
       const metrics = marker.querySelector("[data-metrics]");
       assert.deepEqual([...marker.querySelector("[data-row]").children].map(el => el.tagName), ["BUTTON", "A", "SPAN"]);
       assert.equal(marker.textContent.includes("Called"), false);
-      assert.ok(button.classList.contains("text-muted-foreground"));
-      assert.ok(quote.classList.contains("text-muted-foreground"));
-      assert.ok(metrics.classList.contains("text-muted-foreground"));
+      assert.ok(button.classList.contains("text-subtle-foreground"));
+      assert.ok(quote.classList.contains("text-subtle-foreground"));
+      assert.ok(metrics.classList.contains("text-subtle-foreground"));
       assert.equal(
         button.getAttribute("aria-label"),
         "Show " + count + " tool call" + (count === 1 ? "" : "s") + ". Total tool time: " +
@@ -146,7 +146,7 @@ for (const count of [1, 2, 3]) {
       assert.equal(source.href, QUOTE_SOURCES[QUOTES[0].source].url);
       assert.equal(source.target, "_blank");
       assert.equal(source.rel, "noopener noreferrer");
-      assert.ok(source.classList.contains("text-muted-foreground"));
+      assert.ok(source.classList.contains("text-subtle-foreground"));
       assert.ok(source.classList.contains("underline"));
       assert.equal(source.classList.contains("text-primary"), false);
       assert.ok(button.classList.contains("focus-visible:ring-1"));
