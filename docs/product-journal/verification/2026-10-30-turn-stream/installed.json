@@ -1,0 +1,29 @@
+{
+  "source": "git:https://github.com/vadikhq/bb-plugin-minus.git@15aa2f6f167d51beb55ae9814e24426cdc15e71b",
+  "sourceCommit": "15aa2f6f167d51beb55ae9814e24426cdc15e71b",
+  "bundle": "f445d81ac082c053",
+  "enabled": true,
+  "status": "running",
+  "statusDetail": null,
+  "job": {
+    "id": "36de346d-34d4-4919-bcaa-a1db7d5cb1cb",
+    "state": "succeeded"
+  },
+  "settingsMatched": 31,
+  "logsEmpty": true,
+  "health": 200,
+  "live": {
+    "contexts": 2,
+    "allMessagesVisible": true,
+    "manualClosePreserved": true,
+    "errors": []
+  },
+  "active": {
+    "bundles": 1,
+    "closed": true,
+    "opened": true,
+    "recollapsed": true,
+    "allMessagesVisible": true,
+    "errors": []
+  }
+}
