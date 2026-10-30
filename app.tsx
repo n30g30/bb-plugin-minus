@@ -13,7 +13,30 @@ function HideStyles() {
   const sdk = useSdk();
   useEffect(() => {
     if (!collapseToolCalls) return;
-    return mountToolGrouping(async (threadId) => (await sdk.threads.timeline({ threadId, deferContent: "true" })).rows);
+    return mountToolGrouping(
+      async (threadId) => (await sdk.threads.timeline({ threadId, deferContent: "true", includeNestedRows: "true" })).rows,
+      undefined,
+      undefined,
+      (notify) => {
+        const unsubscribeThread = sdk.subscribe({
+          event: "thread:changed",
+          callback: (event) => {
+            if (!event.changes.some(change =>
+              ["events-appended", "status-changed", "history-compacted", "history-rewritten"].includes(change),
+            )) return;
+            notify(event.id, event.changes.includes("status-changed") ||
+              event.metadata?.eventTypes?.includes("turn/completed") === true);
+          },
+        });
+        const unsubscribeConnection = sdk.subscribe({
+          event: "realtime:connection",
+          callback: (event) => {
+            if (event.state === "connected" && event.reconnected) notify(undefined, true);
+          },
+        });
+        return () => { unsubscribeThread(); unsubscribeConnection(); };
+      },
+    );
   }, [collapseToolCalls, sdk]);
   const collapseQueue = values?.collapseQueue === true;
   useEffect(() => (collapseQueue ? mountQueueCollapse() : undefined), [collapseQueue]);

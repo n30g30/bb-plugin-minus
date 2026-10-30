@@ -11,8 +11,10 @@ type TimelineRow = {
   startedAt?: number;
   completedAt?: number | null;
   status?: string | null;
+  children?: TimelineRow[] | null;
 };
 type FetchTimeline = (threadId: string) => Promise<TimelineRow[]>;
+type SubscribeTimeline = (notify: (threadId: string | undefined, finished: boolean) => void) => () => void;
 type DisclosureChoice = { revision: number; open: boolean };
 type Clock = {
   now: () => number;
@@ -33,15 +35,16 @@ const GROUP_END = "data-bb-minus-group-end";
 const TOOL_ROW = /^(command|tool|file-change|web-search|web-fetch|image-generation|image-view|file-read|search|plan-steps|extension):/;
 // These work rows carry an agent stream or require the user's response.
 const VISIBLE_WORK = new Set(["delegation", "workflow", "approval", "question", "form"]);
+// Keep the existing active-stream cadence; terminal realtime events bypass it.
 const REFETCH_MS = 2000;
 
 const TOGGLE_HTML = `<div class="rounded-md text-subtle-foreground w-full">
   <div data-row class="group/timeline-row min-w-0 px-2 text-sm leading-5">
-    <button type="button" aria-expanded="false" class="group/toggle inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer">
+    <button data-toggle="quote" type="button" aria-expanded="false" class="group/toggle inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="mr-1.5 inline-block size-3.5 align-text-bottom text-subtle-foreground opacity-40" aria-hidden="true" data-minus-icon="called-tools"><path d="M12 8.5L3.12132 17.3787C2.72349 17.7765 2.5 18.3161 2.5 18.8787C2.5 20.0503 3.44975 21 4.62132 21C5.18393 21 5.72349 20.7765 6.12132 20.3787L15 11.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.1207 5.03693L20.3682 9.3197C21.014 9.97093 21.3369 10.2966 21.4435 10.6774C21.5188 10.9467 21.5188 11.2317 21.4435 11.501C21.3369 11.8819 21.014 12.2075 20.3682 12.8587C19.7223 13.51 19.3994 13.8356 19.0216 13.943C18.7546 14.019 18.4719 14.019 18.2048 13.943C17.8271 13.8356 17.5042 13.51 16.8583 12.8587L10.0245 5.96802C8.99015 4.92507 8.47297 4.40359 8.50109 3.94831C8.51495 3.7239 8.60259 3.51054 8.75017 3.34197C9.04956 3 9.78095 3 11.2437 3C12.4209 3 13.0095 3 13.5574 3.16035C13.8406 3.24325 14.1139 3.3574 14.3723 3.50071C14.8721 3.77792 15.2883 4.19759 16.1207 5.03693Z" stroke="currentColor" stroke-width="1.5"/></svg><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-subtle-foreground"><span data-quote-start></span><span class="whitespace-nowrap"><span data-quote-end class="inline-block whitespace-normal break-words" style="max-width:calc(100% - 4.5 * var(--spacing))"></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-subtle-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></span></span>
     </button>
     <a data-source class="mr-1.5 break-words text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
-    <span data-metrics class="text-xs leading-5 text-subtle-foreground"><span data-count class="whitespace-nowrap"></span> · <span data-time class="whitespace-nowrap"></span></span>
+    <button data-metrics data-toggle="metrics" type="button" aria-expanded="false" class="inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><span data-count class="whitespace-nowrap"></span> · <span data-time class="whitespace-nowrap"></span></button>
   </div>
 </div>`;
 
@@ -51,6 +54,23 @@ function rowKey(row: HTMLElement): string {
 
 function hasAgentContent(row: HTMLElement): boolean {
   return row.querySelector(".group\\/message, [data-timeline-row-list]") !== null;
+}
+
+function isTopLevelTurn(row: HTMLElement): boolean {
+  return /:turn(:|$)/.test(rowKey(row)) &&
+    row.closest("[data-timeline-row-list]")?.getAttribute("data-timeline-row-list") === "top-level";
+}
+
+function turnButton(row: HTMLElement): HTMLButtonElement | null {
+  return row.querySelector<HTMLButtonElement>(':scope > div > [class~="group/timeline-row"] > button');
+}
+
+function isToolContainer(container: Element): boolean {
+  const list = container.closest("[data-timeline-row-list]");
+  if (list?.getAttribute("data-timeline-row-list") === "top-level") return true;
+  // Completed turns use a nested list too. Delegated agent timelines stay native.
+  const owner = list?.closest<HTMLElement>("[data-timeline-row-id]");
+  return owner !== null && owner !== undefined && isTopLevelTurn(owner);
 }
 
 function isToolRow(row: HTMLElement, collapsible?: Map<string, boolean>): boolean {
@@ -92,9 +112,7 @@ type ThreadRuns = {
   pending: boolean[];
 };
 function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): ThreadRuns {
-  const collapsible = new Map(rows.map((row) => [row.id,
-    row.kind === "work" && !VISIBLE_WORK.has(row.workKind ?? "") && !visibleRows.has(row.id),
-  ]));
+  const collapsible = new Map<string, boolean>();
   const runOf = new Map<string, number>();
   const counts: number[] = [];
   const firstIds: string[] = [];
@@ -102,37 +120,47 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): 
   const durationMs: number[] = [];
   const durationKnown: boolean[] = [];
   const pending: boolean[] = [];
-  let open = false;
-  for (const row of rows) {
-    const tool = collapsible.get(row.id);
-    if (!tool) {
-      open = false;
-      continue;
-    }
-    if (!open) {
-      counts.push(0);
-      firstIds.push(row.id);
-      memberIds.push([]);
-      durationMs.push(0);
-      durationKnown.push(true);
-      pending.push(false);
-    }
-    open = true;
-    runOf.set(row.id, counts.length - 1);
-    memberIds[counts.length - 1].push(row.id);
-    if (row.kind === "work") {
-      const index = counts.length - 1;
-      counts[index]++;
-      const startedAt = row.startedAt;
-      const endedAt = row.completedAt ?? (row.status === "pending" ? now : undefined);
-      if (!Number.isFinite(startedAt) || endedAt === undefined) {
-        durationKnown[index] = false;
-      } else {
-        durationMs[index] += Math.max(0, endedAt - startedAt!);
+  const visit = (source: TimelineRow[]) => {
+    let open = false;
+    for (const row of source) {
+      if (row.kind === "turn") {
+        collapsible.set(row.id, false);
+        visit(row.children ?? []);
+        open = false;
+        continue;
       }
-      if (row.status === "pending") pending[index] = true;
+      const tool = row.kind === "work" && !VISIBLE_WORK.has(row.workKind ?? "") && !visibleRows.has(row.id);
+      collapsible.set(row.id, tool);
+      if (!tool) {
+        open = false;
+        continue;
+      }
+      if (!open) {
+        counts.push(0);
+        firstIds.push(row.id);
+        memberIds.push([]);
+        durationMs.push(0);
+        durationKnown.push(true);
+        pending.push(false);
+      }
+      open = true;
+      runOf.set(row.id, counts.length - 1);
+      memberIds[counts.length - 1].push(row.id);
+      if (row.kind === "work") {
+        const index = counts.length - 1;
+        counts[index]++;
+        const startedAt = row.startedAt;
+        const endedAt = row.completedAt ?? (row.status === "pending" ? now : undefined);
+        if (!Number.isFinite(startedAt) || endedAt === undefined) {
+          durationKnown[index] = false;
+        } else {
+          durationMs[index] += Math.max(0, endedAt - startedAt!);
+        }
+        if (row.status === "pending") pending[index] = true;
+      }
     }
-  }
+  };
+  visit(rows);
   return {
     rows,
     collapsible,
@@ -169,6 +197,7 @@ export function mountToolGrouping(
   fetchTimeline: FetchTimeline,
   chooseQuote: () => QuoteEntry = pickRandomQuote,
   clock: Clock = systemClock,
+  subscribeTimeline?: SubscribeTimeline,
 ): () => void {
   const expanded = new Set<string>();
   const groupKeyByRow = new Map<string, string>();
@@ -183,7 +212,13 @@ export function mountToolGrouping(
   const visibleRows = new Set<string>();
   const lastFetch = new Map<string, number>();
   const inFlight = new Set<string>();
+  const queuedRefreshes = new Map<string, boolean>();
+  const mountedThreads = new Set<string>();
   const refreshTimers = new Map<string, ReturnType<typeof setTimeout>>();
+  const turnChoices = new Map<string, boolean>();
+  const autoOpenedTurns = new Set<string>();
+  const attemptedTurnButtons = new WeakSet<HTMLButtonElement>();
+  let openingTurn = false;
   let disposed = false;
   const style = document.createElement("style");
   // Keep the native border/inset. The owner's roomier reading rhythm doubles
@@ -201,12 +236,12 @@ export function mountToolGrouping(
     if (frame === 0 && !disposed) frame = requestAnimationFrame(pass);
   };
 
-  function refresh(threadId: string) {
+  function refresh(threadId: string, force = false) {
     const now = clock.now();
     const last = lastFetch.get(threadId);
     const since = last === undefined ? REFETCH_MS : now - last;
     if (disposed || inFlight.has(threadId)) return;
-    if (since < REFETCH_MS) {
+    if (!force && since < REFETCH_MS) {
       if (!refreshTimers.has(threadId)) {
         const timer = clock.setTimeout(() => {
           refreshTimers.delete(threadId);
@@ -225,7 +260,9 @@ export function mountToolGrouping(
     lastFetch.set(threadId, now);
     fetchTimeline(threadId)
       .then(
-        (rows) => threads.set(threadId, indexRuns(rows, clock.now(), visibleRows)),
+        (rows) => {
+          if (!disposed) threads.set(threadId, indexRuns(rows, clock.now(), visibleRows));
+        },
         () => {
           // A failed refresh cannot prove that a spacer does not hide a new run boundary.
           threads.delete(threadId);
@@ -233,8 +270,43 @@ export function mountToolGrouping(
       )
       .finally(() => {
         inFlight.delete(threadId);
+        const queued = queuedRefreshes.get(threadId);
+        queuedRefreshes.delete(threadId);
+        if (queued !== undefined && mountedThreads.has(threadId)) refresh(threadId, queued);
         schedule();
       });
+  }
+
+  function invalidate(threadId: string, finished: boolean) {
+    if (disposed || !mountedThreads.has(threadId)) return;
+    if (inFlight.has(threadId)) {
+      queuedRefreshes.set(threadId, finished || queuedRefreshes.get(threadId) === true);
+    } else {
+      refresh(threadId, finished);
+    }
+  }
+
+  function preserveTurnStreams(container: Element) {
+    for (const row of container.children) {
+      if (!(row instanceof HTMLElement) || !isTopLevelTurn(row)) continue;
+      const button = turnButton(row);
+      const id = row.dataset.timelineRowId!;
+      if (button === null || button.getAttribute("aria-expanded") !== "false" ||
+        turnChoices.get(id) === false || attemptedTurnButtons.has(button)) continue;
+      // Use bb's existing disclosure. No global preference or React row is changed.
+      attemptedTurnButtons.add(button);
+      autoOpenedTurns.add(id);
+      openingTurn = true;
+      try { button.click(); } finally { openingTurn = false; }
+    }
+  }
+
+  function trackTurnChoice(event: Event) {
+    if (openingTurn || !(event.target instanceof Element)) return;
+    const button = event.target.closest("button");
+    const row = button?.closest<HTMLElement>("[data-timeline-row-id]");
+    if (button === null || row === null || row === undefined || !isTopLevelTurn(row) || button !== turnButton(row)) return;
+    turnChoices.set(row.dataset.timelineRowId!, button.getAttribute("aria-expanded") !== "true");
   }
 
   function apiRun(rows: HTMLElement[]): {
@@ -360,7 +432,7 @@ export function mountToolGrouping(
     const el = document.createElement("div");
     el.setAttribute(MARKER, key);
     el.innerHTML = TOGGLE_HTML;
-    el.querySelector("button")!.addEventListener("click", () => {
+    const toggle = () => {
       if (!expanded.delete(key)) expanded.add(key);
       const choice = { revision: ++disclosureRevision, open: expanded.has(key) };
       disclosureChoices.set(key, choice);
@@ -374,7 +446,8 @@ export function mountToolGrouping(
       // cleared/replaced the API index before the scheduled render runs.
       for (const id of renderedMembers.get(el) ?? []) rowDisclosureChoices.set(id, choice);
       schedule();
-    });
+    };
+    for (const button of el.querySelectorAll("[data-toggle]")) button.addEventListener("click", toggle);
     return el;
   }
 
@@ -406,17 +479,26 @@ export function mountToolGrouping(
 
   function pass() {
     frame = 0;
+    mountedThreads.clear();
     const focused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const focusedMarker = focused?.closest<HTMLElement>(`[${MARKER}]`) ?? null;
     const focusedKey = focusedMarker?.getAttribute(MARKER);
-    const focusSelector = focused?.matches("button") ? "button" : focused?.matches("[data-source]") ? "[data-source]" : null;
+    const focusSelector = focused?.matches('[data-toggle="quote"]') ? '[data-toggle="quote"]' :
+      focused?.matches('[data-toggle="metrics"]') ? '[data-toggle="metrics"]' :
+      focused?.matches("[data-source]") ? "[data-source]" : null;
     let migratedFocus: HTMLElement | null = null;
     // Snapshot before rendering so splitting a group can migrate every visible part.
     const previousGroupByRow = new Map(groupKeyByRow);
     const previousChoices = new Map(disclosureChoices);
     const used = new Set<Element>();
     for (const container of document.querySelectorAll("[data-timeline-items]")) {
-      if (container.closest("[data-timeline-row-list]")?.getAttribute("data-timeline-row-list") !== "top-level") continue;
+      if (!isToolContainer(container)) continue;
+      preserveTurnStreams(container);
+      for (const child of container.children) {
+        if (!(child instanceof HTMLElement)) continue;
+        const id = child.dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
+        if (id !== undefined) mountedThreads.add(id);
+      }
       // A streaming work row can acquire message content after the API response.
       // Keep it as a boundary in the API index too, so adjacent tools do not share a marker.
       for (const row of container.children) {
@@ -573,10 +655,11 @@ export function mountToolGrouping(
           ". Total tool time: " +
           duration +
           ".";
-        const button = el.querySelector<HTMLButtonElement>("button")!;
-        button.setAttribute("aria-label", accessibleLabel);
-        button.setAttribute("aria-describedby", quoteId);
-        button.setAttribute("aria-expanded", String(open));
+        for (const button of el.querySelectorAll<HTMLButtonElement>("[data-toggle]")) {
+          button.setAttribute("aria-label", accessibleLabel);
+          button.setAttribute("aria-describedby", quoteId);
+          button.setAttribute("aria-expanded", String(open));
+        }
         el.querySelector<SVGElement>("svg.bb-icon-stroke")!.style.rotate = open ? "90deg" : "";
         if (el.nextElementSibling !== rows[0]) container.insertBefore(el, rows[0]);
         for (const row of rows) {
@@ -602,17 +685,35 @@ export function mountToolGrouping(
 
   const observer = new MutationObserver(schedule);
   observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+  document.addEventListener("click", trackTurnChoice, true);
+  const unsubscribe = subscribeTimeline?.((threadId, finished) => {
+    if (threadId === undefined) {
+      for (const id of mountedThreads) invalidate(id, finished);
+    } else {
+      invalidate(threadId, finished);
+    }
+  });
   pass();
 
   return () => {
+    if (disposed) return;
     disposed = true;
+    unsubscribe?.();
     observer.disconnect();
+    document.removeEventListener("click", trackTurnChoice, true);
     cancelAnimationFrame(frame);
     for (const timer of refreshTimers.values()) clock.clearTimeout(timer);
     refreshTimers.clear();
+    queuedRefreshes.clear();
     style.remove();
     for (const el of document.querySelectorAll(`[${MARKER}], [${GROUP_END}]`)) el.remove();
     for (const el of document.querySelectorAll(`[${HIDDEN}]`)) el.removeAttribute(HIDDEN);
+    for (const row of document.querySelectorAll<HTMLElement>("[data-timeline-row-id]")) {
+      const id = row.dataset.timelineRowId!;
+      if (!autoOpenedTurns.has(id) || turnChoices.has(id) || !isTopLevelTurn(row)) continue;
+      const button = turnButton(row);
+      if (button?.getAttribute("aria-expanded") === "true") button.click();
+    }
     quoteByGroup.clear();
     quoteByRow.clear();
     expanded.clear();
@@ -620,5 +721,8 @@ export function mountToolGrouping(
     disclosureChoices.clear();
     rowDisclosureChoices.clear();
     visibleRows.clear();
+    mountedThreads.clear();
+    turnChoices.clear();
+    autoOpenedTurns.clear();
   };
 }

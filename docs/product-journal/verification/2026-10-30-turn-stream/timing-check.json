@@ -1,0 +1,26 @@
+{
+  "method": "independent arithmetic from real includeNestedRows API timestamps; no private message content",
+  "groups": [
+    {
+      "group": 1,
+      "calls": 7,
+      "sumDurationMs": 12066,
+      "allFinal": true,
+      "display": "7 tools · 12.1s"
+    },
+    {
+      "group": 2,
+      "calls": 1,
+      "sumDurationMs": 1142,
+      "allFinal": true,
+      "display": "1 tool · 1.1s"
+    },
+    {
+      "group": 3,
+      "calls": 3,
+      "sumDurationMs": 569,
+      "allFinal": true,
+      "display": "3 tools · 569ms"
+    }
+  ]
+}
