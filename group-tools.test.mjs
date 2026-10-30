@@ -1208,6 +1208,108 @@ test('respects a native turn manually closed by the user through DOM updates and
   } finally { dom.cleanup(); }
 });
 
+test('presents completed commentary outside the native disclosure without moving React rows', async () => {
+  const ids = ['assistant:progress', 'tool-1', 'assistant:next', 'tool-2'];
+  const dom = mountDom({ rowIds: ['done:turn:0'], fetchTimeline: async () => [{
+    id: fullId('done:turn:0'), kind: 'turn',
+    children: timeline(ids.map(id => [id, id.startsWith('assistant:') ? 'conversation' : 'work'])),
+  }] });
+  const turn = attachCompletedTurn(dom, dom.rows[0], ids);
+  const rowParent = dom.rows[0].parentElement;
+  try {
+    await dom.flush();
+    const shell = turn.list.parentElement;
+    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-turn'), true);
+    assert.equal(shell.hasAttribute('data-bb-minus-turn-shell'), true);
+    for (const toggle of turn.items.querySelectorAll('[data-toggle]')) {
+      toggle.click();
+      await dom.flush();
+      assert.equal(turn.rows[0].hasAttribute(HIDDEN), false);
+      assert.equal(turn.rows[2].hasAttribute(HIDDEN), false);
+      assert.equal(turn.rows[0].closest('[data-bb-minus-group]'), null);
+      assert.equal(turn.rows[0].parentElement, turn.items);
+      assert.equal(dom.rows[0].parentElement, rowParent);
+    }
+    turn.button.click();
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-turn'), false);
+    turn.button.focus();
+    turn.button.click();
+    await dom.flush();
+    assert.equal(dom.window.document.activeElement, turn.items.querySelector('[data-metrics]'));
+    dom.dispose();
+    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-turn'), false);
+    assert.equal(shell.hasAttribute('data-bb-minus-turn-shell'), false);
+    assert.equal(turn.rows[0].parentElement, turn.items);
+    assert.equal(turn.button.getAttribute('aria-expanded'), 'true');
+  } finally { dom.cleanup(); }
+});
+
+test('stream presentation cannot escape its measure row when a sibling precedes the native root', async () => {
+  const ids = ['assistant:progress', 'tool-1'];
+  const dom = mountDom({ rowIds: ['done:turn:0'], fetchTimeline: async () => [{
+    id: fullId('done:turn:0'), kind: 'turn', children: timeline([['assistant:progress', 'conversation'], ['tool-1']]),
+  }] });
+  const turn = attachCompletedTurn(dom, dom.rows[0], ids, true);
+  const root = dom.rows[0].firstElementChild;
+  const sibling = dom.window.document.createElement('span');
+  dom.rows[0].prepend(sibling);
+  try {
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-turn'), true);
+    assert.equal(turn.list.parentElement.hasAttribute('data-bb-minus-turn-shell'), true);
+    for (const el of [root, sibling, dom.rows[0], dom.container, dom.container.parentElement, dom.window.document.body, dom.window.document.documentElement]) {
+      assert.equal(el.hasAttribute('data-bb-minus-turn-shell'), false);
+    }
+  } finally { dom.cleanup(); }
+});
+
+test('an unexpected nested list outside the native root receives no stream shell styling', async () => {
+  const dom = mountDom({ rowIds: ['done:turn:0'], fetchTimeline: async () => [{
+    id: fullId('done:turn:0'), kind: 'turn', children: timeline([['assistant:progress', 'conversation']]),
+  }] });
+  const turn = attachCompletedTurn(dom, dom.rows[0], ['assistant:progress'], true);
+  dom.rows[0].append(turn.list);
+  try {
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-turn'), false);
+    assert.equal(dom.window.document.querySelector('[data-bb-minus-turn-shell]'), null);
+  } finally { dom.cleanup(); }
+});
+
+for (const originalTabIndex of [null, '0', '-1']) {
+  test('commentary without mounted metrics has a visible reversible focus target; tabindex=' + originalTabIndex, async () => {
+    const dom = mountDom({ rowIds: ['done:turn:0'], fetchTimeline: async () => [{
+      id: fullId('done:turn:0'), kind: 'turn', children: timeline([['assistant:progress', 'conversation']]),
+    }] });
+    const turn = attachCompletedTurn(dom, dom.rows[0], ['assistant:progress'], true);
+    const row = dom.rows[0];
+    if (originalTabIndex !== null) row.setAttribute('tabindex', originalTabIndex);
+    turn.button.focus();
+    try {
+      await dom.flush();
+      assert.equal(turn.items.querySelector('[data-metrics]'), null);
+      assert.equal(row.hasAttribute('data-bb-minus-stream-turn'), true);
+      assert.equal(dom.window.document.activeElement, row);
+      assert.equal(row.getAttribute('tabindex'), originalTabIndex ?? '-1');
+      turn.rows[0].append(' — новое сообщение');
+      await dom.flush();
+      assert.equal(dom.window.document.activeElement, row);
+      const outside = dom.window.document.createElement('button');
+      dom.window.document.body.append(outside);
+      outside.focus();
+      turn.rows[0].append(' — следующий фрагмент');
+      await dom.flush();
+      assert.equal(dom.window.document.activeElement, outside);
+      row.focus();
+      dom.dispose();
+      assert.equal(row.hasAttribute('data-bb-minus-stream-focus'), false);
+      assert.equal(row.getAttribute('tabindex'), originalTabIndex);
+      assert.equal(dom.window.document.activeElement, turn.button);
+    } finally { dom.cleanup(); }
+  });
+}
+
 for (const initiallyOpen of [false, true]) {
   test('cleanup restores only native turns auto-opened by Minus; initiallyOpen=' + initiallyOpen, async () => {
     const dom = mountDom({ rowIds: ['done:turn:0'], fetchTimeline: async () => [{ id: fullId('done:turn:0'), kind: 'turn', children: timeline([['tool-1']]) }] });
@@ -1233,6 +1335,7 @@ test('does not open completed turns inside a delegated agent timeline', async ()
     await dom.flush();
     assert.equal(turn.button.getAttribute('aria-expanded'), 'false');
     assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+    assert.equal(nested.hasAttribute('data-bb-minus-stream-turn'), false);
     assert.equal(dom.container.querySelector('[data-bb-minus-group]'), null);
   } finally { dom.cleanup(); }
 });

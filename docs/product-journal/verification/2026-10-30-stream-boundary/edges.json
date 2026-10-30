@@ -1,0 +1,173 @@
+{
+  "method": "isolated headless Chromium; actual source module and native BB CSS; finite edge fixtures",
+  "observations": [
+    {
+      "case": {
+        "edge": "sibling"
+      },
+      "before": {
+        "flat": true,
+        "outsideStyled": false,
+        "rowDisplay": "block",
+        "rowHeight": 286,
+        "bodyDisplay": "block",
+        "htmlDisplay": "block",
+        "focusOnRow": false,
+        "focusOnButton": false,
+        "buttonVisible": false,
+        "tabindex": null,
+        "focusMarker": null
+      },
+      "after": {
+        "flat": false,
+        "outsideStyled": false,
+        "rowDisplay": "block",
+        "rowHeight": 254,
+        "bodyDisplay": "block",
+        "htmlDisplay": "block",
+        "focusOnRow": false,
+        "focusOnButton": false,
+        "buttonVisible": true,
+        "tabindex": null,
+        "focusMarker": null
+      },
+      "ok": true
+    },
+    {
+      "case": {
+        "edge": "outside"
+      },
+      "before": {
+        "flat": false,
+        "outsideStyled": false,
+        "rowDisplay": "block",
+        "rowHeight": 320,
+        "bodyDisplay": "block",
+        "htmlDisplay": "block",
+        "focusOnRow": false,
+        "focusOnButton": true,
+        "buttonVisible": true,
+        "tabindex": null,
+        "focusMarker": null
+      },
+      "after": {
+        "flat": false,
+        "outsideStyled": false,
+        "rowDisplay": "block",
+        "rowHeight": 254,
+        "bodyDisplay": "block",
+        "htmlDisplay": "block",
+        "focusOnRow": false,
+        "focusOnButton": true,
+        "buttonVisible": true,
+        "tabindex": null,
+        "focusMarker": null
+      },
+      "ok": true
+    },
+    {
+      "case": {
+        "edge": "commentary",
+        "tabindex": "none"
+      },
+      "before": {
+        "flat": true,
+        "outsideStyled": false,
+        "rowDisplay": "block",
+        "rowHeight": 20,
+        "bodyDisplay": "block",
+        "htmlDisplay": "block",
+        "focusOnRow": true,
+        "focusOnButton": false,
+        "buttonVisible": false,
+        "tabindex": "-1",
+        "focusMarker": "temporary-tabindex"
+      },
+      "after": {
+        "flat": false,
+        "outsideStyled": false,
+        "rowDisplay": "block",
+        "rowHeight": 54,
+        "bodyDisplay": "block",
+        "htmlDisplay": "block",
+        "focusOnRow": false,
+        "focusOnButton": true,
+        "buttonVisible": true,
+        "tabindex": null,
+        "focusMarker": null
+      },
+      "ok": true
+    },
+    {
+      "case": {
+        "edge": "commentary",
+        "tabindex": "0"
+      },
+      "before": {
+        "flat": true,
+        "outsideStyled": false,
+        "rowDisplay": "block",
+        "rowHeight": 20,
+        "bodyDisplay": "block",
+        "htmlDisplay": "block",
+        "focusOnRow": true,
+        "focusOnButton": false,
+        "buttonVisible": false,
+        "tabindex": "0",
+        "focusMarker": "preserved-tabindex"
+      },
+      "after": {
+        "flat": false,
+        "outsideStyled": false,
+        "rowDisplay": "block",
+        "rowHeight": 54,
+        "bodyDisplay": "block",
+        "htmlDisplay": "block",
+        "focusOnRow": false,
+        "focusOnButton": true,
+        "buttonVisible": true,
+        "tabindex": "0",
+        "focusMarker": null
+      },
+      "ok": true
+    },
+    {
+      "case": {
+        "edge": "commentary",
+        "tabindex": "-1"
+      },
+      "before": {
+        "flat": true,
+        "outsideStyled": false,
+        "rowDisplay": "block",
+        "rowHeight": 20,
+        "bodyDisplay": "block",
+        "htmlDisplay": "block",
+        "focusOnRow": true,
+        "focusOnButton": false,
+        "buttonVisible": false,
+        "tabindex": "-1",
+        "focusMarker": "preserved-tabindex"
+      },
+      "after": {
+        "flat": false,
+        "outsideStyled": false,
+        "rowDisplay": "block",
+        "rowHeight": 54,
+        "bodyDisplay": "block",
+        "htmlDisplay": "block",
+        "focusOnRow": false,
+        "focusOnButton": true,
+        "buttonVisible": true,
+        "tabindex": "-1",
+        "focusMarker": null
+      },
+      "ok": true
+    }
+  ],
+  "hashes": {
+    "group-tools.ts": "b3824f7e69ab902e1a44fa9dc192a67c8a8db5fb908f20f7db23783293a19195",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec",
+    "group-tools.test.mjs": "a12999e1d6ff22c4c172f211046f3a752e91b481351ab24c0df79492f7a50975"
+  }
+}

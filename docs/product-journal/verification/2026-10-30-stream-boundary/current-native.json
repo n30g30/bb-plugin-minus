@@ -1,0 +1,177 @@
+{
+  "method": "isolated headless Chromium; candidate assets in disposable client; current real completed turn, no timeline interception",
+  "hashes": {
+    "group-tools.ts": "b3824f7e69ab902e1a44fa9dc192a67c8a8db5fb908f20f7db23783293a19195",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec",
+    "group-tools.test.mjs": "a12999e1d6ff22c4c172f211046f3a752e91b481351ab24c0df79492f7a50975"
+  },
+  "bundle": "f445d81ac082c053",
+  "served": [
+    "app.js",
+    "app.css",
+    "app.js",
+    "app.css"
+  ],
+  "observations": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "closed": {
+        "flat": true,
+        "headerVisible": false,
+        "rowDisplay": "block",
+        "height": 342.75,
+        "contentVisibility": "visible",
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "groups": [
+          {
+            "expanded": "false",
+            "metrics": "1 tool · 0ms"
+          },
+          {
+            "expanded": "false",
+            "metrics": "1 tool · 330ms"
+          }
+        ],
+        "outsideStyled": false
+      },
+      "open": {
+        "flat": true,
+        "headerVisible": false,
+        "rowDisplay": "block",
+        "height": 380.75,
+        "contentVisibility": "visible",
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "groups": [
+          {
+            "expanded": "true",
+            "metrics": "1 tool · 0ms"
+          },
+          {
+            "expanded": "false",
+            "metrics": "1 tool · 330ms"
+          }
+        ],
+        "outsideStyled": false
+      },
+      "recollapsed": {
+        "flat": true,
+        "headerVisible": false,
+        "rowDisplay": "block",
+        "height": 342.75,
+        "contentVisibility": "visible",
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "groups": [
+          {
+            "expanded": "false",
+            "metrics": "1 tool · 0ms"
+          },
+          {
+            "expanded": "false",
+            "metrics": "1 tool · 330ms"
+          }
+        ],
+        "outsideStyled": false
+      },
+      "errors": [],
+      "ok": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "closed": {
+        "flat": true,
+        "headerVisible": false,
+        "rowDisplay": "block",
+        "height": 505.125,
+        "contentVisibility": "auto",
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "groups": [
+          {
+            "expanded": "false",
+            "metrics": "1 tool · 0ms"
+          },
+          {
+            "expanded": "false",
+            "metrics": "1 tool · 330ms"
+          }
+        ],
+        "outsideStyled": false
+      },
+      "open": {
+        "flat": true,
+        "headerVisible": false,
+        "rowDisplay": "block",
+        "height": 543.125,
+        "contentVisibility": "auto",
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "groups": [
+          {
+            "expanded": "true",
+            "metrics": "1 tool · 0ms"
+          },
+          {
+            "expanded": "false",
+            "metrics": "1 tool · 330ms"
+          }
+        ],
+        "outsideStyled": false
+      },
+      "recollapsed": {
+        "flat": true,
+        "headerVisible": false,
+        "rowDisplay": "block",
+        "height": 505.125,
+        "contentVisibility": "auto",
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "groups": [
+          {
+            "expanded": "false",
+            "metrics": "1 tool · 0ms"
+          },
+          {
+            "expanded": "false",
+            "metrics": "1 tool · 330ms"
+          }
+        ],
+        "outsideStyled": false
+      },
+      "errors": [],
+      "ok": true
+    }
+  ]
+}

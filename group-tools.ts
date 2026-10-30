@@ -31,6 +31,9 @@ const systemClock: Clock = {
 const HIDDEN = "data-bb-minus-hidden";
 const MARKER = "data-bb-minus-group";
 const GROUP_END = "data-bb-minus-group-end";
+const FLAT_TURN = "data-bb-minus-stream-turn";
+const TURN_SHELL = "data-bb-minus-turn-shell";
+const STREAM_FOCUS = "data-bb-minus-stream-focus";
 // Fallback IDs from the SDK's work row kinds. Unknown/streaming rows stay visible.
 const TOOL_ROW = /^(command|tool|file-change|web-search|web-fetch|image-generation|image-view|file-read|search|plan-steps|extension):/;
 // These work rows carry an agent stream or require the user's response.
@@ -226,11 +229,16 @@ export function mountToolGrouping(
   // Keep the native border/inset. The owner's roomier reading rhythm doubles
   // inner padding from 2 to 4 spacing steps; 2 extra steps + native gap 2 = 4
   // steps after the lower divider (and around the open group's end marker).
+  // A temporary stream focus target reuses the native buttons' 1px ring token.
   style.textContent = `[${HIDDEN}]{display:none!important}
 [${MARKER}]{padding-bottom:calc(2 * var(--spacing))}
 [${MARKER}] [data-row]{margin-inline:calc(2 * var(--spacing));padding-inline:0;border-top:1px solid var(--border);padding-top:calc(4 * var(--spacing))}
 [${MARKER}]:has(button[aria-expanded="false"]) [data-row]{border-bottom:1px solid var(--border);padding-bottom:calc(4 * var(--spacing))}
-[${GROUP_END}]{margin-inline:calc(2 * var(--spacing));margin-block:calc(2 * var(--spacing));border-bottom:1px solid var(--border)}`;
+[${GROUP_END}]{margin-inline:calc(2 * var(--spacing));margin-block:calc(2 * var(--spacing));border-bottom:1px solid var(--border)}
+[${FLAT_TURN}] > div > [class~="group/timeline-row"]{display:none}
+[${TURN_SHELL}]{display:contents}
+[${TURN_SHELL}]::before,[${TURN_SHELL}]::after{display:none}
+[${STREAM_FOCUS}]:focus-visible{outline:1px solid var(--ring)}`;
   document.head.append(style);
 
   let frame = 0;
@@ -288,18 +296,56 @@ export function mountToolGrouping(
     }
   }
 
-  function preserveTurnStreams(container: Element) {
+  function preserveTurnStreams(container: Element, presentation: Set<Element>) {
     for (const row of container.children) {
       if (!(row instanceof HTMLElement) || !isTopLevelTurn(row)) continue;
       const button = turnButton(row);
       const id = row.dataset.timelineRowId!;
-      if (button === null || button.getAttribute("aria-expanded") !== "false" ||
-        turnChoices.get(id) === false || attemptedTurnButtons.has(button)) continue;
-      // Use bb's existing disclosure. No global preference or React row is changed.
-      attemptedTurnButtons.add(button);
-      autoOpenedTurns.add(id);
-      openingTurn = true;
-      try { button.click(); } finally { openingTurn = false; }
+      if (button === null) continue;
+      if (button.getAttribute("aria-expanded") === "false" &&
+        turnChoices.get(id) !== false && !attemptedTurnButtons.has(button)) {
+        // Use bb's existing disclosure. No global preference or React row is changed.
+        attemptedTurnButtons.add(button);
+        autoOpenedTurns.add(id);
+        openingTurn = true;
+        try { button.click(); } finally { openingTurn = false; }
+      }
+      if (button.getAttribute("aria-expanded") !== "true") continue;
+      const list = [...row.querySelectorAll<HTMLElement>('[data-timeline-row-list="nested"]')]
+        .find(list => list.closest("[data-timeline-row-id]") === row);
+      if (list === undefined || list.querySelector(".group\\/message") === null) continue;
+      const root = button.parentElement?.parentElement;
+      if (root === undefined || root === null || root.parentElement !== row || !root.contains(list)) continue;
+      const shells: HTMLElement[] = [];
+      let shell = list.parentElement;
+      // Stop at the measure row unconditionally, even if bb adds a sibling
+      // before its native root. Validate the entire chain before styling it.
+      while (shell !== null && shell !== root && shell !== row && root.contains(shell)) {
+        shells.push(shell);
+        shell = shell.parentElement;
+      }
+      if (shell !== root) continue;
+      // Keep React's rows and virtualization measure box in place. Only remove
+      // the enclosing disclosure's visual nesting: commentary is ordinary chat,
+      // and each quote continues to control only its own work rows.
+      row.setAttribute(FLAT_TURN, "");
+      presentation.add(row);
+      for (const shell of shells) {
+        shell.setAttribute(TURN_SHELL, "");
+        presentation.add(shell);
+      }
+    }
+  }
+
+  function clearTurnPresentation(el: Element) {
+    const restoreFocus = document.activeElement === el;
+    el.removeAttribute(FLAT_TURN);
+    el.removeAttribute(TURN_SHELL);
+    const focusMode = el.getAttribute(STREAM_FOCUS);
+    if (focusMode !== null) {
+      el.removeAttribute(STREAM_FOCUS);
+      if (focusMode === "temporary-tabindex" && el.getAttribute("tabindex") === "-1") el.removeAttribute("tabindex");
+      if (restoreFocus && el instanceof HTMLElement) turnButton(el)?.focus({ preventScroll: true });
     }
   }
 
@@ -493,9 +539,10 @@ export function mountToolGrouping(
     const previousGroupByRow = new Map(groupKeyByRow);
     const previousChoices = new Map(disclosureChoices);
     const used = new Set<Element>();
+    const turnPresentation = new Set<Element>();
     for (const container of document.querySelectorAll("[data-timeline-items]")) {
       if (!isToolContainer(container)) continue;
-      preserveTurnStreams(container);
+      preserveTurnStreams(container, turnPresentation);
       for (const child of container.children) {
         if (!(child instanceof HTMLElement)) continue;
         const id = child.dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
@@ -676,12 +723,28 @@ export function mountToolGrouping(
         }
       }
     }
+    for (const el of document.querySelectorAll(`[${FLAT_TURN}], [${TURN_SHELL}], [${STREAM_FOCUS}]`)) {
+      if (!turnPresentation.has(el)) clearTurnPresentation(el);
+    }
     for (const el of document.querySelectorAll(`[${MARKER}], [${GROUP_END}]`)) if (!used.has(el)) el.remove();
     // Replacing a fallback header with an API header must preserve keyboard
     // focus, so the next Enter/Space still acts on the same visible group.
     if (focusedMarker !== null && document.activeElement !== focused) {
       if (used.has(focusedMarker)) focused?.focus({ preventScroll: true });
       else migratedFocus?.focus({ preventScroll: true });
+    }
+    const focusedTurn = focused?.closest<HTMLElement>(`[${FLAT_TURN}]`);
+    if (focusedTurn !== null && focusedTurn !== undefined && focused === turnButton(focusedTurn)) {
+      const metrics = focusedTurn.querySelector<HTMLElement>('[data-toggle="metrics"]');
+      if (metrics !== null) metrics.focus({ preventScroll: true });
+      else {
+        if (!focusedTurn.hasAttribute(STREAM_FOCUS)) {
+          const hasTabIndex = focusedTurn.hasAttribute("tabindex");
+          focusedTurn.setAttribute(STREAM_FOCUS, hasTabIndex ? "preserved-tabindex" : "temporary-tabindex");
+          if (!hasTabIndex) focusedTurn.tabIndex = -1;
+        }
+        focusedTurn.focus({ preventScroll: true });
+      }
     }
   }
 
@@ -710,6 +773,7 @@ export function mountToolGrouping(
     style.remove();
     for (const el of document.querySelectorAll(`[${MARKER}], [${GROUP_END}]`)) el.remove();
     for (const el of document.querySelectorAll(`[${HIDDEN}]`)) el.removeAttribute(HIDDEN);
+    for (const el of document.querySelectorAll(`[${FLAT_TURN}], [${TURN_SHELL}], [${STREAM_FOCUS}]`)) clearTurnPresentation(el);
     for (const row of document.querySelectorAll<HTMLElement>("[data-timeline-row-id]")) {
       const id = row.dataset.timelineRowId!;
       if (!autoOpenedTurns.has(id) || turnChoices.has(id) || !isTopLevelTurn(row)) continue;

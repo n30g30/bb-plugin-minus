@@ -50,6 +50,6 @@ Author names and work titles in the visible source link are shown in Russian. Th
 
 MIT
 
-Collapsing tools keeps reasoning, unknown streaming rows, nested agent timelines and delegation/workflow streams visible. Approval, question and form rows remain available for the user to respond. The summary reads quote → Russian author/source → tool count and total time, with a shared native horizontal inset.
+Collapsing tools keeps reasoning, unknown streaming rows, nested agent timelines and delegation/workflow streams visible. When a completed stage is open, its commentary uses the normal chat inset without an enclosing Worked for disclosure; quote and metrics controls reveal only the tool rows. Turning grouping off restores the native presentation. Approval, question and form rows remain available for the user to respond. The summary reads quote → Russian author/source → tool count and total time, with a shared native horizontal inset.
 
 The current accepted UI reference is [tool-group dividers, 2026-10-30](docs/product-journal/2026-10-30-dividers.md), approved by the owner in the Minus thread: a wrapping muted quote, Russian author/source, call count and time, with dividers around the group. Agent streams remain outside the dividers.
