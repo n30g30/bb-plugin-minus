@@ -1,0 +1,104 @@
+diff --git a/group-tools.test.mjs b/group-tools.test.mjs
+index c11e378..341b4d0 100644
+--- a/group-tools.test.mjs
++++ b/group-tools.test.mjs
+@@ -1666,3 +1666,33 @@ test('a multi-call cycle never exposes partial seconds and publishes the final s
+     assert.equal(dom.container.querySelector('a, br'), null);
+   } finally { dom.cleanup(); }
+ });
++
++for (const [milliseconds, expected] of [[600, '600ms'], [42000, '42s'], [59999, '1m'], [60000, '1m'], [68000, '1m 08s'], [754000, '12m 34s'], [3599999, '1h'], [3723000, '1h 2m']]) {
++  test('formats final tool duration ' + milliseconds + ' as ' + expected, async () => {
++    const dom = mountDom({ rowIds: ['tool-1'], fetchTimeline: async () => timeline([['tool-1', 'work', undefined, 1000, 1000 + milliseconds]]) });
++    try {
++      await dom.flush();
++      assert.equal(dom.container.querySelector('[data-time]').textContent, expected);
++    } finally { dom.cleanup(); }
++  });
++}
++
++test('keeps a visible disclosure chevron after metrics and rotates it for either toggle', async () => {
++  const dom = mountDom({ rowIds: ['tool-1'], fetchTimeline: async () => timeline([['tool-1']]) });
++  try {
++    await dom.flush();
++    const metrics = dom.container.querySelector('[data-metrics]');
++    const chevron = metrics.querySelector('[data-minus-chevron]');
++    assert.ok(chevron);
++    assert.equal(metrics.lastElementChild, chevron);
++    assert.equal(chevron.getAttribute('aria-hidden'), 'true');
++    assert.equal(chevron.classList.contains('opacity-0'), false);
++    assert.equal(dom.container.querySelector('[data-quote-control] svg'), null);
++    metrics.click();await dom.flush();
++    assert.equal(chevron.style.rotate, '90deg');
++    dom.container.querySelector('[data-toggle="quote"]').click();await dom.flush();
++    assert.equal(chevron.style.rotate, '');
++    assert.equal(metrics.getAttribute('aria-expanded'), 'false');
++    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
++  } finally { dom.cleanup(); }
++});
+diff --git a/group-tools.ts b/group-tools.ts
+index e0157d1..81b842a 100644
+--- a/group-tools.ts
++++ b/group-tools.ts
+@@ -25,9 +25,9 @@ const ACTIVITY_LABELS: Record<ToolActivity, string> = {
+ // Native-sized, currentColor SVG geometry; the spinner uses BB's animate-spin token.
+ const ACTIVITY_ICONS: Record<ToolActivity, string> = {
+   pending: '<path d="M12 2a10 10 0 1 0 10 10"/>',
+-  completed: '<circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/>',
+-  error: '<circle cx="12" cy="12" r="10"/><path d="M12 7v6m0 4h.01"/>',
+-  cancelled: '<circle cx="12" cy="12" r="10"/><path d="m8 8 8 8m0-8-8 8"/>',
++  completed: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>',
++  error: '<circle cx="12" cy="12" r="9"/><path d="m8 8 8 8m0-8-8 8"/>',
++  cancelled: '<path d="M7 7h10v10H7z"/>',
+   unknown: '<circle cx="12" cy="12" r="10" stroke-dasharray="2 3"/>',
+ };
+ function toolActivity(row: TimelineRow): ToolActivity {
+@@ -67,8 +67,8 @@ const REFETCH_MS = 2000;
+ 
+ const TOGGLE_HTML = `<div class="rounded-md text-subtle-foreground w-full">
+   <div data-row class="group/timeline-row min-w-0 px-2 text-sm leading-5">
+-    <button data-toggle="quote" type="button" aria-expanded="false" class="inline px-0 py-0 align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mr-1.5 inline-block size-3.5 align-text-bottom text-subtle-foreground" aria-hidden="true" data-minus-icon="activity"></svg><span data-activity-label class="sr-only"></span></button><label data-quote-control class="group/toggle inline whitespace-normal break-words cursor-pointer"><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-subtle-foreground"><span data-quote-start></span><span class="whitespace-nowrap"><span data-quote-end class="inline-block whitespace-normal break-words" style="max-width:calc(100% - 4.5 * var(--spacing))"></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-subtle-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-within/timeline-row:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></span></span> — <span data-source class="mr-1.5 break-words text-xs not-italic leading-5 text-subtle-foreground"></span></label>
+-    <button data-metrics data-toggle="metrics" type="button" aria-expanded="false" class="inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><span data-count class="whitespace-nowrap"></span><span data-time-separator> · </span><span data-time class="whitespace-nowrap"></span></button>
++    <button data-toggle="quote" type="button" aria-expanded="false" class="inline px-0 py-0 align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mr-1.5 inline-block size-3.5 align-text-bottom text-subtle-foreground" aria-hidden="true" data-minus-icon="activity"></svg><span data-activity-label class="sr-only"></span></button><label data-quote-control class="group/toggle inline whitespace-normal break-words cursor-pointer"><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-subtle-foreground"></span> — <span data-source class="mr-1.5 break-words text-xs not-italic leading-5 text-subtle-foreground"></span></label>
++    <button data-metrics data-toggle="metrics" type="button" aria-expanded="false" class="inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><span data-count class="whitespace-nowrap"></span><span data-time-separator> · </span><span data-time class="whitespace-nowrap"></span><svg data-minus-chevron viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-subtle-foreground transition-[rotate] duration-200 ease-out" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></button>
+   </div>
+ </div>`;
+ 
+@@ -256,15 +256,17 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>):
+ function formatToolTime(durationMs: number | null): string {
+   if (durationMs === null) return "time unavailable";
+   if (durationMs < 1000) return Math.round(durationMs) + "ms";
+-  if (durationMs < 60 * 1000) {
++  // Round before selecting units so 59.999s becomes 1m, never 60s.
++  const roundedSeconds = Math.round(durationMs / 100) / 10;
++  if (roundedSeconds < 60) {
+     // Tenths keep the compact tooling row useful for short calls.
+-    return new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 }).format(durationMs / 1000) + "s";
++    return new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 }).format(roundedSeconds) + "s";
+   }
+   const totalSeconds = Math.round(durationMs / 1000);
+   if (totalSeconds < 60 * 60) {
+     const minutes = Math.floor(totalSeconds / 60);
+     const seconds = totalSeconds % 60;
+-    return minutes + "m" + (seconds === 0 ? "" : " " + seconds + "s");
++    return minutes + "m" + (seconds === 0 ? "" : " " + String(seconds).padStart(2, "0") + "s");
+   }
+   const hours = Math.floor(totalSeconds / (60 * 60));
+   const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+@@ -812,15 +814,7 @@ export function mountToolGrouping(
+           focusedMarker?.parentElement === container
+         ) migratedFocus = el.querySelector<HTMLElement>(focusSelector);
+         const quoteText = el.querySelector<HTMLElement>("[data-quote]")!;
+-        if (quoteText.textContent !== quote.text) {
+-          // Keep the chevron with the last word: an invisible arrow on its own
+-          // line otherwise adds an empty line before the author/source. The last
+-          // word may wrap within button width - (icon 3 + margin 1.5) spacing
+-          // units, so its attached chevron also fits at enlarged text sizes.
+-          const tailStart = quote.text.search(/\S+\s*$/);
+-          el.querySelector("[data-quote-start]")!.textContent = quote.text.slice(0, tailStart);
+-          el.querySelector("[data-quote-end]")!.textContent = quote.text.slice(tailStart);
+-        }
++        if (quoteText.textContent !== quote.text) quoteText.textContent = quote.text;
+         if (quoteText.title !== quote.text) quoteText.title = quote.text;
+         const quoteId = "bb-minus-quote-" + encodeURIComponent(key);
+         if (quoteText.id !== quoteId) quoteText.id = quoteId;

@@ -1666,3 +1666,33 @@ test('a multi-call cycle never exposes partial seconds and publishes the final s
     assert.equal(dom.container.querySelector('a, br'), null);
   } finally { dom.cleanup(); }
 });
+
+for (const [milliseconds, expected] of [[600, '600ms'], [42000, '42s'], [59999, '1m'], [60000, '1m'], [68000, '1m 08s'], [754000, '12m 34s'], [3599999, '1h'], [3723000, '1h 2m']]) {
+  test('formats final tool duration ' + milliseconds + ' as ' + expected, async () => {
+    const dom = mountDom({ rowIds: ['tool-1'], fetchTimeline: async () => timeline([['tool-1', 'work', undefined, 1000, 1000 + milliseconds]]) });
+    try {
+      await dom.flush();
+      assert.equal(dom.container.querySelector('[data-time]').textContent, expected);
+    } finally { dom.cleanup(); }
+  });
+}
+
+test('keeps a visible disclosure chevron after metrics and rotates it for either toggle', async () => {
+  const dom = mountDom({ rowIds: ['tool-1'], fetchTimeline: async () => timeline([['tool-1']]) });
+  try {
+    await dom.flush();
+    const metrics = dom.container.querySelector('[data-metrics]');
+    const chevron = metrics.querySelector('[data-minus-chevron]');
+    assert.ok(chevron);
+    assert.equal(metrics.lastElementChild, chevron);
+    assert.equal(chevron.getAttribute('aria-hidden'), 'true');
+    assert.equal(chevron.classList.contains('opacity-0'), false);
+    assert.equal(dom.container.querySelector('[data-quote-control] svg'), null);
+    metrics.click();await dom.flush();
+    assert.equal(chevron.style.rotate, '90deg');
+    dom.container.querySelector('[data-toggle="quote"]').click();await dom.flush();
+    assert.equal(chevron.style.rotate, '');
+    assert.equal(metrics.getAttribute('aria-expanded'), 'false');
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+  } finally { dom.cleanup(); }
+});

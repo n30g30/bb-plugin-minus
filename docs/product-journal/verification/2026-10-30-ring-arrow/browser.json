@@ -1,0 +1,243 @@
+{
+  "method": "isolated headless Chromium; current module, native BB CSS, disposable tool timeline fixture; SVG size from accepted size-3.5 native 4px spacing; motion uses native animate-spin 1s",
+  "hashes": {
+    "group-tools.ts": "f122365a2d9b09efd2a12fc0d2dda999780c11be021daf0fc3b98891e888d1c5",
+    "group-tools.test.mjs": "ce35d52d733f96fef179d5dee900e9b21ba54b721a8db4dc76d167883e82feca",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec"
+  },
+  "observations": [
+    {
+      "reducedMotion": "no-preference",
+      "pending": {
+        "state": "pending",
+        "label": "Выполняется",
+        "animation": "spin",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "metrics": "1 tool",
+        "sourceTag": "SPAN",
+        "hasLink": false,
+        "chevronVisible": true,
+        "chevronInMetrics": true,
+        "glyph": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>",
+        "quoteControl": "LABEL",
+        "described": true
+      },
+      "completed": {
+        "state": "completed",
+        "label": "Завершено",
+        "animation": "none",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "metrics": "1 tool · 600ms",
+        "sourceTag": "SPAN",
+        "hasLink": false,
+        "chevronVisible": true,
+        "chevronInMetrics": true,
+        "glyph": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>",
+        "quoteControl": "LABEL",
+        "described": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "reducedMotion": "reduce",
+      "pending": {
+        "state": "pending",
+        "label": "Выполняется",
+        "animation": "none",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "metrics": "1 tool",
+        "sourceTag": "SPAN",
+        "hasLink": false,
+        "chevronVisible": true,
+        "chevronInMetrics": true,
+        "glyph": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>",
+        "quoteControl": "LABEL",
+        "described": true
+      },
+      "completed": {
+        "state": "completed",
+        "label": "Завершено",
+        "animation": "none",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "metrics": "1 tool · 600ms",
+        "sourceTag": "SPAN",
+        "hasLink": false,
+        "chevronVisible": true,
+        "chevronInMetrics": true,
+        "glyph": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>",
+        "quoteControl": "LABEL",
+        "described": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "phase": "error",
+      "state": "error",
+      "passed": true
+    },
+    {
+      "phase": "cancelled",
+      "state": "cancelled",
+      "passed": true
+    },
+    {
+      "phase": "unknown-provider-state",
+      "state": "unknown",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "zoom": 1,
+      "overflow": false,
+      "keyboard": true,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "zoom": 2,
+      "overflow": false,
+      "keyboard": true,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "zoom": 1,
+      "overflow": false,
+      "keyboard": true,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "zoom": 2,
+      "overflow": false,
+      "keyboard": true,
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "zoom": 1,
+      "overflow": false,
+      "keyboard": true,
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "zoom": 2,
+      "overflow": false,
+      "keyboard": true,
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "prefix": "light-pending",
+      "receipt": {
+        "url": "http://127.0.0.1:63987/?theme=light&phase=pending",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-ring-captures/light-pending-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 21479,
+            "sha256": "ba9ba7f91ec7482f938cb100a0fe703b6bd808c93e1631fc6069e6ad3bcf221d"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-ring-captures/light-pending-390x600.png",
+            "viewport": "390x600",
+            "bytes": 18656,
+            "sha256": "379754ad85fd50cf033a6046e854a55205c06a26a344feca24f925ae7439cc4e"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "light-completed",
+      "receipt": {
+        "url": "http://127.0.0.1:63987/?theme=light&phase=completed",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-ring-captures/light-completed-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 22135,
+            "sha256": "262eb88f997810fb343d0fd6618795ebbe421f728a9e7de7d2b9d9958e934000"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-ring-captures/light-completed-390x600.png",
+            "viewport": "390x600",
+            "bytes": 19123,
+            "sha256": "69d2c0a563722b7d0f4b805f438ef8ba37a2439ccd2e72031a4b36d4509828b8"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "dark-pending",
+      "receipt": {
+        "url": "http://127.0.0.1:63987/?theme=dark&phase=pending",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-ring-captures/dark-pending-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 21293,
+            "sha256": "6366bc7c767a400ab2f67dec486bec5695090bf7a8edbba4297501dd78c3ba20"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-ring-captures/dark-pending-390x600.png",
+            "viewport": "390x600",
+            "bytes": 18498,
+            "sha256": "dcc6f898647b2516db5d49ffca0cde4396912d5bfa962d99ee0bce137e35e31c"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "dark-completed",
+      "receipt": {
+        "url": "http://127.0.0.1:63987/?theme=dark&phase=completed",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-ring-captures/dark-completed-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 21915,
+            "sha256": "027cd5bed2e3fbfe0d7180c590a4db3d6e73fa7a9f5392176246c80b32dfe9ac"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-ring-captures/dark-completed-390x600.png",
+            "viewport": "390x600",
+            "bytes": 18966,
+            "sha256": "4ce1a1db17be4af2618f50cf12ff1b45c5db2a6df78a1a8d795b7e035b82730f"
+          }
+        ]
+      }
+    }
+  ]
+}
