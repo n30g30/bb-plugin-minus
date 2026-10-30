@@ -1,0 +1,22 @@
+{
+  "host": "http://127.0.0.1:38886",
+  "source": "git:https://github.com/vadikhq/bb-plugin-minus.git@0f0175fb81393641a9648a97282ad66a54856478",
+  "bundle": "9efc5b55bd0ff92a",
+  "enabled": true,
+  "status": "running",
+  "statusDetail": null,
+  "hashes": {
+    "group-tools.ts": "2f8de71a3fa8c05579cd714c5b326c51c06cd66a0cd34f5fb12b7ef3280b394b",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec",
+    "group-tools.test.mjs": "c14d471ffcfacdac2d3ffb186656f756ce22c5ed7f9c330d81a8abff3480118a",
+    "quotes.ts": "f0602bcffd488c315c68af1a0ab4adce84dccd4cfa35bbfae68f67744bd8806a"
+  },
+  "settingsEqual": true,
+  "settingsCount": 31,
+  "health": 200,
+  "installJob": "dd7e0d73-a687-41d1-9b83-f1ffcc08d5c5",
+  "jobState": "succeeded",
+  "healthAfterUi": 200,
+  "activeAssetMatchesInstalled": true,
+  "pluginLogEmpty": true
+}
