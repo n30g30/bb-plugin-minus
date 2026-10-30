@@ -1,0 +1,399 @@
+{
+  "method": "isolated headless Chromium; candidate JS/CSS in disposable client only; real native completed turn",
+  "baseCommit": "113388954ca59e476a0a6686806d7799bb9d24c3",
+  "candidateHashes": "7c6fa22fc8ced56b34432a3460ed58c8ccac0854bd33064139a0dc716c8e9083  group-tools.ts\ncc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec  app.tsx\n78810165cd33271fcdaed8b932e41246502c50af9ea2f4b56f4f8f7bcd476ca0  group-tools.test.mjs\n",
+  "served": [
+    "candidate JS",
+    "candidate CSS",
+    "candidate JS",
+    "candidate CSS"
+  ],
+  "healthBefore": 200,
+  "healthAfter": 200,
+  "observations": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "manualClose": "false",
+      "errors": [],
+      "closed": {
+        "nativeExpanded": "true",
+        "messages": [
+          {
+            "visible": true
+          },
+          {
+            "visible": true
+          }
+        ],
+        "groups": [
+          {
+            "metrics": "5 tools · 924ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          },
+          {
+            "metrics": "10 tools · 900ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          }
+        ],
+        "hiddenAgentContent": false
+      },
+      "keyboardOpen": {
+        "nativeExpanded": "true",
+        "messages": [
+          {
+            "visible": true
+          },
+          {
+            "visible": true
+          }
+        ],
+        "groups": [
+          {
+            "metrics": "5 tools · 924ms",
+            "expanded": "true",
+            "quoteExpanded": "true",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          },
+          {
+            "metrics": "10 tools · 900ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          }
+        ],
+        "hiddenAgentContent": false
+      },
+      "pointerOpen": {
+        "nativeExpanded": "true",
+        "messages": [
+          {
+            "visible": true
+          },
+          {
+            "visible": true
+          }
+        ],
+        "groups": [
+          {
+            "metrics": "5 tools · 924ms",
+            "expanded": "true",
+            "quoteExpanded": "true",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          },
+          {
+            "metrics": "10 tools · 900ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          }
+        ],
+        "hiddenAgentContent": false
+      },
+      "recollapsed": {
+        "nativeExpanded": "true",
+        "messages": [
+          {
+            "visible": true
+          },
+          {
+            "visible": true
+          }
+        ],
+        "groups": [
+          {
+            "metrics": "5 tools · 924ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          },
+          {
+            "metrics": "10 tools · 900ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          }
+        ],
+        "hiddenAgentContent": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "manualClose": "false",
+      "errors": [],
+      "closed": {
+        "nativeExpanded": "true",
+        "messages": [
+          {
+            "visible": true
+          },
+          {
+            "visible": true
+          }
+        ],
+        "groups": [
+          {
+            "metrics": "5 tools · 924ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          },
+          {
+            "metrics": "10 tools · 900ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          }
+        ],
+        "hiddenAgentContent": false
+      },
+      "keyboardOpen": {
+        "nativeExpanded": "true",
+        "messages": [
+          {
+            "visible": true
+          },
+          {
+            "visible": true
+          }
+        ],
+        "groups": [
+          {
+            "metrics": "5 tools · 924ms",
+            "expanded": "true",
+            "quoteExpanded": "true",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          },
+          {
+            "metrics": "10 tools · 900ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          }
+        ],
+        "hiddenAgentContent": false
+      },
+      "pointerOpen": {
+        "nativeExpanded": "true",
+        "messages": [
+          {
+            "visible": true
+          },
+          {
+            "visible": true
+          }
+        ],
+        "groups": [
+          {
+            "metrics": "5 tools · 924ms",
+            "expanded": "true",
+            "quoteExpanded": "true",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          },
+          {
+            "metrics": "10 tools · 900ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          }
+        ],
+        "hiddenAgentContent": false
+      },
+      "recollapsed": {
+        "nativeExpanded": "true",
+        "messages": [
+          {
+            "visible": true
+          },
+          {
+            "visible": true
+          }
+        ],
+        "groups": [
+          {
+            "metrics": "5 tools · 924ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          },
+          {
+            "metrics": "10 tools · 900ms",
+            "expanded": "false",
+            "quoteExpanded": "false",
+            "fits": true,
+            "order": [
+              "BUTTON",
+              "A",
+              "BUTTON"
+            ],
+            "colors": [
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)",
+              "oklch(0.5 0 0)"
+            ]
+          }
+        ],
+        "hiddenAgentContent": false
+      }
+    }
+  ]
+}

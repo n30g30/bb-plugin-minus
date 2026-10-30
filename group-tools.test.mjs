@@ -800,6 +800,42 @@ test("a work row acquiring nested agent content becomes a visible independent bo
   } finally { dom.cleanup(); }
 });
 
+test("native running tool bundles collapse while agent messages remain visible", async () => {
+  const summary = "turn-1:work-summary:" + fullId("tool-1");
+  const dom = mountDom({
+    rowIds: [summary, "assistant:kind:assistant|stream"],
+    fetchTimeline: async () => timeline([["tool-1"], ["tool-2"], ["assistant:kind:assistant|stream", "conversation"]]),
+  });
+  try {
+    const bundle = dom.window.document.createElement("div");
+    bundle.dataset.timelineRowList = "bundle";
+    bundle.append(dom.makeRow("tool-1"), dom.makeRow("tool-2"));
+    dom.rows[0].append(bundle);
+    dom.rows[1].className = "group/message";
+    dom.rows[1].textContent = "Проверяю результат работающих команд";
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+    assert.equal(dom.rows[1].hasAttribute(HIDDEN), false);
+    const metrics = dom.container.querySelector("[data-metrics]");
+    assert.equal(metrics.textContent, "2 tools · 600ms");
+    metrics.click();
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+    assert.equal(metrics.getAttribute("aria-expanded"), "true");
+    metrics.click();
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+    const message = dom.makeRow("assistant:kind:assistant|nested-stream");
+    message.className = "group/message";
+    message.textContent = "Полезное сообщение внутри блока";
+    bundle.append(message);
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+    assert.equal(dom.rows[1].hasAttribute(HIDDEN), false);
+    assert.equal(message.closest("[data-bb-minus-hidden]"), null);
+  } finally { dom.cleanup(); }
+});
+
 test("agent stream work and user interactions stay visible with their own API boundaries", async () => {
   for (const workKind of ["delegation", "workflow", "approval", "question", "form"]) {
     const dom = mountDom({

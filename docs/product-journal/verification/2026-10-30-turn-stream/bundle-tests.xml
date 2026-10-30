@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="renders and toggles every mounted row for 1 tool call(s)" time="0.218076" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="renders and toggles every mounted row for 2 tool call(s)" time="0.156666" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="renders and toggles every mounted row for 3 tool call(s)" time="0.153330" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="uses the full timeline count when only one tool row is mounted" time="0.077744" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="shows the sum of individual tool runtimes rather than group wall time" time="0.051872" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="updates the visible duration while a tool call is pending" time="0.077346" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps a manual stop visible and outside collapsed tool-call groups" time="0.156546" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="splits a virtualized tool run at an API interruption boundary" time="0.192678" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps an expanded API group open after refresh rejection and recovery" time="0.220737" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps an expanded right fallback part open when the API joins both parts" time="0.153108" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="does not revive a stale fallback choice when an unmounted row returns" time="0.254984" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps all split groups expanded when the API resolves after fallback expansion" time="0.151727" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="preserves a known API boundary when one mounted tool id is missing" time="0.043738" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="counts an uncached mounted tool row without duplicating its run toggle" time="0.077328" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="does not reopen a collapsed API group when virtualization replaces its first row" time="0.192820" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="does not expand a newly visible API group when virtualization shifts the mounted range" time="0.119456" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="transfers an expanded fallback row once so it can still be collapsed" time="0.158533" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps the quote stable when virtualization mounts another row in the same run" time="0.077963" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps separate tool runs independently expandable" time="0.084984" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps reasoning and unknown live rows visible before, during and after the API response" time="0.157054" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="does not join tool runs across virtualized reasoning" time="0.042910" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="an uncached tool cannot bridge a spacer containing an agent stream" time="0.040033" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="a work row acquiring nested agent content becomes a visible independent boundary" time="0.153742" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="native running tool bundles collapse while agent messages remain visible" time="0.149137" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="agent stream work and user interactions stay visible with their own API boundaries" time="0.217302" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps the end divider after the last mounted call as calls appear and disappear" time="0.183821" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps independent dividers outside the agent stream through virtualization" time="0.155783" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="settles independent headers and dividers for pending-spacer parts sharing an API run" time="0.153774" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="settles independent headers and dividers for stale-reasoning parts sharing an API run" time="0.153589" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="a returning fallback part keeps the latest API collapse" time="0.192171" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="a returning fallback part keeps the latest API collapse after API failure" time="0.225630" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps the rendered API membership when collapse happens after rejection but before its RAF" time="0.191365" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps focus on button when an expanded fallback becomes an API group" time="0.148872" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps focus on [data-source] when an expanded fallback becomes an API group" time="0.128934" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps focus on [data-toggle=metrics] when an expanded fallback becomes an API group" time="0.115380" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="dispose restores rows and removes injected DOM" time="0.077279" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="all quotes have unique excerpts and a source with a line locator" time="0.000266" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="quote selection covers the first and last entries at random bounds" time="0.000052" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="reviewed translations preserve every clause from their source excerpts" time="0.000055" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="keeps completed-turn commentary visible while hiding its tools with final timings" time="0.116333" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="respects a native turn manually closed by the user through DOM updates and remounting" time="0.145904" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="cleanup restores only native turns auto-opened by Minus; initiallyOpen=false" time="0.041094" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="cleanup restores only native turns auto-opened by Minus; initiallyOpen=true" time="0.039990" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="does not open completed turns inside a delegated agent timeline" time="0.039592" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="a terminal realtime event refreshes final duration without a DOM change or throttle delay" time="0.148691" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<testcase name="a terminal event during inFlight preserves its forced final refresh" time="0.076077" classname="test" file="/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-source/group-tools.test.mjs"/>
+	<!-- tests 46 -->
+	<!-- suites 0 -->
+	<!-- pass 46 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 7381.982833 -->
+</testsuites>

@@ -53,7 +53,9 @@ function rowKey(row: HTMLElement): string {
 }
 
 function hasAgentContent(row: HTMLElement): boolean {
-  return row.querySelector(".group\\/message, [data-timeline-row-list]") !== null;
+  // Native running work summaries use a "bundle" list of tool rows. Its
+  // presence alone is not an agent stream; actual messages still stay visible.
+  return row.querySelector('.group\\/message, [data-timeline-row-list]:not([data-timeline-row-list="bundle"])') !== null;
 }
 
 function isTopLevelTurn(row: HTMLElement): boolean {
