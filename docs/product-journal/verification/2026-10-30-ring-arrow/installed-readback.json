@@ -1,0 +1,18 @@
+{
+  "source": "git:https://github.com/vadikhq/bb-plugin-minus.git@0942a77d446dece4a572ac0bafc2873b6a0c1c74",
+  "bundle": "fac6b1fb37e65094",
+  "enabled": true,
+  "status": "running",
+  "statusDetail": null,
+  "settingsEqual": true,
+  "settingCount": 31,
+  "hashes": {
+    "group-tools.ts": "f122365a2d9b09efd2a12fc0d2dda999780c11be021daf0fc3b98891e888d1c5",
+    "group-tools.test.mjs": "ce35d52d733f96fef179d5dee900e9b21ba54b721a8db4dc76d167883e82feca",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec",
+    "quotes.ts": "f0602bcffd488c315c68af1a0ab4adce84dccd4cfa35bbfae68f67744bd8806a"
+  },
+  "jobId": "0130127b-afd0-417f-ad3e-d62a14ae9ca9",
+  "jobState": "succeeded",
+  "health": 200
+}

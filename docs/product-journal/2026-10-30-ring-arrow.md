@@ -1,6 +1,6 @@
 ---
 title: Minus — кольцо, точка и стрелка раскрытия
-status: in progress
+status: done
 updated: 2026-10-30
 ---
 
@@ -41,3 +41,16 @@ updated: 2026-10-30
 ## Применение и откат
 
 До записи: рабочая версия 9a8c46d, bundle e3d47ae53f51bdb6, enabled/running; install/update jobs пусты. Снимок всех 31 boolean settings сохранён в приватном thread storage. Backend только регистрирует boolean settings, не использует secrets/storage/KV/schedules/host entry. Обновление выполняется штатными remove/install с точным Git SHA и восстановлением всех значений. Обратный путь — прежний доступный Git SHA с тем же snapshot; общий runtime не трогается. После установки обязательны отдельные source/artifact/status/settings/jobs read-back и native проверка.
+
+
+## Установлено и проверено
+
+После независимого ревью source f122365… / test ce35d52… отправлены в PR #2 коммитом `0942a77d446dece4a572ac0bafc2873b6a0c1c74`; local/remote/PR head совпали. Штатный install job `0130127b-afd0-417f-ad3e-d62a14ae9ca9` завершён succeeded. Установленный source — тот же exact commit, bundle `fac6b1fb37e65094`, enabled/running, statusDetail=null. [Независимый read-back](verification/2026-10-30-ring-arrow/installed-readback.json) подтвердил все 31 настройки, hashes source/test/app/quotes и health. Restore потребовался только collapseToolCalls=true; остальные значения совпали с baseline. Исходный словарь не изменён.
+
+[Установленный frontend](verification/2026-10-30-ring-arrow/native-installed.json) без подмены assets/API подтвердил completed/dot, работу стрелки мышью и Space на 1280/390 px; browser errors отсутствуют. [Реальный переход](verification/2026-10-30-ring-arrow/installed-transition.json) подтвердил pending `5 tools` без времени → completed `5 tools · 6.7s`, spin → точка, стрелка видна в обоих состояниях, errors=[]. Это isolated headless Chromium, рабочие Chrome/BB не перезапускались.
+
+Два предыдущих наблюдения перехода завершились timeout: foreground watcher сам был частью незавершённого цикла, которого ожидал. Эти попытки не PASS. Успешный watcher запущен отдельным ограниченным headless-процессом; launcher tool завершился до наблюдаемого цикла, поэтому зависимости от собственного завершения не было. Процесс завершился штатно с закрытием браузера. Приватные UI captures остаются в thread storage; public evidence не содержит текст чужого треда.
+
+Изменения source/test остаются точно теми же проверенными байтами; итоговая запись установки — отдельный docs-коммит, не новая исполняемая редакция. CI отсутствует и merge не выполнялся. Для отката доступен прежний Git SHA 9a8c46d… и snapshot 31 настроек. Новых открытых продуктовых выборов нет; принятие всей установленной редакции остаётся за владельцем.
+
+Итоговый reviewer повторно прочитал три installed-квитанции: новых P1/P2 нет, source hashes согласованы. Его граница — без нового независимого browser-прогона; реальный длительный вызов >1 минуты не наблюдался, формат подтверждён JUnit и независимой DOM-пробой. Собственный headless observer завершён. Собственные node_modules/dist и дубли fixture PNG удалены после сохранения evidence.
