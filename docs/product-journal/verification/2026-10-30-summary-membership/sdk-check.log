@@ -1,0 +1,2 @@
+This plugin uses the npm package @get-bb/plugin-sdk; pin is 0.6.79, host is 0.6.94.
+Set "@get-bb/plugin-sdk" to 0.6.94 in devDependencies and re-run npm install (`bb plugin types` does it for you).

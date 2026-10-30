@@ -1384,3 +1384,177 @@ test('a terminal event during inFlight preserves its forced final refresh', asyn
     assert.equal(dom.container.querySelector('[data-metrics]').textContent,'1 tool · 1.8s');
   } finally {dom.cleanup();}
 });
+
+// Mirrors the native summary shell; the click only mounts/unmounts its owned
+// bundle, just as React does. Delegated child timelines are separate lists.
+function nativeSummary(dom, row, label, children = []) {
+  const root = dom.window.document.createElement('div');
+  const header = dom.window.document.createElement('div');
+  header.className = 'group/timeline-row';
+  const button = dom.window.document.createElement('button');
+  button.textContent = label;
+  button.setAttribute('aria-expanded', 'false');
+  header.append(button);
+  const shell = dom.window.document.createElement('div');
+  const list = dom.window.document.createElement('div');
+  list.dataset.timelineRowList = 'bundle';
+  const items = dom.window.document.createElement('div');
+  items.dataset.timelineItems = '';
+  items.append(...children);
+  list.append(items);
+  shell.append(list);
+  root.append(header);
+  row.append(root);
+  button.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(open));
+    if (open) root.append(shell);
+    else shell.remove();
+  });
+  return { button, root, shell, list, items };
+}
+
+test('native summary counts all 16 tools across reasoning boundaries', async () => {
+  const tools = Array.from({ length: 16 }, (_, i) => ['tool-' + (i + 1)]);
+  const source = [...tools.slice(0, 5), ['op:reasoning:between', 'system', 'reasoning'], ...tools.slice(5)];
+  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('tool-1')], fetchTimeline: async () => timeline(source) });
+  try {
+    nativeSummary(dom, dom.rows[0], 'Ran 16 tools');
+    await dom.flush();
+    const metrics = dom.container.querySelector('[data-metrics]');
+    assert.equal(metrics.textContent, '16 tools · 4.8s');
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+    metrics.click(); await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+    metrics.click(); await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+  } finally { dom.cleanup(); }
+});
+
+test('summary beginning with reasoning still collapses its complete tool membership', async () => {
+  const source = [['op:reasoning:first', 'system', 'reasoning'], ['tool-1'], ['op:reasoning:second', 'system', 'reasoning'], ['tool-2']];
+  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('op:reasoning:first')], fetchTimeline: async () => timeline(source) });
+  try {
+    nativeSummary(dom, dom.rows[0], 'Ran 2 tools');
+    await dom.flush();
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+    assert.equal(dom.container.querySelector('[data-metrics]').textContent, '2 tools · 600ms');
+  } finally { dom.cleanup(); }
+});
+
+test('an incomplete summary API window never reports just its first five members', async () => {
+  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('tool-1')], fetchTimeline: async () => timeline(Array.from({ length: 5 }, (_, i) => ['tool-' + (i + 1)])) });
+  try {
+    nativeSummary(dom, dom.rows[0], 'Ran 16 tools');
+    await dom.flush();
+    assert.equal(dom.container.querySelector('[data-metrics]').textContent, '16 tools · time unavailable');
+  } finally { dom.cleanup(); }
+});
+
+test('mixed summary exposes delegated work outside tool disclosures and restores its native shell', async () => {
+  const source = [['tool-1'], ['tool-2'], ['delegation:child', 'work', undefined, 1000, 5000, 'delegation'], ['tool-3'], ['assistant:after', 'conversation']];
+  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('tool-1'), 'assistant:after'], fetchTimeline: async () => timeline(source) });
+  try {
+    const children = ['tool-1', 'tool-2', 'delegation:child', 'tool-3'].map(dom.makeRow);
+    const native = nativeSummary(dom, dom.rows[0], 'Ran 3 commands, ran 1 subagent', children);
+    native.button.focus();
+    await dom.flush();
+    assert.equal(native.button.getAttribute('aria-expanded'), 'true');
+    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-summary'), true);
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+    assert.deepEqual(children.map(r => r.hasAttribute(HIDDEN)), [true, true, false, true]);
+    const metrics = [...native.items.querySelectorAll('[data-metrics]')];
+    assert.deepEqual(metrics.map(e => e.textContent), ['2 tools · 600ms', '1 tool · 300ms']);
+    // The bundle mounts during the first pass; metrics appear in the next.
+    // Focus stays on the visible fallback rather than being stolen afterward.
+    assert.equal(dom.window.document.activeElement, dom.rows[0]);
+    const childList = dom.window.document.createElement('div');
+    childList.dataset.timelineRowList = 'child';
+    const childItems = dom.window.document.createElement('div');
+    childItems.dataset.timelineItems = '';
+    const childTool = dom.makeRow('tool-child');
+    childItems.append(childTool);childList.append(childItems);children[2].append(childList);
+    metrics[0].click(); await dom.flush();
+    assert.equal(children[2].closest('[data-bb-minus-hidden]'), null);
+    assert.equal(childTool.hasAttribute(HIDDEN), false);
+    assert.equal(childItems.querySelector('[data-bb-minus-group]'), null);
+    metrics[0].click(); await dom.flush();
+    assert.equal(children[2].closest('[data-bb-minus-hidden]'), null);
+    dom.dispose();
+    assert.equal(native.button.getAttribute('aria-expanded'), 'false');
+    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-summary'), false);
+    assert.equal(dom.window.document.querySelector('[data-bb-minus-turn-shell]'), null);
+  } finally { dom.cleanup(); }
+});
+
+test('manually closed mixed summary stays closed and cleanup respects that choice', async () => {
+  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('delegation:child')], fetchTimeline: async () => timeline([['delegation:child', 'work', undefined, 1000, 5000, 'delegation']]) });
+  try {
+    const native = nativeSummary(dom, dom.rows[0], 'Ran 1 subagent', [dom.makeRow('delegation:child')]);
+    await dom.flush();
+    assert.equal(native.button.getAttribute('aria-expanded'), 'true');
+    native.button.click(); await dom.flush();
+    assert.equal(native.button.getAttribute('aria-expanded'), 'false');
+    dom.rows[0].append(dom.window.document.createElement('span')); await dom.flush();
+    assert.equal(native.button.getAttribute('aria-expanded'), 'false');
+    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-summary'), false);
+    dom.dispose();
+    assert.equal(native.button.getAttribute('aria-expanded'), 'false');
+  } finally { dom.cleanup(); }
+});
+
+for (const reasoning of [false, true]) {
+  test('stale summary membership cannot borrow the next summary first call' + (reasoning ? ' across reasoning' : ''), async () => {
+    const source = [['tool-1'], ['tool-2'], ...(reasoning ? [['op:reasoning:middle', 'system', 'reasoning']] : []), ['tool-3'], ['tool-4']];
+    const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('tool-1'), 'turn-1:work-summary:' + fullId('tool-3')], fetchTimeline: async () => timeline(source) });
+    try {
+      nativeSummary(dom, dom.rows[0], 'Ran 3 tools');
+      nativeSummary(dom, dom.rows[1], 'Ran 2 tools');
+      await dom.flush();
+      const metrics = [...dom.container.querySelectorAll('[data-metrics]')].map(e => e.textContent);
+      if (reasoning) assert.deepEqual(metrics, ['3 tools · time unavailable', '2 tools · 600ms']);
+      else assert.deepEqual(metrics, ['5 tools · time unavailable']);
+    } finally { dom.cleanup(); }
+  });
+}
+
+test('native subagent evidence preserves mixed streams even when the API still reports tools only', async () => {
+  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('tool-1')], fetchTimeline: async () => timeline([['tool-1'], ['delegation:child', 'work', undefined, 1000, 1300, 'tool'], ['tool-2']]) });
+  try {
+    const children = ['tool-1', 'delegation:child', 'tool-2'].map(dom.makeRow);
+    const native = nativeSummary(dom, dom.rows[0], 'Ran 2 tools, ran 1 subagent', children);
+    await dom.flush();
+    assert.equal(native.button.getAttribute('aria-expanded'), 'true');
+    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-summary'), true);
+    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+    assert.equal(children[1].hasAttribute(HIDDEN), false);
+    assert.equal(children[1].closest('[data-bb-minus-hidden]'), null);
+  } finally { dom.cleanup(); }
+});
+
+for (const failedApi of [false, true]) {
+  test('known agent content survives repacking into a closed native summary' + (failedApi ? ' with API unavailable' : ''), async () => {
+    let notify, reject = false;
+    const dom = mountDom({ rowIds: ['tool-1', 'tool-2'], fetchTimeline: async () => {
+      if (reject) throw Error('API unavailable during native repack');
+      return timeline([['tool-1'], ['tool-2']]);
+    }, subscribeTimeline: callback => { notify = callback; return () => {}; } });
+    try {
+      const message = dom.window.document.createElement('div');
+      message.className = 'group/message';message.textContent = 'Полезный промежуточный результат';
+      dom.rows[0].append(message);await dom.flush();
+      assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+      if (failedApi) { reject = true;notify('thr_test', true);await dom.flush(); }
+      const summary = dom.makeRow('turn-1:work-summary:' + fullId('tool-1'));
+      const native = nativeSummary(dom, summary, 'Ran 2 tools', [...dom.rows]);
+      dom.container.replaceChildren(summary);await dom.flush();
+      assert.equal(summary.hasAttribute(HIDDEN), false);
+      assert.equal(native.button.getAttribute('aria-expanded'), 'true');
+      assert.equal(message.closest('[data-bb-minus-hidden]'), null);
+      assert.equal(summary.hasAttribute('data-bb-minus-stream-summary'), true);
+      reject = true;notify('thr_test', true);await dom.flush();
+      assert.equal(summary.hasAttribute(HIDDEN), false);
+      assert.equal(message.closest('[data-bb-minus-hidden]'), null);
+    } finally { dom.cleanup(); }
+  });
+}

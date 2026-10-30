@@ -1,0 +1,488 @@
+diff --git a/group-tools.test.mjs b/group-tools.test.mjs
+index 23e0508..18c8823 100644
+--- a/group-tools.test.mjs
++++ b/group-tools.test.mjs
+@@ -1384,3 +1384,177 @@ test('a terminal event during inFlight preserves its forced final refresh', asyn
+     assert.equal(dom.container.querySelector('[data-metrics]').textContent,'1 tool · 1.8s');
+   } finally {dom.cleanup();}
+ });
++
++// Mirrors the native summary shell; the click only mounts/unmounts its owned
++// bundle, just as React does. Delegated child timelines are separate lists.
++function nativeSummary(dom, row, label, children = []) {
++  const root = dom.window.document.createElement('div');
++  const header = dom.window.document.createElement('div');
++  header.className = 'group/timeline-row';
++  const button = dom.window.document.createElement('button');
++  button.textContent = label;
++  button.setAttribute('aria-expanded', 'false');
++  header.append(button);
++  const shell = dom.window.document.createElement('div');
++  const list = dom.window.document.createElement('div');
++  list.dataset.timelineRowList = 'bundle';
++  const items = dom.window.document.createElement('div');
++  items.dataset.timelineItems = '';
++  items.append(...children);
++  list.append(items);
++  shell.append(list);
++  root.append(header);
++  row.append(root);
++  button.addEventListener('click', () => {
++    const open = button.getAttribute('aria-expanded') !== 'true';
++    button.setAttribute('aria-expanded', String(open));
++    if (open) root.append(shell);
++    else shell.remove();
++  });
++  return { button, root, shell, list, items };
++}
++
++test('native summary counts all 16 tools across reasoning boundaries', async () => {
++  const tools = Array.from({ length: 16 }, (_, i) => ['tool-' + (i + 1)]);
++  const source = [...tools.slice(0, 5), ['op:reasoning:between', 'system', 'reasoning'], ...tools.slice(5)];
++  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('tool-1')], fetchTimeline: async () => timeline(source) });
++  try {
++    nativeSummary(dom, dom.rows[0], 'Ran 16 tools');
++    await dom.flush();
++    const metrics = dom.container.querySelector('[data-metrics]');
++    assert.equal(metrics.textContent, '16 tools · 4.8s');
++    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
++    metrics.click(); await dom.flush();
++    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
++    metrics.click(); await dom.flush();
++    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
++  } finally { dom.cleanup(); }
++});
++
++test('summary beginning with reasoning still collapses its complete tool membership', async () => {
++  const source = [['op:reasoning:first', 'system', 'reasoning'], ['tool-1'], ['op:reasoning:second', 'system', 'reasoning'], ['tool-2']];
++  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('op:reasoning:first')], fetchTimeline: async () => timeline(source) });
++  try {
++    nativeSummary(dom, dom.rows[0], 'Ran 2 tools');
++    await dom.flush();
++    assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
++    assert.equal(dom.container.querySelector('[data-metrics]').textContent, '2 tools · 600ms');
++  } finally { dom.cleanup(); }
++});
++
++test('an incomplete summary API window never reports just its first five members', async () => {
++  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('tool-1')], fetchTimeline: async () => timeline(Array.from({ length: 5 }, (_, i) => ['tool-' + (i + 1)])) });
++  try {
++    nativeSummary(dom, dom.rows[0], 'Ran 16 tools');
++    await dom.flush();
++    assert.equal(dom.container.querySelector('[data-metrics]').textContent, '16 tools · time unavailable');
++  } finally { dom.cleanup(); }
++});
++
++test('mixed summary exposes delegated work outside tool disclosures and restores its native shell', async () => {
++  const source = [['tool-1'], ['tool-2'], ['delegation:child', 'work', undefined, 1000, 5000, 'delegation'], ['tool-3'], ['assistant:after', 'conversation']];
++  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('tool-1'), 'assistant:after'], fetchTimeline: async () => timeline(source) });
++  try {
++    const children = ['tool-1', 'tool-2', 'delegation:child', 'tool-3'].map(dom.makeRow);
++    const native = nativeSummary(dom, dom.rows[0], 'Ran 3 commands, ran 1 subagent', children);
++    native.button.focus();
++    await dom.flush();
++    assert.equal(native.button.getAttribute('aria-expanded'), 'true');
++    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-summary'), true);
++    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
++    assert.deepEqual(children.map(r => r.hasAttribute(HIDDEN)), [true, true, false, true]);
++    const metrics = [...native.items.querySelectorAll('[data-metrics]')];
++    assert.deepEqual(metrics.map(e => e.textContent), ['2 tools · 600ms', '1 tool · 300ms']);
++    // The bundle mounts during the first pass; metrics appear in the next.
++    // Focus stays on the visible fallback rather than being stolen afterward.
++    assert.equal(dom.window.document.activeElement, dom.rows[0]);
++    const childList = dom.window.document.createElement('div');
++    childList.dataset.timelineRowList = 'child';
++    const childItems = dom.window.document.createElement('div');
++    childItems.dataset.timelineItems = '';
++    const childTool = dom.makeRow('tool-child');
++    childItems.append(childTool);childList.append(childItems);children[2].append(childList);
++    metrics[0].click(); await dom.flush();
++    assert.equal(children[2].closest('[data-bb-minus-hidden]'), null);
++    assert.equal(childTool.hasAttribute(HIDDEN), false);
++    assert.equal(childItems.querySelector('[data-bb-minus-group]'), null);
++    metrics[0].click(); await dom.flush();
++    assert.equal(children[2].closest('[data-bb-minus-hidden]'), null);
++    dom.dispose();
++    assert.equal(native.button.getAttribute('aria-expanded'), 'false');
++    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-summary'), false);
++    assert.equal(dom.window.document.querySelector('[data-bb-minus-turn-shell]'), null);
++  } finally { dom.cleanup(); }
++});
++
++test('manually closed mixed summary stays closed and cleanup respects that choice', async () => {
++  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('delegation:child')], fetchTimeline: async () => timeline([['delegation:child', 'work', undefined, 1000, 5000, 'delegation']]) });
++  try {
++    const native = nativeSummary(dom, dom.rows[0], 'Ran 1 subagent', [dom.makeRow('delegation:child')]);
++    await dom.flush();
++    assert.equal(native.button.getAttribute('aria-expanded'), 'true');
++    native.button.click(); await dom.flush();
++    assert.equal(native.button.getAttribute('aria-expanded'), 'false');
++    dom.rows[0].append(dom.window.document.createElement('span')); await dom.flush();
++    assert.equal(native.button.getAttribute('aria-expanded'), 'false');
++    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-summary'), false);
++    dom.dispose();
++    assert.equal(native.button.getAttribute('aria-expanded'), 'false');
++  } finally { dom.cleanup(); }
++});
++
++for (const reasoning of [false, true]) {
++  test('stale summary membership cannot borrow the next summary first call' + (reasoning ? ' across reasoning' : ''), async () => {
++    const source = [['tool-1'], ['tool-2'], ...(reasoning ? [['op:reasoning:middle', 'system', 'reasoning']] : []), ['tool-3'], ['tool-4']];
++    const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('tool-1'), 'turn-1:work-summary:' + fullId('tool-3')], fetchTimeline: async () => timeline(source) });
++    try {
++      nativeSummary(dom, dom.rows[0], 'Ran 3 tools');
++      nativeSummary(dom, dom.rows[1], 'Ran 2 tools');
++      await dom.flush();
++      const metrics = [...dom.container.querySelectorAll('[data-metrics]')].map(e => e.textContent);
++      if (reasoning) assert.deepEqual(metrics, ['3 tools · time unavailable', '2 tools · 600ms']);
++      else assert.deepEqual(metrics, ['5 tools · time unavailable']);
++    } finally { dom.cleanup(); }
++  });
++}
++
++test('native subagent evidence preserves mixed streams even when the API still reports tools only', async () => {
++  const dom = mountDom({ rowIds: ['turn-1:work-summary:' + fullId('tool-1')], fetchTimeline: async () => timeline([['tool-1'], ['delegation:child', 'work', undefined, 1000, 1300, 'tool'], ['tool-2']]) });
++  try {
++    const children = ['tool-1', 'delegation:child', 'tool-2'].map(dom.makeRow);
++    const native = nativeSummary(dom, dom.rows[0], 'Ran 2 tools, ran 1 subagent', children);
++    await dom.flush();
++    assert.equal(native.button.getAttribute('aria-expanded'), 'true');
++    assert.equal(dom.rows[0].hasAttribute('data-bb-minus-stream-summary'), true);
++    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
++    assert.equal(children[1].hasAttribute(HIDDEN), false);
++    assert.equal(children[1].closest('[data-bb-minus-hidden]'), null);
++  } finally { dom.cleanup(); }
++});
++
++for (const failedApi of [false, true]) {
++  test('known agent content survives repacking into a closed native summary' + (failedApi ? ' with API unavailable' : ''), async () => {
++    let notify, reject = false;
++    const dom = mountDom({ rowIds: ['tool-1', 'tool-2'], fetchTimeline: async () => {
++      if (reject) throw Error('API unavailable during native repack');
++      return timeline([['tool-1'], ['tool-2']]);
++    }, subscribeTimeline: callback => { notify = callback; return () => {}; } });
++    try {
++      const message = dom.window.document.createElement('div');
++      message.className = 'group/message';message.textContent = 'Полезный промежуточный результат';
++      dom.rows[0].append(message);await dom.flush();
++      assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
++      if (failedApi) { reject = true;notify('thr_test', true);await dom.flush(); }
++      const summary = dom.makeRow('turn-1:work-summary:' + fullId('tool-1'));
++      const native = nativeSummary(dom, summary, 'Ran 2 tools', [...dom.rows]);
++      dom.container.replaceChildren(summary);await dom.flush();
++      assert.equal(summary.hasAttribute(HIDDEN), false);
++      assert.equal(native.button.getAttribute('aria-expanded'), 'true');
++      assert.equal(message.closest('[data-bb-minus-hidden]'), null);
++      assert.equal(summary.hasAttribute('data-bb-minus-stream-summary'), true);
++      reject = true;notify('thr_test', true);await dom.flush();
++      assert.equal(summary.hasAttribute(HIDDEN), false);
++      assert.equal(message.closest('[data-bb-minus-hidden]'), null);
++    } finally { dom.cleanup(); }
++  });
++}
+diff --git a/group-tools.ts b/group-tools.ts
+index 5d8e39e..c00d49a 100644
+--- a/group-tools.ts
++++ b/group-tools.ts
+@@ -7,6 +7,7 @@ import { pickRandomQuote, QUOTE_SOURCES, type QuoteEntry } from "./quotes.ts";
+ type TimelineRow = {
+   id: string;
+   kind: string;
++  operationKind?: string;
+   workKind?: string;
+   startedAt?: number;
+   completedAt?: number | null;
+@@ -32,12 +33,14 @@ const HIDDEN = "data-bb-minus-hidden";
+ const MARKER = "data-bb-minus-group";
+ const GROUP_END = "data-bb-minus-group-end";
+ const FLAT_TURN = "data-bb-minus-stream-turn";
++const FLAT_SUMMARY = "data-bb-minus-stream-summary";
+ const TURN_SHELL = "data-bb-minus-turn-shell";
+ const STREAM_FOCUS = "data-bb-minus-stream-focus";
+ // Fallback IDs from the SDK's work row kinds. Unknown/streaming rows stay visible.
+ const TOOL_ROW = /^(command|tool|file-change|web-search|web-fetch|image-generation|image-view|file-read|search|plan-steps|extension):/;
+ // These work rows carry an agent stream or require the user's response.
+ const VISIBLE_WORK = new Set(["delegation", "workflow", "approval", "question", "form"]);
++const VISIBLE_WORK_ROW = /^(delegation|workflow|approval|question|form):/;
+ // Keep the existing active-stream cadence; terminal realtime events bypass it.
+ const REFETCH_MS = 2000;
+ 
+@@ -61,6 +64,11 @@ function hasAgentContent(row: HTMLElement): boolean {
+   return row.querySelector('.group\\/message, [data-timeline-row-list]:not([data-timeline-row-list="bundle"])') !== null;
+ }
+ 
++function summaryHasAgentWork(row: HTMLElement): boolean {
++  return rowKey(row).includes(":work-summary:") &&
++    /\d+\s+(subagents?|workflows?)/i.test(turnButton(row)?.textContent ?? "");
++}
++
+ function isTopLevelTurn(row: HTMLElement): boolean {
+   return /:turn(:|$)/.test(rowKey(row)) &&
+     row.closest("[data-timeline-row-list]")?.getAttribute("data-timeline-row-list") === "top-level";
+@@ -75,16 +83,22 @@ function isToolContainer(container: Element): boolean {
+   if (list?.getAttribute("data-timeline-row-list") === "top-level") return true;
+   // Completed turns use a nested list too. Delegated agent timelines stay native.
+   const owner = list?.closest<HTMLElement>("[data-timeline-row-id]");
+-  return owner !== null && owner !== undefined && isTopLevelTurn(owner);
++  return owner !== null && owner !== undefined && (isTopLevelTurn(owner) ||
++    (list?.getAttribute("data-timeline-row-list") === "bundle" && owner.hasAttribute(FLAT_SUMMARY)));
+ }
+ 
+-function isToolRow(row: HTMLElement, collapsible?: Map<string, boolean>): boolean {
++function isToolRow(row: HTMLElement, runs?: ThreadRuns, visibleRows?: ReadonlySet<string>): boolean {
+   // A work/delegation row may contain live messages or an entire child timeline.
+   // Hiding its outer wrapper would also hide that useful agent stream.
+-  if (hasAgentContent(row)) return false;
++  if (hasAgentContent(row) || summaryHasAgentWork(row) ||
++    visibleRows?.has(row.dataset.timelineRowId ?? "") || visibleRows?.has(apiId(row))) return false;
++  const members = summaryMembers(row, runs);
++  if (members !== undefined) return members.every(member =>
++    !VISIBLE_WORK.has(member.workKind ?? "") && runs?.collapsible.get(member.id) !== false);
+   const key = rowKey(row);
++  if (VISIBLE_WORK_ROW.test(key)) return false;
+   if (/^(user|assistant|error|op:)|:turn(:|$)|kind:(assistant|user|reasoning)/.test(key)) return false;
+-  const known = collapsible?.get(apiId(row));
++  const known = runs?.collapsible.get(apiId(row));
+   if (known !== undefined) return known;
+   return TOOL_ROW.test(key) || key.includes(":work-summary:");
+ }
+@@ -108,6 +122,7 @@ function domCount(row: HTMLElement): number {
+ // Only work rows belong to API runs. Streaming/reasoning rows break the run.
+ type ThreadRuns = {
+   rows: TimelineRow[];
++  sourceOf: Map<string, { source: TimelineRow[]; index: number }>;
+   collapsible: Map<string, boolean>;
+   runOf: Map<string, number>;
+   counts: number[];
+@@ -116,7 +131,40 @@ type ThreadRuns = {
+   durationMs: Array<number | null>;
+   pending: boolean[];
+ };
++
++// Native work summaries can span reasoning boundaries and therefore several
++// API runs. Recover their complete membership from their own header count,
++// bounded by the API sibling list and conversation/interaction boundaries.
++// Never turn an incomplete API window into a partial, apparently exact total.
++function summaryMembers(row: HTMLElement, runs?: ThreadRuns): TimelineRow[] | undefined {
++  if (!rowKey(row).includes(":work-summary:")) return undefined;
++  const header = turnButton(row);
++  if (header === null || !/\d+\s+\w+/.test(header.textContent ?? "")) return undefined;
++  const start = runs?.sourceOf.get(apiId(row));
++  if (start === undefined) return undefined;
++  let end = start.source.length;
++  let next = row.nextElementSibling;
++  while (next !== null && (next.hasAttribute(MARKER) || next.hasAttribute(GROUP_END) || next.hasAttribute("data-timeline-window-spacer"))) next = next.nextElementSibling;
++  if (next instanceof HTMLElement && next.dataset.timelineRowId !== undefined) {
++    const boundary = runs?.sourceOf.get(apiId(next));
++    // Native composition can advance before its API snapshot. Do not borrow
++    // a call from the next mounted summary to satisfy the current header.
++    if (boundary === undefined || boundary.source !== start.source || boundary.index <= start.index) return undefined;
++    end = boundary.index;
++  }
++  const count = domCount(row);
++  const members: TimelineRow[] = [];
++  for (const entry of start.source.slice(start.index, end)) {
++    if (entry.kind === "system" && entry.operationKind === "reasoning") continue;
++    if (entry.kind !== "work" || ["approval", "question", "form"].includes(entry.workKind ?? "")) return undefined;
++    members.push(entry);
++    if (members.length === count) return members;
++  }
++  return undefined;
++}
++
+ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): ThreadRuns {
++  const sourceOf: ThreadRuns["sourceOf"] = new Map();
+   const collapsible = new Map<string, boolean>();
+   const runOf = new Map<string, number>();
+   const counts: number[] = [];
+@@ -127,7 +175,8 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>):
+   const pending: boolean[] = [];
+   const visit = (source: TimelineRow[]) => {
+     let open = false;
+-    for (const row of source) {
++    for (const [index, row] of source.entries()) {
++      sourceOf.set(row.id, { source, index });
+       if (row.kind === "turn") {
+         collapsible.set(row.id, false);
+         visit(row.children ?? []);
+@@ -168,6 +217,7 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>):
+   visit(rows);
+   return {
+     rows,
++    sourceOf,
+     collapsible,
+     runOf,
+     counts,
+@@ -236,6 +286,7 @@ export function mountToolGrouping(
+ [${MARKER}]:has(button[aria-expanded="false"]) [data-row]{border-bottom:1px solid var(--border);padding-bottom:calc(4 * var(--spacing))}
+ [${GROUP_END}]{margin-inline:calc(2 * var(--spacing));margin-block:calc(2 * var(--spacing));border-bottom:1px solid var(--border)}
+ [${FLAT_TURN}] > div > [class~="group/timeline-row"]{display:none}
++[${FLAT_SUMMARY}] > div > [class~="group/timeline-row"]{display:none}
+ [${TURN_SHELL}]{display:contents}
+ [${TURN_SHELL}]::before,[${TURN_SHELL}]::after{display:none}
+ [${STREAM_FOCUS}]:focus-visible{outline:1px solid var(--ring)}`;
+@@ -298,7 +349,18 @@ export function mountToolGrouping(
+ 
+   function preserveTurnStreams(container: Element, presentation: Set<Element>) {
+     for (const row of container.children) {
+-      if (!(row instanceof HTMLElement) || !isTopLevelTurn(row)) continue;
++      if (!(row instanceof HTMLElement)) continue;
++      const isTurn = isTopLevelTurn(row);
++      const threadId = row.dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
++      const api = threads.get(threadId ?? "");
++      const members = summaryMembers(row, api);
++      const isStreamSummary = rowKey(row).includes(":work-summary:") &&
++        (visibleRows.has(row.dataset.timelineRowId ?? "") || visibleRows.has(apiId(row)) || summaryHasAgentWork(row) ||
++          members?.some(member => VISIBLE_WORK.has(member.workKind ?? "") || api?.collapsible.get(member.id) === false) || hasAgentContent(row));
++      if (!isTurn && !isStreamSummary) continue;
++      // Remember a proven stream summary too: an API failure must not hide
++      // its protected contents while the bundle is temporarily unmounted.
++      if (isStreamSummary) visibleRows.add(row.dataset.timelineRowId!);
+       const button = turnButton(row);
+       const id = row.dataset.timelineRowId!;
+       if (button === null) continue;
+@@ -311,9 +373,9 @@ export function mountToolGrouping(
+         try { button.click(); } finally { openingTurn = false; }
+       }
+       if (button.getAttribute("aria-expanded") !== "true") continue;
+-      const list = [...row.querySelectorAll<HTMLElement>('[data-timeline-row-list="nested"]')]
++      const list = [...row.querySelectorAll<HTMLElement>(isTurn ? '[data-timeline-row-list="nested"]' : '[data-timeline-row-list="bundle"]')]
+         .find(list => list.closest("[data-timeline-row-id]") === row);
+-      if (list === undefined || list.querySelector(".group\\/message") === null) continue;
++      if (list === undefined || (isTurn && list.querySelector(".group\\/message") === null)) continue;
+       const root = button.parentElement?.parentElement;
+       if (root === undefined || root === null || root.parentElement !== row || !root.contains(list)) continue;
+       const shells: HTMLElement[] = [];
+@@ -328,7 +390,7 @@ export function mountToolGrouping(
+       // Keep React's rows and virtualization measure box in place. Only remove
+       // the enclosing disclosure's visual nesting: commentary is ordinary chat,
+       // and each quote continues to control only its own work rows.
+-      row.setAttribute(FLAT_TURN, "");
++      row.setAttribute(isTurn ? FLAT_TURN : FLAT_SUMMARY, "");
+       presentation.add(row);
+       for (const shell of shells) {
+         shell.setAttribute(TURN_SHELL, "");
+@@ -340,6 +402,7 @@ export function mountToolGrouping(
+   function clearTurnPresentation(el: Element) {
+     const restoreFocus = document.activeElement === el;
+     el.removeAttribute(FLAT_TURN);
++    el.removeAttribute(FLAT_SUMMARY);
+     el.removeAttribute(TURN_SHELL);
+     const focusMode = el.getAttribute(STREAM_FOCUS);
+     if (focusMode !== null) {
+@@ -353,7 +416,9 @@ export function mountToolGrouping(
+     if (openingTurn || !(event.target instanceof Element)) return;
+     const button = event.target.closest("button");
+     const row = button?.closest<HTMLElement>("[data-timeline-row-id]");
+-    if (button === null || row === null || row === undefined || !isTopLevelTurn(row) || button !== turnButton(row)) return;
++    if (button === null || row === null || row === undefined ||
++      (!isTopLevelTurn(row) && !(rowKey(row).includes(":work-summary:") && row.parentElement !== null && isToolContainer(row.parentElement))) ||
++      button !== turnButton(row)) return;
+     turnChoices.set(row.dataset.timelineRowId!, button.getAttribute("aria-expanded") !== "true");
+   }
+ 
+@@ -371,6 +436,44 @@ export function mountToolGrouping(
+       refresh(threadId);
+       return null;
+     }
++    const summaries = rows.map(row => summaryMembers(row, runs));
++    if (rows.some((row, index) => rowKey(row).includes(":work-summary:") &&
++      turnButton(row) !== null && summaries[index] === undefined)) {
++      refresh(threadId);
++      return null;
++    }
++    if (summaries.some(members => members !== undefined)) {
++      const members = new Map<string, TimelineRow>();
++      let unknownCount = 0;
++      for (const [index, row] of rows.entries()) {
++        if (row.dataset.timelineRowId === undefined) continue;
++        const summary = summaries[index];
++        const run = runs.runOf.get(apiId(row));
++        if (summary === undefined && rowKey(row).includes(":work-summary:")) {
++          refresh(threadId);
++          return null;
++        }
++        const ids = summary?.map(member => member.id) ?? (run === undefined ? [] : runs.memberIds[run]);
++        if (ids.length === 0) unknownCount += domCount(row);
++        for (const id of ids) {
++          const source = runs.sourceOf.get(id);
++          if (source !== undefined) members.set(id, source.source[source.index]);
++        }
++      }
++      let durationMs: number | null = unknownCount > 0 ? null : 0;
++      let pending = false;
++      for (const member of members.values()) {
++        if (VISIBLE_WORK.has(member.workKind ?? "")) return null;
++        const end = member.completedAt ?? (member.status === "pending" ? clock.now() : undefined);
++        if (!Number.isFinite(member.startedAt) || end === undefined) durationMs = null;
++        else if (durationMs !== null) durationMs += Math.max(0, end - member.startedAt!);
++        if (member.status === "pending") pending = true;
++      }
++      if (pending || unknownCount > 0) refresh(threadId);
++      const ids = [...members.keys()];
++      if (ids.length === 0) return null;
++      return { key: "timeline:" + threadId + ":" + ids[0], count: ids.length + unknownCount, durationMs, pending, memberIds: ids };
++    }
+     const ids = rows.filter((row) => row.dataset.timelineRowId !== undefined).map(apiId);
+     const knownIds = ids.filter((id) => runs.runOf.has(id));
+     if (knownIds.length === 0) {
+@@ -438,7 +541,7 @@ export function mountToolGrouping(
+               next = next.nextElementSibling;
+               continue;
+             }
+-            if (!isToolRow(next, api.collapsible)) break;
++            if (!isToolRow(next, api, visibleRows)) break;
+             nextRun = api.runOf.get(apiId(next));
+             if (nextRun !== undefined) break;
+             next = next.nextElementSibling;
+@@ -551,7 +654,8 @@ export function mountToolGrouping(
+       // A streaming work row can acquire message content after the API response.
+       // Keep it as a boundary in the API index too, so adjacent tools do not share a marker.
+       for (const row of container.children) {
+-        if (!(row instanceof HTMLElement) || row.dataset.timelineRowId === undefined || !hasAgentContent(row)) continue;
++        if (!(row instanceof HTMLElement) || row.dataset.timelineRowId === undefined || rowKey(row).includes(":work-summary:") ||
++          !(hasAgentContent(row) || VISIBLE_WORK_ROW.test(rowKey(row)))) continue;
+         const id = apiId(row);
+         if (visibleRows.has(id)) continue;
+         visibleRows.add(id);
+@@ -571,7 +675,7 @@ export function mountToolGrouping(
+         }
+         const threadId = child.dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
+         if (threadId !== undefined && !threads.has(threadId)) refresh(threadId);
+-        if (child.dataset.timelineRowId !== undefined && isToolRow(child, threads.get(threadId ?? "")?.collapsible)) {
++        if (child.dataset.timelineRowId !== undefined && isToolRow(child, threads.get(threadId ?? ""), visibleRows)) {
+           if (
+             run.length > 0 &&
+             spacers.length > 0 &&
+@@ -723,7 +827,7 @@ export function mountToolGrouping(
+         }
+       }
+     }
+-    for (const el of document.querySelectorAll(`[${FLAT_TURN}], [${TURN_SHELL}], [${STREAM_FOCUS}]`)) {
++    for (const el of document.querySelectorAll(`[${FLAT_TURN}], [${FLAT_SUMMARY}], [${TURN_SHELL}], [${STREAM_FOCUS}]`)) {
+       if (!turnPresentation.has(el)) clearTurnPresentation(el);
+     }
+     for (const el of document.querySelectorAll(`[${MARKER}], [${GROUP_END}]`)) if (!used.has(el)) el.remove();
+@@ -733,7 +837,7 @@ export function mountToolGrouping(
+       if (used.has(focusedMarker)) focused?.focus({ preventScroll: true });
+       else migratedFocus?.focus({ preventScroll: true });
+     }
+-    const focusedTurn = focused?.closest<HTMLElement>(`[${FLAT_TURN}]`);
++    const focusedTurn = focused?.closest<HTMLElement>(`[${FLAT_TURN}], [${FLAT_SUMMARY}]`);
+     if (focusedTurn !== null && focusedTurn !== undefined && focused === turnButton(focusedTurn)) {
+       const metrics = focusedTurn.querySelector<HTMLElement>('[data-toggle="metrics"]');
+       if (metrics !== null) metrics.focus({ preventScroll: true });
+@@ -773,10 +877,11 @@ export function mountToolGrouping(
+     style.remove();
+     for (const el of document.querySelectorAll(`[${MARKER}], [${GROUP_END}]`)) el.remove();
+     for (const el of document.querySelectorAll(`[${HIDDEN}]`)) el.removeAttribute(HIDDEN);
+-    for (const el of document.querySelectorAll(`[${FLAT_TURN}], [${TURN_SHELL}], [${STREAM_FOCUS}]`)) clearTurnPresentation(el);
++    for (const el of document.querySelectorAll(`[${FLAT_TURN}], [${FLAT_SUMMARY}], [${TURN_SHELL}], [${STREAM_FOCUS}]`)) clearTurnPresentation(el);
+     for (const row of document.querySelectorAll<HTMLElement>("[data-timeline-row-id]")) {
+       const id = row.dataset.timelineRowId!;
+-      if (!autoOpenedTurns.has(id) || turnChoices.has(id) || !isTopLevelTurn(row)) continue;
++      if (!autoOpenedTurns.has(id) || turnChoices.has(id) ||
++        (!isTopLevelTurn(row) && !rowKey(row).includes(":work-summary:"))) continue;
+       const button = turnButton(row);
+       if (button?.getAttribute("aria-expanded") === "true") button.click();
+     }
