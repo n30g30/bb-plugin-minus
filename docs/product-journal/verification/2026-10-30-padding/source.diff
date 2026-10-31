@@ -1,0 +1,47 @@
+diff --git a/group-tools.ts b/group-tools.ts
+index 6c186f7..d813c01 100644
+--- a/group-tools.ts
++++ b/group-tools.ts
+@@ -36,11 +36,10 @@ const REFETCH_MS = 2000;
+ const TOGGLE_HTML = `<div class="rounded-md text-muted-foreground w-full">
+   <div data-row class="group/timeline-row min-w-0 px-2 text-sm leading-5">
+     <button type="button" aria-expanded="false" class="group/toggle inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-sm leading-5 text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer">
+-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="mr-1.5 inline-block size-3.5 align-text-bottom text-muted-foreground opacity-40" aria-hidden="true" data-minus-icon="called-tools"><path d="M12 8.5L3.12132 17.3787C2.72349 17.7765 2.5 18.3161 2.5 18.8787C2.5 20.0503 3.44975 21 4.62132 21C5.18393 21 5.72349 20.7765 6.12132 20.3787L15 11.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.1207 5.03693L20.3682 9.3197C21.014 9.97093 21.3369 10.2966 21.4435 10.6774C21.5188 10.9467 21.5188 11.2317 21.4435 11.501C21.3369 11.8819 21.014 12.2075 20.3682 12.8587C19.7223 13.51 19.3994 13.8356 19.0216 13.943C18.7546 14.019 18.4719 14.019 18.2048 13.943C17.8271 13.8356 17.5042 13.51 16.8583 12.8587L10.0245 5.96802C8.99015 4.92507 8.47297 4.40359 8.50109 3.94831C8.51495 3.7239 8.60259 3.51054 8.75017 3.34197C9.04956 3 9.78095 3 11.2437 3C12.4209 3 13.0095 3 13.5574 3.16035C13.8406 3.24325 14.1139 3.3574 14.3723 3.50071C14.8721 3.77792 15.2883 4.19759 16.1207 5.03693Z" stroke="currentColor" stroke-width="1.5"/></svg><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-muted-foreground"></span>
+-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-muted-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg>
++      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="mr-1.5 inline-block size-3.5 align-text-bottom text-muted-foreground opacity-40" aria-hidden="true" data-minus-icon="called-tools"><path d="M12 8.5L3.12132 17.3787C2.72349 17.7765 2.5 18.3161 2.5 18.8787C2.5 20.0503 3.44975 21 4.62132 21C5.18393 21 5.72349 20.7765 6.12132 20.3787L15 11.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.1207 5.03693L20.3682 9.3197C21.014 9.97093 21.3369 10.2966 21.4435 10.6774C21.5188 10.9467 21.5188 11.2317 21.4435 11.501C21.3369 11.8819 21.014 12.2075 20.3682 12.8587C19.7223 13.51 19.3994 13.8356 19.0216 13.943C18.7546 14.019 18.4719 14.019 18.2048 13.943C17.8271 13.8356 17.5042 13.51 16.8583 12.8587L10.0245 5.96802C8.99015 4.92507 8.47297 4.40359 8.50109 3.94831C8.51495 3.7239 8.60259 3.51054 8.75017 3.34197C9.04956 3 9.78095 3 11.2437 3C12.4209 3 13.0095 3 13.5574 3.16035C13.8406 3.24325 14.1139 3.3574 14.3723 3.50071C14.8721 3.77792 15.2883 4.19759 16.1207 5.03693Z" stroke="currentColor" stroke-width="1.5"/></svg><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-muted-foreground"><span data-quote-start></span><span class="whitespace-nowrap"><span data-quote-end class="inline-block whitespace-normal break-words" style="max-width:calc(100% - 4.5 * var(--spacing))"></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-muted-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></span></span>
+     </button>
+     <a data-source class="mr-1.5 break-words text-xs leading-5 text-muted-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
+-    <span data-metrics class="inline-block whitespace-nowrap text-xs leading-5 text-muted-foreground"></span>
++    <span data-metrics class="text-xs leading-5 text-muted-foreground"><span data-count class="whitespace-nowrap"></span> · <span data-time class="whitespace-nowrap"></span></span>
+   </div>
+ </div>`;
+ 
+@@ -468,7 +467,15 @@ export function mountToolGrouping(
+         const el = marker(container, key);
+         used.add(el);
+         const quoteText = el.querySelector<HTMLElement>("[data-quote]")!;
+-        if (quoteText.textContent !== quote.text) quoteText.textContent = quote.text;
++        if (quoteText.textContent !== quote.text) {
++          // Keep the chevron with the last word: an invisible arrow on its own
++          // line otherwise adds an empty line before the author/source. The last
++          // word may wrap within button width - (icon 3 + margin 1.5) spacing
++          // units, so its attached chevron also fits at enlarged text sizes.
++          const tailStart = quote.text.search(/\S+\s*$/);
++          el.querySelector("[data-quote-start]")!.textContent = quote.text.slice(0, tailStart);
++          el.querySelector("[data-quote-end]")!.textContent = quote.text.slice(tailStart);
++        }
+         if (quoteText.title !== quote.text) quoteText.title = quote.text;
+         const quoteId = "bb-minus-quote-" + encodeURIComponent(key);
+         if (quoteText.id !== quoteId) quoteText.id = quoteId;
+@@ -489,7 +496,10 @@ export function mountToolGrouping(
+         const metrics = el.querySelector<HTMLElement>("[data-metrics]")!;
+         const visibleCount = calls + " tool" + (calls === 1 ? "" : "s");
+         if (metrics.textContent !== visibleCount + " · " + duration) {
+-          metrics.textContent = visibleCount + " · " + duration;
++          // Let count and time wrap independently at narrow widths/text zoom,
++          // keeping each value with its unit rather than overflowing the inset.
++          metrics.querySelector("[data-count]")!.textContent = visibleCount;
++          metrics.querySelector("[data-time]")!.textContent = duration;
+         }
+         metrics.title = "Total time across individual tool calls; parallel calls are added together.";
+         const accessibleLabel =

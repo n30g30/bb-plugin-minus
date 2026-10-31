@@ -1,0 +1,87 @@
+{
+  "method": "isolated headless Chromium; current real native thread; installed assets without interception",
+  "bundle": "fac6b1fb37e65094",
+  "hashes": {
+    "group-tools.ts": "f122365a2d9b09efd2a12fc0d2dda999780c11be021daf0fc3b98891e888d1c5",
+    "group-tools.test.mjs": "ce35d52d733f96fef179d5dee900e9b21ba54b721a8db4dc76d167883e82feca",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec"
+  },
+  "observations": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "states": [
+        {
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "none",
+          "opacity": "1",
+          "described": true,
+          "metrics": "1 tool · 169ms",
+          "chevronVisible": true,
+          "chevronInMetrics": true,
+          "noLink": true,
+          "dot": true,
+          "insideMessage": false
+        },
+        {
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "none",
+          "opacity": "1",
+          "described": true,
+          "metrics": "1 tool · 230ms",
+          "chevronVisible": true,
+          "chevronInMetrics": true,
+          "noLink": true,
+          "dot": true,
+          "insideMessage": false
+        }
+      ],
+      "errors": [],
+      "served": [],
+      "keyboard": true,
+      "passed": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "states": [
+        {
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "none",
+          "opacity": "1",
+          "described": true,
+          "metrics": "1 tool · 169ms",
+          "chevronVisible": true,
+          "chevronInMetrics": true,
+          "noLink": true,
+          "dot": true,
+          "insideMessage": false
+        },
+        {
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "none",
+          "opacity": "1",
+          "described": true,
+          "metrics": "1 tool · 230ms",
+          "chevronVisible": true,
+          "chevronInMetrics": true,
+          "noLink": true,
+          "dot": true,
+          "insideMessage": false
+        }
+      ],
+      "errors": [],
+      "served": [],
+      "keyboard": true,
+      "passed": true
+    }
+  ]
+}

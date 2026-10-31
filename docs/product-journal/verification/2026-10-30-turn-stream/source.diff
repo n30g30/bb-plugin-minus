@@ -1,0 +1,700 @@
+diff --git a/app.tsx b/app.tsx
+index aaa0d6c..5ab4bc2 100644
+--- a/app.tsx
++++ b/app.tsx
+@@ -13,7 +13,30 @@ function HideStyles() {
+   const sdk = useSdk();
+   useEffect(() => {
+     if (!collapseToolCalls) return;
+-    return mountToolGrouping(async (threadId) => (await sdk.threads.timeline({ threadId, deferContent: "true" })).rows);
++    return mountToolGrouping(
++      async (threadId) => (await sdk.threads.timeline({ threadId, deferContent: "true", includeNestedRows: "true" })).rows,
++      undefined,
++      undefined,
++      (notify) => {
++        const unsubscribeThread = sdk.subscribe({
++          event: "thread:changed",
++          callback: (event) => {
++            if (!event.changes.some(change =>
++              ["events-appended", "status-changed", "history-compacted", "history-rewritten"].includes(change),
++            )) return;
++            notify(event.id, event.changes.includes("status-changed") ||
++              event.metadata?.eventTypes?.includes("turn/completed") === true);
++          },
++        });
++        const unsubscribeConnection = sdk.subscribe({
++          event: "realtime:connection",
++          callback: (event) => {
++            if (event.state === "connected" && event.reconnected) notify(undefined, true);
++          },
++        });
++        return () => { unsubscribeThread(); unsubscribeConnection(); };
++      },
++    );
+   }, [collapseToolCalls, sdk]);
+   const collapseQueue = values?.collapseQueue === true;
+   useEffect(() => (collapseQueue ? mountQueueCollapse() : undefined), [collapseQueue]);
+diff --git a/group-tools.test.mjs b/group-tools.test.mjs
+index 261fdf2..8fb1b6a 100644
+--- a/group-tools.test.mjs
++++ b/group-tools.test.mjs
+@@ -16,7 +16,7 @@ function makeRow(window, id) {
+   return row;
+ }
+ 
+-function mountDom({ rowIds, fetchTimeline, chooseQuote = () => QUOTES[0], clock }) {
++function mountDom({ rowIds, fetchTimeline, chooseQuote = () => QUOTES[0], clock, subscribeTimeline }) {
+   const dom = new JSDOM("<!doctype html><html><head></head><body></body></html>", {
+     pretendToBeVisual: true,
+     url: "https://bb.local/",
+@@ -44,7 +44,7 @@ function mountDom({ rowIds, fetchTimeline, chooseQuote = () => QUOTES[0], clock
+   container.append(...rows);
+   list.append(container);
+   window.document.body.append(list);
+-  const dispose = mountToolGrouping(fetchTimeline, chooseQuote, clock);
++  const dispose = mountToolGrouping(fetchTimeline, chooseQuote, clock, subscribeTimeline);
+ 
+   return {
+     window,
+@@ -124,7 +124,7 @@ for (const count of [1, 2, 3]) {
+       const quote = marker.querySelector("[data-quote]");
+       const source = marker.querySelector("[data-source]");
+       const metrics = marker.querySelector("[data-metrics]");
+-      assert.deepEqual([...marker.querySelector("[data-row]").children].map(el => el.tagName), ["BUTTON", "A", "SPAN"]);
++      assert.deepEqual([...marker.querySelector("[data-row]").children].map(el => el.tagName), ["BUTTON", "A", "BUTTON"]);
+       assert.equal(marker.textContent.includes("Called"), false);
+       assert.ok(button.classList.contains("text-subtle-foreground"));
+       assert.ok(quote.classList.contains("text-subtle-foreground"));
+@@ -274,7 +274,7 @@ test("keeps a manual stop visible and outside collapsed tool-call groups", async
+       ["1 tool · 500ms", "1 tool · 1.5s"],
+     );
+ 
+-    const buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
++    const buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")];
+     buttons[0].click();
+     await dom.flush();
+     assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
+@@ -406,7 +406,7 @@ test("keeps an expanded right fallback part open when the API joins both parts",
+   dom.container.insertBefore(spacer, dom.rows[1]);
+   try {
+     await dom.flush();
+-    const buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
++    const buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")];
+     assert.equal(buttons.length, 2);
+     buttons[1].click();
+     await dom.flush();
+@@ -460,7 +460,7 @@ test("keeps all split groups expanded when the API resolves after fallback expan
+   dom.container.insertBefore(spacer, dom.rows[1]);
+   try {
+     await dom.flush();
+-    const fallbackButtons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
++    const fallbackButtons = [...dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")];
+     assert.equal(fallbackButtons.length, 2);
+     fallbackButtons.forEach((button) => button.click());
+     await dom.flush();
+@@ -555,7 +555,7 @@ test("does not reopen a collapsed API group when virtualization replaces its fir
+   dom.container.insertBefore(spacer, dom.rows[1]);
+   try {
+     await dom.flush();
+-    const fallbackButtons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
++    const fallbackButtons = [...dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")];
+     assert.equal(fallbackButtons.length, 2);
+     fallbackButtons[0].click();
+     fallbackButtons[1].click();
+@@ -576,7 +576,7 @@ test("does not reopen a collapsed API group when virtualization replaces its fir
+     markers[1].querySelector("button").click();
+     await dom.flush();
+     assert.deepEqual(
+-      [...dom.container.querySelectorAll("[data-bb-minus-group] button")].map((button) => button.getAttribute("aria-expanded")),
++      [...dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")].map((button) => button.getAttribute("aria-expanded")),
+       ["true", "false"],
+     );
+ 
+@@ -609,7 +609,7 @@ test("does not expand a newly visible API group when virtualization shifts the m
+   });
+   try {
+     await dom.flush();
+-    let buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
++    let buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")];
+     assert.equal(buttons.length, 2);
+     buttons[1].click();
+     await dom.flush();
+@@ -620,7 +620,7 @@ test("does not expand a newly visible API group when virtualization shifts the m
+     dom.container.append(newlyVisible);
+     await dom.flush();
+ 
+-    buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
++    buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")];
+     assert.equal(buttons.length, 2);
+     assert.deepEqual(buttons.map((button) => button.getAttribute("aria-expanded")), ["true", "false"]);
+     assert.equal(dom.rows[1].hasAttribute(HIDDEN), false);
+@@ -728,7 +728,7 @@ test("keeps reasoning and unknown live rows visible before, during and after the
+     dom.rows[2].append(" — новые данные");
+     await dom.flush();
+     assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [true, false, false, true]);
+-    const buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] button")];
++    const buttons = [...dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")];
+     assert.equal(buttons.length, 2);
+     assert.ok(buttons.every(button => button.getAttribute("aria-label") === "Show 1 tool call. Total tool time: 300ms."));
+     buttons[0].click();
+@@ -852,7 +852,7 @@ test("keeps independent dividers outside the agent stream through virtualization
+   });
+   try {
+     await dom.flush();
+-    for (const button of dom.container.querySelectorAll("[data-bb-minus-group] button")) button.click();
++    for (const button of dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")) button.click();
+     await dom.flush();
+     let ends = [...dom.container.querySelectorAll("[data-bb-minus-group-end]")];
+     assert.equal(ends.length, 2);
+@@ -937,7 +937,7 @@ for (const failRefresh of [false, true]) {
+     dom.container.insertBefore(spacer, dom.rows[1]);
+     try {
+       await dom.flush();
+-      for (const button of dom.container.querySelectorAll("[data-bb-minus-group] button")) button.click();
++      for (const button of dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")) button.click();
+       await dom.flush();
+       assert.equal(dom.container.querySelectorAll("[data-bb-minus-group-end]").length, 2);
+       dom.rows[1].remove();
+@@ -954,7 +954,7 @@ for (const failRefresh of [false, true]) {
+       }
+       dom.container.insertBefore(dom.rows[1], dom.rows[2]);
+       await dom.flush();
+-      assert.deepEqual([...dom.container.querySelectorAll("[data-bb-minus-group] button")].map(x => x.getAttribute("aria-expanded")), ["false", "false"]);
++      assert.deepEqual([...dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")].map(x => x.getAttribute("aria-expanded")), ["false", "false"]);
+       assert.equal(dom.container.querySelectorAll("[data-bb-minus-group-end]").length, 0);
+       assert.equal(dom.rows[0].hasAttribute(HIDDEN), true);
+       assert.equal(dom.rows[1].hasAttribute(HIDDEN), true);
+@@ -979,7 +979,7 @@ test("keeps the rendered API membership when collapse happens after rejection bu
+   const originalRaf = globalThis.requestAnimationFrame;
+   try {
+     await dom.flush();
+-    for (const button of dom.container.querySelectorAll("[data-bb-minus-group] button")) button.click();
++    for (const button of dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")) button.click();
+     await dom.flush();
+     dom.rows[1].remove();
+     await dom.flush();
+@@ -998,13 +998,13 @@ test("keeps the rendered API membership when collapse happens after rejection bu
+     await dom.flush();
+     dom.container.insertBefore(dom.rows[1], dom.rows[2]);
+     await dom.flush();
+-    assert.deepEqual([...dom.container.querySelectorAll("[data-bb-minus-group] button")].map(x => x.getAttribute("aria-expanded")), ["false", "false"]);
++    assert.deepEqual([...dom.container.querySelectorAll("[data-bb-minus-group] [data-toggle=quote]")].map(x => x.getAttribute("aria-expanded")), ["false", "false"]);
+     assert.equal(dom.container.querySelectorAll("[data-bb-minus-group-end]").length, 0);
+     assert.deepEqual(dom.rows.map(row => row.hasAttribute(HIDDEN)), [true, true, false]);
+   } finally { globalThis.requestAnimationFrame = originalRaf; dom.cleanup(); }
+ });
+ 
+-for (const focusSelector of ["button", "[data-source]"]) {
++for (const focusSelector of ["button", "[data-source]", "[data-toggle=metrics]"]) {
+   test("keeps focus on " + focusSelector + " when an expanded fallback becomes an API group", async () => {
+     let resolveTimeline;
+     const dom = mountDom({
+@@ -1089,3 +1089,159 @@ test("reviewed translations preserve every clause from their source excerpts", (
+     assert.equal(QUOTES.find((quote) => quote.id === id)?.text, text, id);
+   }
+ });
++
++function attachCompletedTurn(dom, row, ids, initiallyOpen = false) {
++  const w = dom.window;
++  const root = w.document.createElement('div');
++  const header = w.document.createElement('div');
++  header.className = 'group/timeline-row';
++  const button = w.document.createElement('button');
++  button.textContent = 'Worked for 3s';
++  button.setAttribute('aria-expanded', String(initiallyOpen));
++  header.append(button);
++  const body = w.document.createElement('div');
++  const list = w.document.createElement('div');
++  list.setAttribute('data-timeline-row-list', 'nested');
++  const items = w.document.createElement('div');
++  items.setAttribute('data-timeline-items', '');
++  const rows = ids.map(id => {
++    const el = dom.makeRow(id);
++    el.textContent = id.startsWith('assistant:') ? 'Полезное промежуточное сообщение' : 'Вызов инструмента';
++    if (id.startsWith('assistant:')) el.className = 'group/message';
++    return el;
++  });
++  items.append(...rows);
++  list.append(items);
++  if (initiallyOpen) body.append(list);
++  button.addEventListener('click', () => {
++    const open = button.getAttribute('aria-expanded') !== 'true';
++    button.setAttribute('aria-expanded', String(open));
++    body.replaceChildren(...(open ? [list] : []));
++  });
++  root.append(header, body);
++  row.replaceChildren(root);
++  return { button, rows, items, list };
++}
++
++test('keeps completed-turn commentary visible while hiding its tools with final timings', async () => {
++  const ids = ['assistant:progress', 'tool-1', 'assistant:next', 'tool-2'];
++  const children = timeline(ids.map(id => [id, id.startsWith('assistant:') ? 'conversation' : 'work']));
++  const dom = mountDom({
++    rowIds: ['done:turn:0'],
++    fetchTimeline: async () => [{ id: fullId('done:turn:0'), kind: 'turn', status: 'completed', children }],
++  });
++  const turn = attachCompletedTurn(dom, dom.rows[0], ids);
++  try {
++    await dom.flush();
++    assert.equal(turn.button.getAttribute('aria-expanded'), 'true');
++    assert.deepEqual(turn.rows.map(row => row.hasAttribute(HIDDEN)), [false, true, false, true]);
++    assert.equal(turn.items.querySelectorAll('[data-bb-minus-group]').length, 2);
++    assert.deepEqual([...turn.items.querySelectorAll('[data-metrics]')].map(x => x.textContent), ['1 tool · 300ms', '1 tool · 300ms']);
++    const metrics = turn.items.querySelector('[data-metrics]');
++    assert.equal(metrics.tagName, 'BUTTON');
++    metrics.click();
++    await dom.flush();
++    const marker = metrics.closest('[data-bb-minus-group]');
++    assert.ok([...marker.querySelectorAll('[data-toggle]')].every(b => b.getAttribute('aria-expanded') === 'true'));
++    assert.equal(turn.rows[1].hasAttribute(HIDDEN), false);
++    assert.equal(turn.rows[2].hasAttribute(HIDDEN), false);
++    metrics.click();
++    await dom.flush();
++    assert.equal(turn.rows[1].hasAttribute(HIDDEN), true);
++    assert.equal(turn.rows[2].hasAttribute(HIDDEN), false);
++  } finally { dom.cleanup(); }
++});
++
++test('respects a native turn manually closed by the user through DOM updates and remounting', async () => {
++  const dom = mountDom({ rowIds: ['done:turn:0'], fetchTimeline: async () => [{ id: fullId('done:turn:0'), kind: 'turn', children: timeline([['tool-1']]) }] });
++  let turn = attachCompletedTurn(dom, dom.rows[0], ['tool-1']);
++  try {
++    await dom.flush();
++    assert.equal(turn.button.getAttribute('aria-expanded'), 'true');
++    turn.button.click();
++    await dom.flush();
++    assert.equal(turn.button.getAttribute('aria-expanded'), 'false');
++    dom.container.append(dom.makeRow('assistant:update'));
++    await dom.flush();
++    assert.equal(turn.button.getAttribute('aria-expanded'), 'false');
++    const returning = dom.makeRow('done:turn:0');
++    turn = attachCompletedTurn(dom, returning, ['tool-1']);
++    dom.rows[0].replaceWith(returning);
++    await dom.flush();
++    assert.equal(turn.button.getAttribute('aria-expanded'), 'false');
++  } finally { dom.cleanup(); }
++});
++
++for (const initiallyOpen of [false, true]) {
++  test('cleanup restores only native turns auto-opened by Minus; initiallyOpen=' + initiallyOpen, async () => {
++    const dom = mountDom({ rowIds: ['done:turn:0'], fetchTimeline: async () => [{ id: fullId('done:turn:0'), kind: 'turn', children: timeline([['tool-1']]) }] });
++    const turn = attachCompletedTurn(dom, dom.rows[0], ['tool-1'], initiallyOpen);
++    try {
++      await dom.flush();
++      assert.equal(turn.button.getAttribute('aria-expanded'), 'true');
++      dom.dispose();
++      assert.equal(turn.button.getAttribute('aria-expanded'), String(initiallyOpen));
++      assert.equal(turn.rows[0].hasAttribute(HIDDEN), false);
++      assert.equal(turn.items.querySelector('[data-bb-minus-group]'), null);
++    } finally { dom.cleanup(); }
++  });
++}
++
++test('does not open completed turns inside a delegated agent timeline', async () => {
++  const dom = mountDom({ rowIds: ['delegation:child'], fetchTimeline: async () => timeline([['delegation:child', 'work', undefined, 1000, null, 'delegation']]) });
++  const list = dom.window.document.createElement('div');list.setAttribute('data-timeline-row-list', 'nested');
++  const items = dom.window.document.createElement('div');items.setAttribute('data-timeline-items', '');list.append(items);
++  const nested = dom.makeRow('child:turn:0');items.append(nested);dom.rows[0].append(list);
++  const turn = attachCompletedTurn(dom, nested, ['tool-1']);
++  try {
++    await dom.flush();
++    assert.equal(turn.button.getAttribute('aria-expanded'), 'false');
++    assert.equal(dom.rows[0].hasAttribute(HIDDEN), false);
++    assert.equal(dom.container.querySelector('[data-bb-minus-group]'), null);
++  } finally { dom.cleanup(); }
++});
++
++test('a terminal realtime event refreshes final duration without a DOM change or throttle delay', async () => {
++  const clock = makeClock(10000);let notify;let fetchCount = 0;let unsubscribed = 0;
++  const dom = mountDom({rowIds:['tool-1'],clock,
++    subscribeTimeline: callback => { notify = callback;return () => { unsubscribed++; }; },
++    fetchTimeline: async () => {fetchCount++;return timeline([['tool-1','work',undefined,10000,fetchCount === 1 ? null : 11500]]);},
++  });
++  try {
++    await dom.flush();
++    const metrics = dom.container.querySelector('[data-metrics]');
++    assert.equal(metrics.textContent, '1 tool · 0ms');
++    clock.advance(1500);
++    notify('thr_unrelated', true);
++    await dom.flush();assert.equal(fetchCount, 1);
++    notify('thr_test', true);
++    await dom.flush();
++    assert.equal(fetchCount, 2);
++    assert.equal(metrics.textContent, '1 tool · 1.5s');
++    dom.dispose();assert.equal(unsubscribed, 1);
++    notify('thr_test', true);clock.advance(2000);
++    await dom.flush();assert.equal(fetchCount, 2);
++  } finally { dom.cleanup(); }
++  assert.equal(unsubscribed, 1);
++});
++
++test('a terminal event during inFlight preserves its forced final refresh', async () => {
++  const clock = makeClock(10000);let notify;let finishStale;let fetchCount = 0;
++  const dom = mountDom({rowIds:['tool-1'],clock,
++    subscribeTimeline: callback => {notify = callback;return () => {};},
++    fetchTimeline: () => {
++      fetchCount++;
++      if (fetchCount === 2) return new Promise(resolve => {finishStale = resolve;});
++      return Promise.resolve(timeline([['tool-1','work',undefined,1000,fetchCount === 1 ? 1300 : 2800]]));
++    },
++  });
++  try {
++    await dom.flush();assert.equal(fetchCount,1);
++    notify('thr_test',true);assert.equal(fetchCount,2);
++    notify('thr_test',true);
++    finishStale(timeline([['tool-1','work',undefined,1000,1400]]));
++    await dom.flush();
++    assert.equal(fetchCount,3);
++    assert.equal(dom.container.querySelector('[data-metrics]').textContent,'1 tool · 1.8s');
++  } finally {dom.cleanup();}
++});
+diff --git a/group-tools.ts b/group-tools.ts
+index 8dff820..18f5bd0 100644
+--- a/group-tools.ts
++++ b/group-tools.ts
+@@ -11,8 +11,10 @@ type TimelineRow = {
+   startedAt?: number;
+   completedAt?: number | null;
+   status?: string | null;
++  children?: TimelineRow[] | null;
+ };
+ type FetchTimeline = (threadId: string) => Promise<TimelineRow[]>;
++type SubscribeTimeline = (notify: (threadId: string | undefined, finished: boolean) => void) => () => void;
+ type DisclosureChoice = { revision: number; open: boolean };
+ type Clock = {
+   now: () => number;
+@@ -33,15 +35,16 @@ const GROUP_END = "data-bb-minus-group-end";
+ const TOOL_ROW = /^(command|tool|file-change|web-search|web-fetch|image-generation|image-view|file-read|search|plan-steps|extension):/;
+ // These work rows carry an agent stream or require the user's response.
+ const VISIBLE_WORK = new Set(["delegation", "workflow", "approval", "question", "form"]);
++// Keep the existing active-stream cadence; terminal realtime events bypass it.
+ const REFETCH_MS = 2000;
+ 
+ const TOGGLE_HTML = `<div class="rounded-md text-subtle-foreground w-full">
+   <div data-row class="group/timeline-row min-w-0 px-2 text-sm leading-5">
+-    <button type="button" aria-expanded="false" class="group/toggle inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer">
++    <button data-toggle="quote" type="button" aria-expanded="false" class="group/toggle inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-sm leading-5 text-subtle-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer">
+       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="mr-1.5 inline-block size-3.5 align-text-bottom text-subtle-foreground opacity-40" aria-hidden="true" data-minus-icon="called-tools"><path d="M12 8.5L3.12132 17.3787C2.72349 17.7765 2.5 18.3161 2.5 18.8787C2.5 20.0503 3.44975 21 4.62132 21C5.18393 21 5.72349 20.7765 6.12132 20.3787L15 11.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.1207 5.03693L20.3682 9.3197C21.014 9.97093 21.3369 10.2966 21.4435 10.6774C21.5188 10.9467 21.5188 11.2317 21.4435 11.501C21.3369 11.8819 21.014 12.2075 20.3682 12.8587C19.7223 13.51 19.3994 13.8356 19.0216 13.943C18.7546 14.019 18.4719 14.019 18.2048 13.943C17.8271 13.8356 17.5042 13.51 16.8583 12.8587L10.0245 5.96802C8.99015 4.92507 8.47297 4.40359 8.50109 3.94831C8.51495 3.7239 8.60259 3.51054 8.75017 3.34197C9.04956 3 9.78095 3 11.2437 3C12.4209 3 13.0095 3 13.5574 3.16035C13.8406 3.24325 14.1139 3.3574 14.3723 3.50071C14.8721 3.77792 15.2883 4.19759 16.1207 5.03693Z" stroke="currentColor" stroke-width="1.5"/></svg><span data-quote class="whitespace-normal break-words text-sm italic leading-5 text-subtle-foreground"><span data-quote-start></span><span class="whitespace-nowrap"><span data-quote-end class="inline-block whitespace-normal break-words" style="max-width:calc(100% - 4.5 * var(--spacing))"></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="bb-icon-stroke pointer-events-none ml-1.5 inline-block size-3 align-text-bottom origin-center text-subtle-foreground transition-[opacity,rotate] duration-200 ease-out opacity-0 group-hover/toggle:opacity-100 group-focus-visible/toggle:opacity-100 [@media(hover:none)]:opacity-100" aria-hidden="true"><path d="M6 4l4 4-4 4"></path></svg></span></span>
+     </button>
+     <a data-source class="mr-1.5 break-words text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" target="_blank" rel="noopener noreferrer"></a>
+-    <span data-metrics class="text-xs leading-5 text-subtle-foreground"><span data-count class="whitespace-nowrap"></span> · <span data-time class="whitespace-nowrap"></span></span>
++    <button data-metrics data-toggle="metrics" type="button" aria-expanded="false" class="inline max-w-full whitespace-normal break-words px-0 py-0 text-left align-baseline text-xs leading-5 text-subtle-foreground underline underline-offset-2 hover:decoration-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"><span data-count class="whitespace-nowrap"></span> · <span data-time class="whitespace-nowrap"></span></button>
+   </div>
+ </div>`;
+ 
+@@ -53,6 +56,23 @@ function hasAgentContent(row: HTMLElement): boolean {
+   return row.querySelector(".group\\/message, [data-timeline-row-list]") !== null;
+ }
+ 
++function isTopLevelTurn(row: HTMLElement): boolean {
++  return /:turn(:|$)/.test(rowKey(row)) &&
++    row.closest("[data-timeline-row-list]")?.getAttribute("data-timeline-row-list") === "top-level";
++}
++
++function turnButton(row: HTMLElement): HTMLButtonElement | null {
++  return row.querySelector<HTMLButtonElement>(':scope > div > [class~="group/timeline-row"] > button');
++}
++
++function isToolContainer(container: Element): boolean {
++  const list = container.closest("[data-timeline-row-list]");
++  if (list?.getAttribute("data-timeline-row-list") === "top-level") return true;
++  // Completed turns use a nested list too. Delegated agent timelines stay native.
++  const owner = list?.closest<HTMLElement>("[data-timeline-row-id]");
++  return owner !== null && owner !== undefined && isTopLevelTurn(owner);
++}
++
+ function isToolRow(row: HTMLElement, collapsible?: Map<string, boolean>): boolean {
+   // A work/delegation row may contain live messages or an entire child timeline.
+   // Hiding its outer wrapper would also hide that useful agent stream.
+@@ -92,9 +112,7 @@ type ThreadRuns = {
+   pending: boolean[];
+ };
+ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>): ThreadRuns {
+-  const collapsible = new Map(rows.map((row) => [row.id,
+-    row.kind === "work" && !VISIBLE_WORK.has(row.workKind ?? "") && !visibleRows.has(row.id),
+-  ]));
++  const collapsible = new Map<string, boolean>();
+   const runOf = new Map<string, number>();
+   const counts: number[] = [];
+   const firstIds: string[] = [];
+@@ -102,37 +120,47 @@ function indexRuns(rows: TimelineRow[], now: number, visibleRows: Set<string>):
+   const durationMs: number[] = [];
+   const durationKnown: boolean[] = [];
+   const pending: boolean[] = [];
+-  let open = false;
+-  for (const row of rows) {
+-    const tool = collapsible.get(row.id);
+-    if (!tool) {
+-      open = false;
+-      continue;
+-    }
+-    if (!open) {
+-      counts.push(0);
+-      firstIds.push(row.id);
+-      memberIds.push([]);
+-      durationMs.push(0);
+-      durationKnown.push(true);
+-      pending.push(false);
+-    }
+-    open = true;
+-    runOf.set(row.id, counts.length - 1);
+-    memberIds[counts.length - 1].push(row.id);
+-    if (row.kind === "work") {
+-      const index = counts.length - 1;
+-      counts[index]++;
+-      const startedAt = row.startedAt;
+-      const endedAt = row.completedAt ?? (row.status === "pending" ? now : undefined);
+-      if (!Number.isFinite(startedAt) || endedAt === undefined) {
+-        durationKnown[index] = false;
+-      } else {
+-        durationMs[index] += Math.max(0, endedAt - startedAt!);
++  const visit = (source: TimelineRow[]) => {
++    let open = false;
++    for (const row of source) {
++      if (row.kind === "turn") {
++        collapsible.set(row.id, false);
++        visit(row.children ?? []);
++        open = false;
++        continue;
++      }
++      const tool = row.kind === "work" && !VISIBLE_WORK.has(row.workKind ?? "") && !visibleRows.has(row.id);
++      collapsible.set(row.id, tool);
++      if (!tool) {
++        open = false;
++        continue;
++      }
++      if (!open) {
++        counts.push(0);
++        firstIds.push(row.id);
++        memberIds.push([]);
++        durationMs.push(0);
++        durationKnown.push(true);
++        pending.push(false);
++      }
++      open = true;
++      runOf.set(row.id, counts.length - 1);
++      memberIds[counts.length - 1].push(row.id);
++      if (row.kind === "work") {
++        const index = counts.length - 1;
++        counts[index]++;
++        const startedAt = row.startedAt;
++        const endedAt = row.completedAt ?? (row.status === "pending" ? now : undefined);
++        if (!Number.isFinite(startedAt) || endedAt === undefined) {
++          durationKnown[index] = false;
++        } else {
++          durationMs[index] += Math.max(0, endedAt - startedAt!);
++        }
++        if (row.status === "pending") pending[index] = true;
+       }
+-      if (row.status === "pending") pending[index] = true;
+     }
+-  }
++  };
++  visit(rows);
+   return {
+     rows,
+     collapsible,
+@@ -169,6 +197,7 @@ export function mountToolGrouping(
+   fetchTimeline: FetchTimeline,
+   chooseQuote: () => QuoteEntry = pickRandomQuote,
+   clock: Clock = systemClock,
++  subscribeTimeline?: SubscribeTimeline,
+ ): () => void {
+   const expanded = new Set<string>();
+   const groupKeyByRow = new Map<string, string>();
+@@ -183,7 +212,13 @@ export function mountToolGrouping(
+   const visibleRows = new Set<string>();
+   const lastFetch = new Map<string, number>();
+   const inFlight = new Set<string>();
++  const queuedRefreshes = new Map<string, boolean>();
++  const mountedThreads = new Set<string>();
+   const refreshTimers = new Map<string, ReturnType<typeof setTimeout>>();
++  const turnChoices = new Map<string, boolean>();
++  const autoOpenedTurns = new Set<string>();
++  const attemptedTurnButtons = new WeakSet<HTMLButtonElement>();
++  let openingTurn = false;
+   let disposed = false;
+   const style = document.createElement("style");
+   // Keep the native border/inset. The owner's roomier reading rhythm doubles
+@@ -201,12 +236,12 @@ export function mountToolGrouping(
+     if (frame === 0 && !disposed) frame = requestAnimationFrame(pass);
+   };
+ 
+-  function refresh(threadId: string) {
++  function refresh(threadId: string, force = false) {
+     const now = clock.now();
+     const last = lastFetch.get(threadId);
+     const since = last === undefined ? REFETCH_MS : now - last;
+     if (disposed || inFlight.has(threadId)) return;
+-    if (since < REFETCH_MS) {
++    if (!force && since < REFETCH_MS) {
+       if (!refreshTimers.has(threadId)) {
+         const timer = clock.setTimeout(() => {
+           refreshTimers.delete(threadId);
+@@ -225,7 +260,9 @@ export function mountToolGrouping(
+     lastFetch.set(threadId, now);
+     fetchTimeline(threadId)
+       .then(
+-        (rows) => threads.set(threadId, indexRuns(rows, clock.now(), visibleRows)),
++        (rows) => {
++          if (!disposed) threads.set(threadId, indexRuns(rows, clock.now(), visibleRows));
++        },
+         () => {
+           // A failed refresh cannot prove that a spacer does not hide a new run boundary.
+           threads.delete(threadId);
+@@ -233,10 +270,45 @@ export function mountToolGrouping(
+       )
+       .finally(() => {
+         inFlight.delete(threadId);
++        const queued = queuedRefreshes.get(threadId);
++        queuedRefreshes.delete(threadId);
++        if (queued !== undefined && mountedThreads.has(threadId)) refresh(threadId, queued);
+         schedule();
+       });
+   }
+ 
++  function invalidate(threadId: string, finished: boolean) {
++    if (disposed || !mountedThreads.has(threadId)) return;
++    if (inFlight.has(threadId)) {
++      queuedRefreshes.set(threadId, finished || queuedRefreshes.get(threadId) === true);
++    } else {
++      refresh(threadId, finished);
++    }
++  }
++
++  function preserveTurnStreams(container: Element) {
++    for (const row of container.children) {
++      if (!(row instanceof HTMLElement) || !isTopLevelTurn(row)) continue;
++      const button = turnButton(row);
++      const id = row.dataset.timelineRowId!;
++      if (button === null || button.getAttribute("aria-expanded") !== "false" ||
++        turnChoices.get(id) === false || attemptedTurnButtons.has(button)) continue;
++      // Use bb's existing disclosure. No global preference or React row is changed.
++      attemptedTurnButtons.add(button);
++      autoOpenedTurns.add(id);
++      openingTurn = true;
++      try { button.click(); } finally { openingTurn = false; }
++    }
++  }
++
++  function trackTurnChoice(event: Event) {
++    if (openingTurn || !(event.target instanceof Element)) return;
++    const button = event.target.closest("button");
++    const row = button?.closest<HTMLElement>("[data-timeline-row-id]");
++    if (button === null || row === null || row === undefined || !isTopLevelTurn(row) || button !== turnButton(row)) return;
++    turnChoices.set(row.dataset.timelineRowId!, button.getAttribute("aria-expanded") !== "true");
++  }
++
+   function apiRun(rows: HTMLElement[]): {
+     key: string;
+     count: number;
+@@ -360,7 +432,7 @@ export function mountToolGrouping(
+     const el = document.createElement("div");
+     el.setAttribute(MARKER, key);
+     el.innerHTML = TOGGLE_HTML;
+-    el.querySelector("button")!.addEventListener("click", () => {
++    const toggle = () => {
+       if (!expanded.delete(key)) expanded.add(key);
+       const choice = { revision: ++disclosureRevision, open: expanded.has(key) };
+       disclosureChoices.set(key, choice);
+@@ -374,7 +446,8 @@ export function mountToolGrouping(
+       // cleared/replaced the API index before the scheduled render runs.
+       for (const id of renderedMembers.get(el) ?? []) rowDisclosureChoices.set(id, choice);
+       schedule();
+-    });
++    };
++    for (const button of el.querySelectorAll("[data-toggle]")) button.addEventListener("click", toggle);
+     return el;
+   }
+ 
+@@ -406,17 +479,26 @@ export function mountToolGrouping(
+ 
+   function pass() {
+     frame = 0;
++    mountedThreads.clear();
+     const focused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+     const focusedMarker = focused?.closest<HTMLElement>(`[${MARKER}]`) ?? null;
+     const focusedKey = focusedMarker?.getAttribute(MARKER);
+-    const focusSelector = focused?.matches("button") ? "button" : focused?.matches("[data-source]") ? "[data-source]" : null;
++    const focusSelector = focused?.matches('[data-toggle="quote"]') ? '[data-toggle="quote"]' :
++      focused?.matches('[data-toggle="metrics"]') ? '[data-toggle="metrics"]' :
++      focused?.matches("[data-source]") ? "[data-source]" : null;
+     let migratedFocus: HTMLElement | null = null;
+     // Snapshot before rendering so splitting a group can migrate every visible part.
+     const previousGroupByRow = new Map(groupKeyByRow);
+     const previousChoices = new Map(disclosureChoices);
+     const used = new Set<Element>();
+     for (const container of document.querySelectorAll("[data-timeline-items]")) {
+-      if (container.closest("[data-timeline-row-list]")?.getAttribute("data-timeline-row-list") !== "top-level") continue;
++      if (!isToolContainer(container)) continue;
++      preserveTurnStreams(container);
++      for (const child of container.children) {
++        if (!(child instanceof HTMLElement)) continue;
++        const id = child.dataset.timelineRowId?.match(/^thr_[a-z0-9]+/)?.[0];
++        if (id !== undefined) mountedThreads.add(id);
++      }
+       // A streaming work row can acquire message content after the API response.
+       // Keep it as a boundary in the API index too, so adjacent tools do not share a marker.
+       for (const row of container.children) {
+@@ -573,10 +655,11 @@ export function mountToolGrouping(
+           ". Total tool time: " +
+           duration +
+           ".";
+-        const button = el.querySelector<HTMLButtonElement>("button")!;
+-        button.setAttribute("aria-label", accessibleLabel);
+-        button.setAttribute("aria-describedby", quoteId);
+-        button.setAttribute("aria-expanded", String(open));
++        for (const button of el.querySelectorAll<HTMLButtonElement>("[data-toggle]")) {
++          button.setAttribute("aria-label", accessibleLabel);
++          button.setAttribute("aria-describedby", quoteId);
++          button.setAttribute("aria-expanded", String(open));
++        }
+         el.querySelector<SVGElement>("svg.bb-icon-stroke")!.style.rotate = open ? "90deg" : "";
+         if (el.nextElementSibling !== rows[0]) container.insertBefore(el, rows[0]);
+         for (const row of rows) {
+@@ -602,17 +685,35 @@ export function mountToolGrouping(
+ 
+   const observer = new MutationObserver(schedule);
+   observer.observe(document.body, { childList: true, subtree: true, characterData: true });
++  document.addEventListener("click", trackTurnChoice, true);
++  const unsubscribe = subscribeTimeline?.((threadId, finished) => {
++    if (threadId === undefined) {
++      for (const id of mountedThreads) invalidate(id, finished);
++    } else {
++      invalidate(threadId, finished);
++    }
++  });
+   pass();
+ 
+   return () => {
++    if (disposed) return;
+     disposed = true;
++    unsubscribe?.();
+     observer.disconnect();
++    document.removeEventListener("click", trackTurnChoice, true);
+     cancelAnimationFrame(frame);
+     for (const timer of refreshTimers.values()) clock.clearTimeout(timer);
+     refreshTimers.clear();
++    queuedRefreshes.clear();
+     style.remove();
+     for (const el of document.querySelectorAll(`[${MARKER}], [${GROUP_END}]`)) el.remove();
+     for (const el of document.querySelectorAll(`[${HIDDEN}]`)) el.removeAttribute(HIDDEN);
++    for (const row of document.querySelectorAll<HTMLElement>("[data-timeline-row-id]")) {
++      const id = row.dataset.timelineRowId!;
++      if (!autoOpenedTurns.has(id) || turnChoices.has(id) || !isTopLevelTurn(row)) continue;
++      const button = turnButton(row);
++      if (button?.getAttribute("aria-expanded") === "true") button.click();
++    }
+     quoteByGroup.clear();
+     quoteByRow.clear();
+     expanded.clear();
+@@ -620,5 +721,8 @@ export function mountToolGrouping(
+     disclosureChoices.clear();
+     rowDisclosureChoices.clear();
+     visibleRows.clear();
++    mountedThreads.clear();
++    turnChoices.clear();
++    autoOpenedTurns.clear();
+   };
+ }

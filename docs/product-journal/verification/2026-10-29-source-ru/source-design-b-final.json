@@ -1,0 +1,54 @@
+{
+  "target": "group-tools.ts",
+  "slug": "group-tools-ts",
+  "independence": "B did not read Assessment A; detector started only after parent signalled A completed",
+  "verdict": "No P0/P1/P2 found in reviewed source and supplied candidate fixture evidence",
+  "detector": {
+    "command": "impeccable detect --json group-tools.ts",
+    "exitCode": 0,
+    "primaryFindings": 0,
+    "advisories": 0,
+    "mode": "TypeScript regex only",
+    "falsePositives": [],
+    "ignoreList": "not present"
+  },
+  "browserEvidence": {
+    "suppliedObservationsChecked": 32,
+    "combinations": 32,
+    "sources": 8,
+    "widths": [
+      728,
+      358
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "states": [
+      "idle",
+      "hover",
+      "focused"
+    ],
+    "sourceVisible": true,
+    "russianBylineAndTooltip": true,
+    "sourceHrefUnchanged": true,
+    "mutedColorsPreserved": true,
+    "previewsViewed": [
+      "current-390x162.png",
+      "a-390x162.png",
+      "b-390x186.png"
+    ],
+    "limitations": [
+      "Reviewed writer-supplied fixture PNG/JSON; no independent full browser rerun",
+      "Not proof of installed live bundle or physical phone",
+      "No shared-BB overlay or new server was started; no user-visible overlay claimed",
+      "No browser console detector evidence; fallback is source detector plus candidate screenshots/computed JSON"
+    ]
+  },
+  "sourceHashes": {
+    "group-tools.ts": "35eae0cb7d82255f95bb314655e39aec9d8e0446e077cd2a24b43883921047d9",
+    "quotes.ts": "f0602bcffd488c315c68af1a0ab4adce84dccd4cfa35bbfae68f67744bd8806a"
+  },
+  "sourceFilesEdited": false,
+  "runtimeChanged": false
+}

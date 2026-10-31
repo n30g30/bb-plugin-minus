@@ -1,0 +1,73 @@
+{
+  "method": "isolated headless Chromium; candidate bytes in disposable client; real reviewer turn transition",
+  "served": [
+    "candidate JS",
+    "candidate CSS"
+  ],
+  "errors": [],
+  "activeRowsObservedBeforeTerminal": true,
+  "completedStatus": "completed",
+  "finalWorkCount": 15,
+  "allWorkTimestampsFinal": true,
+  "result": {
+    "id": "reviewer-completed-turn",
+    "expanded": "true",
+    "messages": [
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      }
+    ],
+    "groups": [
+      {
+        "metrics": "5 tools · 924ms",
+        "expanded": "false"
+      }
+    ],
+    "hiddenMessages": 0
+  },
+  "domTransitions": [
+    {
+      "elapsedMs": 382033,
+      "turns": [
+        {
+          "expanded": "false",
+          "groups": 0,
+          "messages": 0
+        }
+      ]
+    },
+    {
+      "elapsedMs": 382201,
+      "turns": [
+        {
+          "expanded": "true",
+          "groups": 0,
+          "messages": 0
+        }
+      ]
+    },
+    {
+      "elapsedMs": 382493,
+      "turns": [
+        {
+          "expanded": "true",
+          "groups": 0,
+          "messages": 2
+        }
+      ]
+    },
+    {
+      "elapsedMs": 382495,
+      "turns": [
+        {
+          "expanded": "true",
+          "groups": 1,
+          "messages": 2
+        }
+      ]
+    }
+  ]
+}

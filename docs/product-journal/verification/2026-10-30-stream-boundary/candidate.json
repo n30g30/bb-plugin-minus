@@ -1,0 +1,554 @@
+{
+  "method": "isolated headless Chromium; candidate JS/CSS; real historical API page pinned only in disposable client",
+  "hashes": {
+    "group-tools.ts": "b3824f7e69ab902e1a44fa9dc192a67c8a8db5fb908f20f7db23783293a19195",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec",
+    "group-tools.test.mjs": "a12999e1d6ff22c4c172f211046f3a752e91b481351ab24c0df79492f7a50975"
+  },
+  "observations": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "closed": {
+        "nativeHeaderVisible": false,
+        "measureHeight": 490.125,
+        "rootDisplay": "block",
+        "flat": true,
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false,
+            "left": 448
+          },
+          {
+            "visible": true,
+            "insideQuote": false,
+            "left": 448
+          },
+          {
+            "visible": true,
+            "insideQuote": false,
+            "left": 448
+          }
+        ],
+        "shells": [
+          {
+            "display": "contents",
+            "before": "none"
+          },
+          {
+            "display": "contents",
+            "before": "none"
+          },
+          {
+            "display": "contents",
+            "before": "none"
+          }
+        ],
+        "groups": [
+          {
+            "expanded": "false",
+            "metrics": "6 tools · 11.2s",
+            "left": 448,
+            "source": "Конфуций · «Беседы и суждения»"
+          },
+          {
+            "expanded": "false",
+            "metrics": "22 tools · 18.5s",
+            "left": 448,
+            "source": "Ральф Уолдо Эмерсон · «Эссе»"
+          },
+          {
+            "expanded": "false",
+            "metrics": "4 tools · 186ms",
+            "left": 448,
+            "source": "Конфуций · «Беседы и суждения»"
+          }
+        ],
+        "directList": true
+      },
+      "states": [
+        {
+          "nativeHeaderVisible": false,
+          "measureHeight": 526.125,
+          "rootDisplay": "block",
+          "flat": true,
+          "messages": [
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            }
+          ],
+          "shells": [
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            }
+          ],
+          "groups": [
+            {
+              "expanded": "true",
+              "metrics": "6 tools · 11.2s",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "22 tools · 18.5s",
+              "left": 448,
+              "source": "Ральф Уолдо Эмерсон · «Эссе»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "4 tools · 186ms",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            }
+          ],
+          "directList": true
+        },
+        {
+          "nativeHeaderVisible": false,
+          "measureHeight": 490.125,
+          "rootDisplay": "block",
+          "flat": true,
+          "messages": [
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            }
+          ],
+          "shells": [
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            }
+          ],
+          "groups": [
+            {
+              "expanded": "false",
+              "metrics": "6 tools · 11.2s",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "22 tools · 18.5s",
+              "left": 448,
+              "source": "Ральф Уолдо Эмерсон · «Эссе»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "4 tools · 186ms",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            }
+          ],
+          "directList": true
+        },
+        {
+          "nativeHeaderVisible": false,
+          "measureHeight": 526.125,
+          "rootDisplay": "block",
+          "flat": true,
+          "messages": [
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            }
+          ],
+          "shells": [
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            }
+          ],
+          "groups": [
+            {
+              "expanded": "false",
+              "metrics": "6 tools · 11.2s",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            },
+            {
+              "expanded": "true",
+              "metrics": "22 tools · 18.5s",
+              "left": 448,
+              "source": "Ральф Уолдо Эмерсон · «Эссе»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "4 tools · 186ms",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            }
+          ],
+          "directList": true
+        },
+        {
+          "nativeHeaderVisible": false,
+          "measureHeight": 490.125,
+          "rootDisplay": "block",
+          "flat": true,
+          "messages": [
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            }
+          ],
+          "shells": [
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            }
+          ],
+          "groups": [
+            {
+              "expanded": "false",
+              "metrics": "6 tools · 11.2s",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "22 tools · 18.5s",
+              "left": 448,
+              "source": "Ральф Уолдо Эмерсон · «Эссе»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "4 tools · 186ms",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            }
+          ],
+          "directList": true
+        },
+        {
+          "nativeHeaderVisible": false,
+          "measureHeight": 526.125,
+          "rootDisplay": "block",
+          "flat": true,
+          "messages": [
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            }
+          ],
+          "shells": [
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            }
+          ],
+          "groups": [
+            {
+              "expanded": "false",
+              "metrics": "6 tools · 11.2s",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "22 tools · 18.5s",
+              "left": 448,
+              "source": "Ральф Уолдо Эмерсон · «Эссе»"
+            },
+            {
+              "expanded": "true",
+              "metrics": "4 tools · 186ms",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            }
+          ],
+          "directList": true
+        },
+        {
+          "nativeHeaderVisible": false,
+          "measureHeight": 490.125,
+          "rootDisplay": "block",
+          "flat": true,
+          "messages": [
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            }
+          ],
+          "shells": [
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            }
+          ],
+          "groups": [
+            {
+              "expanded": "false",
+              "metrics": "6 tools · 11.2s",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "22 tools · 18.5s",
+              "left": 448,
+              "source": "Ральф Уолдо Эмерсон · «Эссе»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "4 tools · 186ms",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            }
+          ],
+          "directList": true
+        },
+        {
+          "nativeHeaderVisible": false,
+          "measureHeight": 526.125,
+          "rootDisplay": "block",
+          "flat": true,
+          "messages": [
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            }
+          ],
+          "shells": [
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            }
+          ],
+          "groups": [
+            {
+              "expanded": "true",
+              "metrics": "6 tools · 11.2s",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "22 tools · 18.5s",
+              "left": 448,
+              "source": "Ральф Уолдо Эмерсон · «Эссе»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "4 tools · 186ms",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            }
+          ],
+          "directList": true
+        },
+        {
+          "nativeHeaderVisible": false,
+          "measureHeight": 490.125,
+          "rootDisplay": "block",
+          "flat": true,
+          "messages": [
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            },
+            {
+              "visible": true,
+              "insideQuote": false,
+              "left": 448
+            }
+          ],
+          "shells": [
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            },
+            {
+              "display": "contents",
+              "before": "none"
+            }
+          ],
+          "groups": [
+            {
+              "expanded": "false",
+              "metrics": "6 tools · 11.2s",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "22 tools · 18.5s",
+              "left": 448,
+              "source": "Ральф Уолдо Эмерсон · «Эссе»"
+            },
+            {
+              "expanded": "false",
+              "metrics": "4 tools · 186ms",
+              "left": 448,
+              "source": "Конфуций · «Беседы и суждения»"
+            }
+          ],
+          "directList": true
+        }
+      ],
+      "errors": [],
+      "ok": true,
+      "artifactLoaded": true
+    }
+  ],
+  "narrow": {
+    "status": "not completed",
+    "reason": "The historical turn left the mounted DOM; captured DOM rows belong to the current active turn, not the requested historical turn. No successful narrow observation recorded.",
+    "error": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-timeline-row-id=\"thr_9n7tywbkxt:dad8cfc63a-t1:turn:1\"]').locator('[data-metrics]').first() to be visible\u001b[22m\n"
+  },
+  "served": [
+    "app.js",
+    "app.css",
+    "app.js",
+    "app.css"
+  ]
+}

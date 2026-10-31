@@ -1,0 +1,1016 @@
+{
+  "method": "isolated headless Chromium; actual native source thread; installed frontend without interception",
+  "hashes": {
+    "group-tools.ts": "2f8de71a3fa8c05579cd714c5b326c51c06cd66a0cd34f5fb12b7ef3280b394b",
+    "group-tools.test.mjs": "c14d471ffcfacdac2d3ffb186656f756ce22c5ed7f9c330d81a8abff3480118a",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec"
+  },
+  "activeBundle": "9efc5b55bd0ff92a",
+  "served": [],
+  "expected": {
+    "count": 16,
+    "durationMs": 74411
+  },
+  "observations": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "closed": {
+        "expanded": "false",
+        "count": "16 tools",
+        "time": "1m 14s",
+        "summaryHidden": true,
+        "summaries": [
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 1519,
+            "delegations": [
+              {
+                "visible": true
+              },
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": [
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              }
+            ]
+          },
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 66,
+            "delegations": [
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": []
+          }
+        ],
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "outerStyled": false,
+        "focusMetrics": false
+      },
+      "open": {
+        "expanded": "true",
+        "count": "16 tools",
+        "time": "1m 14s",
+        "summaryHidden": false,
+        "summaries": [
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 1519,
+            "delegations": [
+              {
+                "visible": true
+              },
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": [
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              }
+            ]
+          },
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 66,
+            "delegations": [
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": []
+          }
+        ],
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "outerStyled": false,
+        "focusMetrics": true
+      },
+      "recollapsed": {
+        "expanded": "false",
+        "count": "16 tools",
+        "time": "1m 14s",
+        "summaryHidden": true,
+        "summaries": [
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 1519,
+            "delegations": [
+              {
+                "visible": true
+              },
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": [
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              }
+            ]
+          },
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 66,
+            "delegations": [
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": []
+          }
+        ],
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "outerStyled": false,
+        "focusMetrics": true
+      },
+      "errors": [],
+      "screenshotBox": {
+        "x": 436,
+        "y": 439.5625,
+        "width": 728,
+        "height": 84
+      },
+      "passed": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 1100
+      },
+      "closed": {
+        "expanded": "false",
+        "count": "16 tools",
+        "time": "1m 14s",
+        "summaryHidden": true,
+        "summaries": [
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 1912,
+            "delegations": [
+              {
+                "visible": true
+              },
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": [
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              }
+            ]
+          },
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 66,
+            "delegations": [
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": []
+          }
+        ],
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "outerStyled": false,
+        "focusMetrics": false
+      },
+      "open": {
+        "expanded": "true",
+        "count": "16 tools",
+        "time": "1m 14s",
+        "summaryHidden": false,
+        "summaries": [
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 1912,
+            "delegations": [
+              {
+                "visible": true
+              },
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": [
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              }
+            ]
+          },
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 66,
+            "delegations": [
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": []
+          }
+        ],
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "outerStyled": false,
+        "focusMetrics": true
+      },
+      "recollapsed": {
+        "expanded": "false",
+        "count": "16 tools",
+        "time": "1m 14s",
+        "summaryHidden": true,
+        "summaries": [
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 1912,
+            "delegations": [
+              {
+                "visible": true
+              },
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": [
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              },
+              {
+                "hidden": true
+              }
+            ]
+          },
+          {
+            "headerHidden": true,
+            "display": "block",
+            "height": 66,
+            "delegations": [
+              {
+                "visible": true
+              }
+            ],
+            "toolRows": []
+          }
+        ],
+        "messages": [
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          },
+          {
+            "visible": true,
+            "insideQuote": false
+          }
+        ],
+        "outerStyled": false,
+        "focusMetrics": true
+      },
+      "errors": [],
+      "screenshotBox": {
+        "x": 16,
+        "y": 530.8125,
+        "width": 358,
+        "height": 103
+      },
+      "passed": true
+    }
+  ]
+}

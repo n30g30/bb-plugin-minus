@@ -1,0 +1,43 @@
+{
+  "source": "git:https://github.com/vadikhq/bb-plugin-minus.git@3514900c0eb433fa39934cd06b13bf0f25d9789e",
+  "sourceCommit": "3514900c0eb433fa39934cd06b13bf0f25d9789e",
+  "bundle": "267bebfe6f3e4272",
+  "enabled": true,
+  "status": "running",
+  "statusDetail": null,
+  "settingsMatched": 31,
+  "hashes": {
+    "group-tools.ts": "b3824f7e69ab902e1a44fa9dc192a67c8a8db5fb908f20f7db23783293a19195",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec",
+    "group-tools.test.mjs": "a12999e1d6ff22c4c172f211046f3a752e91b481351ab24c0df79492f7a50975"
+  },
+  "jobId": "c9edcd1a-3b73-46ab-8b22-63f5f100f200",
+  "jobState": "succeeded",
+  "health": 200,
+  "quotesUnchanged": true,
+  "logsEmpty": true,
+  "live": {
+    "method": "isolated headless Chromium; actual installed frontend; current real completed turn, no timeline interception",
+    "contexts": [
+      {
+        "width": 1280,
+        "ok": true,
+        "nativeHeaderVisible": false,
+        "messagesVisible": true,
+        "measureDisplay": "block",
+        "measureHeightPositive": true,
+        "outsideStyled": false
+      },
+      {
+        "width": 390,
+        "ok": true,
+        "nativeHeaderVisible": false,
+        "messagesVisible": true,
+        "measureDisplay": "block",
+        "measureHeightPositive": true,
+        "outsideStyled": false
+      }
+    ],
+    "errors": []
+  }
+}

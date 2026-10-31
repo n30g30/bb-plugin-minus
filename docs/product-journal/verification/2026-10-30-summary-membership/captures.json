@@ -1,0 +1,97 @@
+{
+  "method": "isolated headless Chromium via local-ui-capture; sanitized real native summary wrappers, current module/native CSS",
+  "captures": [
+    {
+      "prefix": "light-closed",
+      "receipt": {
+        "url": "http://127.0.0.1:55588/?theme=light&open=0",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-summary-captures/light-closed-1280x1100.png",
+            "viewport": "1280x1100",
+            "bytes": 50687,
+            "sha256": "b99084112b6548da3b2c1648455f57fa2d5b8413eed01ada6b5c163180c3aeab"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-summary-captures/light-closed-390x1100.png",
+            "viewport": "390x1100",
+            "bytes": 44954,
+            "sha256": "e25bd405187878cca3b76c15648e09b2cab81178e0fb7f78b58c70cbe607c413"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "light-open",
+      "receipt": {
+        "url": "http://127.0.0.1:55588/?theme=light&open=1",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-summary-captures/light-open-1280x1100.png",
+            "viewport": "1280x1100",
+            "bytes": 52018,
+            "sha256": "5c5cc6f23b8dad27d0734ca576dd2bf525b2102b30efd4ed1ad46ea1ab81574a"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-summary-captures/light-open-390x1100.png",
+            "viewport": "390x1100",
+            "bytes": 45775,
+            "sha256": "ceb910bce12207f642187a08e441ab9ec3701e49ff54798dba392e0fc115db07"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "dark-closed",
+      "receipt": {
+        "url": "http://127.0.0.1:55588/?theme=dark&open=0",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-summary-captures/dark-closed-1280x1100.png",
+            "viewport": "1280x1100",
+            "bytes": 49765,
+            "sha256": "8059e681e634dc7d8896ae4d5b52d2da58ab4c4b7285a1167db365b9a578d171"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-summary-captures/dark-closed-390x1100.png",
+            "viewport": "390x1100",
+            "bytes": 44188,
+            "sha256": "c07d68846d3a2ba6fe04abb1276e73d4da630b7b401259dbc2cc3a3707efcb65"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "dark-open",
+      "receipt": {
+        "url": "http://127.0.0.1:55588/?theme=dark&open=1",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-summary-captures/dark-open-1280x1100.png",
+            "viewport": "1280x1100",
+            "bytes": 51039,
+            "sha256": "143c53c8dc732e2e1d8c6b29479ffe69f42af29e423ee98114e97e60d8cce340"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-summary-captures/dark-open-390x1100.png",
+            "viewport": "390x1100",
+            "bytes": 45042,
+            "sha256": "f7c284c3a47822142809ba92d6a7e950bad1262e5fc5abe22788263f4d09466a"
+          }
+        ]
+      }
+    }
+  ]
+}

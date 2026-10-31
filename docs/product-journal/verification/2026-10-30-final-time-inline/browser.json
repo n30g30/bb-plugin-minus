@@ -1,0 +1,189 @@
+{
+  "method": "isolated headless Chromium; current module, native BB CSS, disposable tool timeline fixture; SVG size from accepted size-3.5 native 4px spacing; motion uses native animate-spin 1s",
+  "hashes": {
+    "group-tools.ts": "867bcb02c90a15a8dafb31ed17996ba24db722c2f972abd855b4ca580ae20a1e",
+    "group-tools.test.mjs": "2e248ba8bc6dbb56d318a1cd1d0c75b74585f617732d3fb95f3a3b5ea91e2037",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec"
+  },
+  "observations": [
+    {
+      "reducedMotion": "no-preference",
+      "pending": {
+        "state": "pending",
+        "label": "Выполняется",
+        "animation": "spin",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "metrics": "1 tool",
+        "sourceTag": "SPAN",
+        "hasLink": false,
+        "quoteControl": "LABEL",
+        "described": true
+      },
+      "completed": {
+        "state": "completed",
+        "label": "Завершено",
+        "animation": "none",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "metrics": "1 tool · 600ms",
+        "sourceTag": "SPAN",
+        "hasLink": false,
+        "quoteControl": "LABEL",
+        "described": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "reducedMotion": "reduce",
+      "pending": {
+        "state": "pending",
+        "label": "Выполняется",
+        "animation": "none",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "metrics": "1 tool",
+        "sourceTag": "SPAN",
+        "hasLink": false,
+        "quoteControl": "LABEL",
+        "described": true
+      },
+      "completed": {
+        "state": "completed",
+        "label": "Завершено",
+        "animation": "none",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "metrics": "1 tool · 600ms",
+        "sourceTag": "SPAN",
+        "hasLink": false,
+        "quoteControl": "LABEL",
+        "described": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "phase": "error",
+      "state": "error",
+      "passed": true
+    },
+    {
+      "phase": "cancelled",
+      "state": "cancelled",
+      "passed": true
+    },
+    {
+      "phase": "unknown-provider-state",
+      "state": "unknown",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "prefix": "light-pending",
+      "receipt": {
+        "url": "http://127.0.0.1:49368/?theme=light&phase=pending",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-cycle-captures/light-pending-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 21419,
+            "sha256": "daea1c59d78574b9abff1ef9ea238fc8e02c22565a651379b0168ba04a13ecb0"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-cycle-captures/light-pending-390x600.png",
+            "viewport": "390x600",
+            "bytes": 18592,
+            "sha256": "86608517da510a26f225193fb01dd8dd39cf50bf4ffe0df7c8d0f03ec0693a8e"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "light-completed",
+      "receipt": {
+        "url": "http://127.0.0.1:49368/?theme=light&phase=completed",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-cycle-captures/light-completed-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 22120,
+            "sha256": "261698aa107ee46d6d9c639a9debbfd1651e484b445391ed2aaafe905674a80d"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-cycle-captures/light-completed-390x600.png",
+            "viewport": "390x600",
+            "bytes": 19102,
+            "sha256": "148099750f17b8c1f402fcd67e45e5824bec9e0de7995321687ec301c37d1b1b"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "dark-pending",
+      "receipt": {
+        "url": "http://127.0.0.1:49368/?theme=dark&phase=pending",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-cycle-captures/dark-pending-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 21198,
+            "sha256": "dcca2f620ff774f6e85ff59a0f98a00e86679206b067ff03d266023fdfb99f0b"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-cycle-captures/dark-pending-390x600.png",
+            "viewport": "390x600",
+            "bytes": 18416,
+            "sha256": "43e5ff96fa24c7d312f340127fefe1326632ae1786af7dfff93a0ace3dee1c7f"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "dark-completed",
+      "receipt": {
+        "url": "http://127.0.0.1:49368/?theme=dark&phase=completed",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-cycle-captures/dark-completed-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 21895,
+            "sha256": "b65e3dbc91e5b9de6dc91a93983843110e046c8616e803954b7c010e022cc029"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-cycle-captures/dark-completed-390x600.png",
+            "viewport": "390x600",
+            "bytes": 18929,
+            "sha256": "d8334589f0869c1de33241d9b018891658df67e69d889934264a5890fa385a60"
+          }
+        ]
+      }
+    }
+  ]
+}

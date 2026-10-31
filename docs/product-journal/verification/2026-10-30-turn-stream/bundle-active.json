@@ -1,0 +1,119 @@
+{
+  "method": "isolated headless Chromium; candidate JS/CSS only in disposable client; real active native work bundle",
+  "served": [
+    "app.js",
+    "app.css"
+  ],
+  "errors": [],
+  "closed": {
+    "bundles": [
+      {
+        "hidden": true,
+        "messages": 0,
+        "metrics": "2 tools · time unavailable",
+        "expanded": "false",
+        "hasMarker": true
+      }
+    ],
+    "messages": [
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      }
+    ]
+  },
+  "open": {
+    "bundles": [
+      {
+        "hidden": false,
+        "messages": 0,
+        "metrics": "2 tools · 1.7s",
+        "expanded": "true",
+        "hasMarker": true
+      }
+    ],
+    "messages": [
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      }
+    ]
+  },
+  "recollapsed": {
+    "bundles": [
+      {
+        "hidden": true,
+        "messages": 0,
+        "metrics": "2 tools · 1.7s",
+        "expanded": "false",
+        "hasMarker": true
+      }
+    ],
+    "messages": [
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      },
+      {
+        "visible": true
+      }
+    ]
+  }
+}

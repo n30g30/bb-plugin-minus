@@ -1,0 +1,26 @@
+--- PR-2-before.md
++++ PR-2-approved.md
+@@ -1 +1 @@
+-With the Minus plugin enabled, people who collapse consecutive tool calls can scan each group in one muted line with a short Russian quote, its linked author and source, the number of calls, and their summed duration. They can expand the row to inspect the original calls. A manually stopped call stays visible outside the group and is excluded from both metrics.
++With Minus enabled, people who collapse consecutive tool calls can scan each group in one muted line with a short Russian quote, its linked author and source, the number of calls, and their summed duration. They can expand the row to inspect the original calls. Manual stops stay visible outside the group, and timeline refreshes or scrolling preserve the user’s latest expand/collapse choice.
+@@ -4,3 +4,4 @@
+-- Add a local collection of Russian quotes with links to their sources; displaying a quote does not make a network request.
+-- Show the quote, author/source, call count, and summed per-call duration in the collapsed row, including calls outside the mounted DOM.
+-- Keep `Stopped manually` separate from grouping and metrics. Concurrent calls contribute individual durations, so the sum can exceed wall-clock time.
++- Add 200 local Russian quote translations with source links; displaying a quote makes no network request. A truncated quote exposes its full text on hover.
++- Count and sum individual tool durations from the complete timeline, including virtualized calls. Parallel durations are added together and may exceed wall-clock time.
++- Keep `Stopped manually` outside grouping and metrics. When the timeline is unavailable, do not group across an unverified virtualization boundary.
++- Preserve the latest explicit disclosure choice across fallback/API changes, group splits and merges, and returning virtualized rows.
+@@ -9,4 +10,8 @@
+-- 20 DOM tests pass, including mounted groups of 1, 2, and 3 calls, expand/collapse, virtualization, and manual interruption.
+-- `npx tsc --noEmit --pretty false` passes.
+-- `bb plugin build .` passes.
+-- `git diff --check` passes.
++- 23 DOM tests pass, including mounted groups of 1/2/3, virtualization, manual interruption, API errors and disclosure-state regressions.
++- Strict TypeScript, `bb plugin build .`, and `git diff --check` pass.
++- 12 isolated headless Chromium cases check two viewport widths, three quote lengths, known/unknown time, one-line layout and Enter/Space toggling, using the actual module and BB 0.48.0 CSS.
++- Independent review and four targeted DOM probes found no remaining P0/P1/P2 defect in the final source bytes.
++- Journal, source hashes, JUnit, layout observations and screenshots: `docs/product-journal/2026-10-29-tool-call-quotes.md` and its linked verification files.
++
++## Delivery limits
++The candidate was not installed into the shared BB runtime. The screenshots are an isolated fixture, not the installed plugin; dark/custom themes and a physical phone remain untested. GitHub Actions is not configured; these are local checks. Merge and installation remain separate operations.

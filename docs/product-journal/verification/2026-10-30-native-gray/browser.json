@@ -1,0 +1,5159 @@
+{
+  "method": "isolated headless Chromium; current native BB CSS; actual candidate module",
+  "cases": 8,
+  "observations": [
+    {
+      "case": {
+        "width": 728,
+        "theme": "light",
+        "scale": 1
+      },
+      "states": {
+        "closed": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 78,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 727.40625,
+              "top": 55,
+              "bottom": 70,
+              "width": 683.40625
+            },
+            {
+              "left": 24,
+              "right": 177.765625,
+              "top": 75,
+              "bottom": 90,
+              "width": 153.765625
+            },
+            {
+              "left": 177.765625,
+              "right": 230.265625,
+              "top": 75,
+              "bottom": 90,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 96,
+              "bottom": 110,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 96,
+              "bottom": 110,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 78,
+            "bottom": 90,
+            "left": 236.265625,
+            "right": 248.265625
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "hover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 78,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 727.40625,
+              "top": 55,
+              "bottom": 70,
+              "width": 683.40625
+            },
+            {
+              "left": 24,
+              "right": 177.765625,
+              "top": 75,
+              "bottom": 90,
+              "width": 153.765625
+            },
+            {
+              "left": 177.765625,
+              "right": 230.265625,
+              "top": 75,
+              "bottom": 90,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 96,
+              "bottom": 110,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 96,
+              "bottom": 110,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 78,
+            "bottom": 90,
+            "left": 236.265625,
+            "right": 248.265625
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "focus": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 78,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 727.40625,
+              "top": 55,
+              "bottom": 70,
+              "width": 683.40625
+            },
+            {
+              "left": 24,
+              "right": 177.765625,
+              "top": 75,
+              "bottom": 90,
+              "width": 153.765625
+            },
+            {
+              "left": 177.765625,
+              "right": 230.265625,
+              "top": 75,
+              "bottom": 90,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 96,
+              "bottom": 110,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 96,
+              "bottom": 110,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 78,
+            "bottom": 90,
+            "left": 236.265625,
+            "right": 248.265625
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "open": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "0px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 69,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 727.40625,
+              "top": 55,
+              "bottom": 70,
+              "width": 683.40625
+            },
+            {
+              "left": 24,
+              "right": 177.765625,
+              "top": 75,
+              "bottom": 90,
+              "width": 153.765625
+            },
+            {
+              "left": 177.765625,
+              "right": 230.265625,
+              "top": 75,
+              "bottom": 90,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 96,
+              "bottom": 110,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 96,
+              "bottom": 110,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 78,
+            "bottom": 90,
+            "left": 236.265625,
+            "right": 248.265625
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "true",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "0px",
+          "ends": [
+            {
+              "border": "1px",
+              "left": 24,
+              "right": 736,
+              "keyMatches": true,
+              "positionCorrect": true
+            }
+          ],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "sourceHover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 78,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 727.40625,
+              "top": 55,
+              "bottom": 70,
+              "width": 683.40625
+            },
+            {
+              "left": 24,
+              "right": 177.765625,
+              "top": 75,
+              "bottom": 90,
+              "width": 153.765625
+            },
+            {
+              "left": 177.765625,
+              "right": 230.265625,
+              "top": 75,
+              "bottom": 90,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 96,
+              "bottom": 110,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 96,
+              "bottom": 110,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 78,
+            "bottom": 90,
+            "left": 236.265625,
+            "right": 248.265625
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        }
+      }
+    },
+    {
+      "case": {
+        "width": 728,
+        "theme": "dark",
+        "scale": 1
+      },
+      "states": {
+        "closed": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 78,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 727.40625,
+              "top": 55,
+              "bottom": 70,
+              "width": 683.40625
+            },
+            {
+              "left": 24,
+              "right": 177.765625,
+              "top": 75,
+              "bottom": 90,
+              "width": 153.765625
+            },
+            {
+              "left": 177.765625,
+              "right": 230.265625,
+              "top": 75,
+              "bottom": 90,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 96,
+              "bottom": 110,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 96,
+              "bottom": 110,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 78,
+            "bottom": 90,
+            "left": 236.265625,
+            "right": 248.265625
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "hover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 78,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 727.40625,
+              "top": 55,
+              "bottom": 70,
+              "width": 683.40625
+            },
+            {
+              "left": 24,
+              "right": 177.765625,
+              "top": 75,
+              "bottom": 90,
+              "width": 153.765625
+            },
+            {
+              "left": 177.765625,
+              "right": 230.265625,
+              "top": 75,
+              "bottom": 90,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 96,
+              "bottom": 110,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 96,
+              "bottom": 110,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 78,
+            "bottom": 90,
+            "left": 236.265625,
+            "right": 248.265625
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "focus": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 78,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 727.40625,
+              "top": 55,
+              "bottom": 70,
+              "width": 683.40625
+            },
+            {
+              "left": 24,
+              "right": 177.765625,
+              "top": 75,
+              "bottom": 90,
+              "width": 153.765625
+            },
+            {
+              "left": 177.765625,
+              "right": 230.265625,
+              "top": 75,
+              "bottom": 90,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 96,
+              "bottom": 110,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 96,
+              "bottom": 110,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 78,
+            "bottom": 90,
+            "left": 236.265625,
+            "right": 248.265625
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "open": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "0px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 69,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 727.40625,
+              "top": 55,
+              "bottom": 70,
+              "width": 683.40625
+            },
+            {
+              "left": 24,
+              "right": 177.765625,
+              "top": 75,
+              "bottom": 90,
+              "width": 153.765625
+            },
+            {
+              "left": 177.765625,
+              "right": 230.265625,
+              "top": 75,
+              "bottom": 90,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 96,
+              "bottom": 110,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 96,
+              "bottom": 110,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 78,
+            "bottom": 90,
+            "left": 236.265625,
+            "right": 248.265625
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "true",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "0px",
+          "ends": [
+            {
+              "border": "1px",
+              "left": 24,
+              "right": 736,
+              "keyMatches": true,
+              "positionCorrect": true
+            }
+          ],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "sourceHover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 78,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 727.40625,
+              "top": 55,
+              "bottom": 70,
+              "width": 683.40625
+            },
+            {
+              "left": 24,
+              "right": 177.765625,
+              "top": 75,
+              "bottom": 90,
+              "width": 153.765625
+            },
+            {
+              "left": 177.765625,
+              "right": 230.265625,
+              "top": 75,
+              "bottom": 90,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 96,
+              "bottom": 110,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 96,
+              "bottom": 110,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 96,
+              "bottom": 110,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 78,
+            "bottom": 90,
+            "left": 236.265625,
+            "right": 248.265625
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        }
+      }
+    },
+    {
+      "case": {
+        "width": 358,
+        "theme": "light",
+        "scale": 1
+      },
+      "states": {
+        "closed": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 98,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 330.59375,
+              "top": 55,
+              "bottom": 70,
+              "width": 286.59375
+            },
+            {
+              "left": 24,
+              "right": 329.46875,
+              "top": 75,
+              "bottom": 90,
+              "width": 305.46875
+            },
+            {
+              "left": 24,
+              "right": 265.5,
+              "top": 95,
+              "bottom": 110,
+              "width": 241.5
+            },
+            {
+              "left": 265.5,
+              "right": 318,
+              "top": 95,
+              "bottom": 110,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 116,
+              "bottom": 130,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 116,
+              "bottom": 130,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 98,
+            "bottom": 110,
+            "left": 324,
+            "right": 336
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "hover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 98,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 330.59375,
+              "top": 55,
+              "bottom": 70,
+              "width": 286.59375
+            },
+            {
+              "left": 24,
+              "right": 329.46875,
+              "top": 75,
+              "bottom": 90,
+              "width": 305.46875
+            },
+            {
+              "left": 24,
+              "right": 265.5,
+              "top": 95,
+              "bottom": 110,
+              "width": 241.5
+            },
+            {
+              "left": 265.5,
+              "right": 318,
+              "top": 95,
+              "bottom": 110,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 116,
+              "bottom": 130,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 116,
+              "bottom": 130,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 98,
+            "bottom": 110,
+            "left": 324,
+            "right": 336
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "focus": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 98,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 330.59375,
+              "top": 55,
+              "bottom": 70,
+              "width": 286.59375
+            },
+            {
+              "left": 24,
+              "right": 329.46875,
+              "top": 75,
+              "bottom": 90,
+              "width": 305.46875
+            },
+            {
+              "left": 24,
+              "right": 265.5,
+              "top": 95,
+              "bottom": 110,
+              "width": 241.5
+            },
+            {
+              "left": 265.5,
+              "right": 318,
+              "top": 95,
+              "bottom": 110,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 116,
+              "bottom": 130,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 116,
+              "bottom": 130,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 98,
+            "bottom": 110,
+            "left": 324,
+            "right": 336
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "open": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "0px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 89,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 330.59375,
+              "top": 55,
+              "bottom": 70,
+              "width": 286.59375
+            },
+            {
+              "left": 24,
+              "right": 329.46875,
+              "top": 75,
+              "bottom": 90,
+              "width": 305.46875
+            },
+            {
+              "left": 24,
+              "right": 265.5,
+              "top": 95,
+              "bottom": 110,
+              "width": 241.5
+            },
+            {
+              "left": 265.5,
+              "right": 318,
+              "top": 95,
+              "bottom": 110,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 116,
+              "bottom": 130,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 116,
+              "bottom": 130,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 98,
+            "bottom": 110,
+            "left": 324,
+            "right": 336
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "true",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "0px",
+          "ends": [
+            {
+              "border": "1px",
+              "left": 24,
+              "right": 366,
+              "keyMatches": true,
+              "positionCorrect": true
+            }
+          ],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "sourceHover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 98,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 330.59375,
+              "top": 55,
+              "bottom": 70,
+              "width": 286.59375
+            },
+            {
+              "left": 24,
+              "right": 329.46875,
+              "top": 75,
+              "bottom": 90,
+              "width": 305.46875
+            },
+            {
+              "left": 24,
+              "right": 265.5,
+              "top": 95,
+              "bottom": 110,
+              "width": 241.5
+            },
+            {
+              "left": 265.5,
+              "right": 318,
+              "top": 95,
+              "bottom": 110,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 116,
+              "bottom": 130,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 116,
+              "bottom": 130,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 98,
+            "bottom": 110,
+            "left": 324,
+            "right": 336
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        }
+      }
+    },
+    {
+      "case": {
+        "width": 358,
+        "theme": "dark",
+        "scale": 1
+      },
+      "states": {
+        "closed": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 98,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 330.59375,
+              "top": 55,
+              "bottom": 70,
+              "width": 286.59375
+            },
+            {
+              "left": 24,
+              "right": 329.46875,
+              "top": 75,
+              "bottom": 90,
+              "width": 305.46875
+            },
+            {
+              "left": 24,
+              "right": 265.5,
+              "top": 95,
+              "bottom": 110,
+              "width": 241.5
+            },
+            {
+              "left": 265.5,
+              "right": 318,
+              "top": 95,
+              "bottom": 110,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 116,
+              "bottom": 130,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 116,
+              "bottom": 130,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 98,
+            "bottom": 110,
+            "left": 324,
+            "right": 336
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "hover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 98,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 330.59375,
+              "top": 55,
+              "bottom": 70,
+              "width": 286.59375
+            },
+            {
+              "left": 24,
+              "right": 329.46875,
+              "top": 75,
+              "bottom": 90,
+              "width": 305.46875
+            },
+            {
+              "left": 24,
+              "right": 265.5,
+              "top": 95,
+              "bottom": 110,
+              "width": 241.5
+            },
+            {
+              "left": 265.5,
+              "right": 318,
+              "top": 95,
+              "bottom": 110,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 116,
+              "bottom": 130,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 116,
+              "bottom": 130,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 98,
+            "bottom": 110,
+            "left": 324,
+            "right": 336
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "focus": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 98,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 330.59375,
+              "top": 55,
+              "bottom": 70,
+              "width": 286.59375
+            },
+            {
+              "left": 24,
+              "right": 329.46875,
+              "top": 75,
+              "bottom": 90,
+              "width": 305.46875
+            },
+            {
+              "left": 24,
+              "right": 265.5,
+              "top": 95,
+              "bottom": 110,
+              "width": 241.5
+            },
+            {
+              "left": 265.5,
+              "right": 318,
+              "top": 95,
+              "bottom": 110,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 116,
+              "bottom": 130,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 116,
+              "bottom": 130,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 98,
+            "bottom": 110,
+            "left": 324,
+            "right": 336
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "open": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "0px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 89,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 330.59375,
+              "top": 55,
+              "bottom": 70,
+              "width": 286.59375
+            },
+            {
+              "left": 24,
+              "right": 329.46875,
+              "top": 75,
+              "bottom": 90,
+              "width": 305.46875
+            },
+            {
+              "left": 24,
+              "right": 265.5,
+              "top": 95,
+              "bottom": 110,
+              "width": 241.5
+            },
+            {
+              "left": 265.5,
+              "right": 318,
+              "top": 95,
+              "bottom": 110,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 116,
+              "bottom": 130,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 116,
+              "bottom": 130,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 98,
+            "bottom": 110,
+            "left": 324,
+            "right": 336
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "true",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "0px",
+          "ends": [
+            {
+              "border": "1px",
+              "left": 24,
+              "right": 366,
+              "keyMatches": true,
+              "positionCorrect": true
+            }
+          ],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "sourceHover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 98,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 330.59375,
+              "top": 55,
+              "bottom": 70,
+              "width": 286.59375
+            },
+            {
+              "left": 24,
+              "right": 329.46875,
+              "top": 75,
+              "bottom": 90,
+              "width": 305.46875
+            },
+            {
+              "left": 24,
+              "right": 265.5,
+              "top": 95,
+              "bottom": 110,
+              "width": 241.5
+            },
+            {
+              "left": 265.5,
+              "right": 318,
+              "top": 95,
+              "bottom": 110,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 116,
+              "bottom": 130,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 267.5625,
+              "top": 116,
+              "bottom": 130,
+              "width": 10.015625
+            },
+            {
+              "left": 267.5625,
+              "right": 296.921875,
+              "top": 116,
+              "bottom": 130,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 98,
+            "bottom": 110,
+            "left": 324,
+            "right": 336
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        }
+      }
+    },
+    {
+      "case": {
+        "width": 288,
+        "theme": "light",
+        "scale": 1
+      },
+      "states": {
+        "closed": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 138,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 279.0625,
+              "top": 75,
+              "bottom": 90,
+              "width": 235.0625
+            },
+            {
+              "left": 24,
+              "right": 262.203125,
+              "top": 95,
+              "bottom": 110,
+              "width": 238.203125
+            },
+            {
+              "left": 24,
+              "right": 245,
+              "top": 115,
+              "bottom": 130,
+              "width": 221
+            },
+            {
+              "left": 24,
+              "right": 159.703125,
+              "top": 135,
+              "bottom": 150,
+              "width": 135.703125
+            },
+            {
+              "left": 159.703125,
+              "right": 212.203125,
+              "top": 135,
+              "bottom": 150,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 156,
+              "bottom": 170,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 156,
+              "bottom": 170,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 264.21875,
+              "top": 156,
+              "bottom": 170,
+              "width": 6.671875
+            },
+            {
+              "left": 24,
+              "right": 53.359375,
+              "top": 176,
+              "bottom": 190,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 138,
+            "bottom": 150,
+            "left": 218.203125,
+            "right": 230.203125
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "hover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 138,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 279.0625,
+              "top": 75,
+              "bottom": 90,
+              "width": 235.0625
+            },
+            {
+              "left": 24,
+              "right": 262.203125,
+              "top": 95,
+              "bottom": 110,
+              "width": 238.203125
+            },
+            {
+              "left": 24,
+              "right": 245,
+              "top": 115,
+              "bottom": 130,
+              "width": 221
+            },
+            {
+              "left": 24,
+              "right": 159.703125,
+              "top": 135,
+              "bottom": 150,
+              "width": 135.703125
+            },
+            {
+              "left": 159.703125,
+              "right": 212.203125,
+              "top": 135,
+              "bottom": 150,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 156,
+              "bottom": 170,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 156,
+              "bottom": 170,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 264.21875,
+              "top": 156,
+              "bottom": 170,
+              "width": 6.671875
+            },
+            {
+              "left": 24,
+              "right": 53.359375,
+              "top": 176,
+              "bottom": 190,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 138,
+            "bottom": 150,
+            "left": 218.203125,
+            "right": 230.203125
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "focus": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 138,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 279.0625,
+              "top": 75,
+              "bottom": 90,
+              "width": 235.0625
+            },
+            {
+              "left": 24,
+              "right": 262.203125,
+              "top": 95,
+              "bottom": 110,
+              "width": 238.203125
+            },
+            {
+              "left": 24,
+              "right": 245,
+              "top": 115,
+              "bottom": 130,
+              "width": 221
+            },
+            {
+              "left": 24,
+              "right": 159.703125,
+              "top": 135,
+              "bottom": 150,
+              "width": 135.703125
+            },
+            {
+              "left": 159.703125,
+              "right": 212.203125,
+              "top": 135,
+              "bottom": 150,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 156,
+              "bottom": 170,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 156,
+              "bottom": 170,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 264.21875,
+              "top": 156,
+              "bottom": 170,
+              "width": 6.671875
+            },
+            {
+              "left": 24,
+              "right": 53.359375,
+              "top": 176,
+              "bottom": 190,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 138,
+            "bottom": 150,
+            "left": 218.203125,
+            "right": 230.203125
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "open": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "0px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 129,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 279.0625,
+              "top": 75,
+              "bottom": 90,
+              "width": 235.0625
+            },
+            {
+              "left": 24,
+              "right": 262.203125,
+              "top": 95,
+              "bottom": 110,
+              "width": 238.203125
+            },
+            {
+              "left": 24,
+              "right": 245,
+              "top": 115,
+              "bottom": 130,
+              "width": 221
+            },
+            {
+              "left": 24,
+              "right": 159.703125,
+              "top": 135,
+              "bottom": 150,
+              "width": 135.703125
+            },
+            {
+              "left": 159.703125,
+              "right": 212.203125,
+              "top": 135,
+              "bottom": 150,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 156,
+              "bottom": 170,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 156,
+              "bottom": 170,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 264.21875,
+              "top": 156,
+              "bottom": 170,
+              "width": 6.671875
+            },
+            {
+              "left": 24,
+              "right": 53.359375,
+              "top": 176,
+              "bottom": 190,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 138,
+            "bottom": 150,
+            "left": 218.203125,
+            "right": 230.203125
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "true",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "0px",
+          "ends": [
+            {
+              "border": "1px",
+              "left": 24,
+              "right": 296,
+              "keyMatches": true,
+              "positionCorrect": true
+            }
+          ],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "sourceHover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 138,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 279.0625,
+              "top": 75,
+              "bottom": 90,
+              "width": 235.0625
+            },
+            {
+              "left": 24,
+              "right": 262.203125,
+              "top": 95,
+              "bottom": 110,
+              "width": 238.203125
+            },
+            {
+              "left": 24,
+              "right": 245,
+              "top": 115,
+              "bottom": 130,
+              "width": 221
+            },
+            {
+              "left": 24,
+              "right": 159.703125,
+              "top": 135,
+              "bottom": 150,
+              "width": 135.703125
+            },
+            {
+              "left": 159.703125,
+              "right": 212.203125,
+              "top": 135,
+              "bottom": 150,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 156,
+              "bottom": 170,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 156,
+              "bottom": 170,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 264.21875,
+              "top": 156,
+              "bottom": 170,
+              "width": 6.671875
+            },
+            {
+              "left": 24,
+              "right": 53.359375,
+              "top": 176,
+              "bottom": 190,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 138,
+            "bottom": 150,
+            "left": 218.203125,
+            "right": 230.203125
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        }
+      }
+    },
+    {
+      "case": {
+        "width": 288,
+        "theme": "dark",
+        "scale": 1
+      },
+      "states": {
+        "closed": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 138,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 279.0625,
+              "top": 75,
+              "bottom": 90,
+              "width": 235.0625
+            },
+            {
+              "left": 24,
+              "right": 262.203125,
+              "top": 95,
+              "bottom": 110,
+              "width": 238.203125
+            },
+            {
+              "left": 24,
+              "right": 245,
+              "top": 115,
+              "bottom": 130,
+              "width": 221
+            },
+            {
+              "left": 24,
+              "right": 159.703125,
+              "top": 135,
+              "bottom": 150,
+              "width": 135.703125
+            },
+            {
+              "left": 159.703125,
+              "right": 212.203125,
+              "top": 135,
+              "bottom": 150,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 156,
+              "bottom": 170,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 156,
+              "bottom": 170,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 264.21875,
+              "top": 156,
+              "bottom": 170,
+              "width": 6.671875
+            },
+            {
+              "left": 24,
+              "right": 53.359375,
+              "top": 176,
+              "bottom": 190,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 138,
+            "bottom": 150,
+            "left": 218.203125,
+            "right": 230.203125
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "hover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 138,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 279.0625,
+              "top": 75,
+              "bottom": 90,
+              "width": 235.0625
+            },
+            {
+              "left": 24,
+              "right": 262.203125,
+              "top": 95,
+              "bottom": 110,
+              "width": 238.203125
+            },
+            {
+              "left": 24,
+              "right": 245,
+              "top": 115,
+              "bottom": 130,
+              "width": 221
+            },
+            {
+              "left": 24,
+              "right": 159.703125,
+              "top": 135,
+              "bottom": 150,
+              "width": 135.703125
+            },
+            {
+              "left": 159.703125,
+              "right": 212.203125,
+              "top": 135,
+              "bottom": 150,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 156,
+              "bottom": 170,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 156,
+              "bottom": 170,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 264.21875,
+              "top": 156,
+              "bottom": 170,
+              "width": 6.671875
+            },
+            {
+              "left": 24,
+              "right": 53.359375,
+              "top": 176,
+              "bottom": 190,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 138,
+            "bottom": 150,
+            "left": 218.203125,
+            "right": 230.203125
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "focus": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 138,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 279.0625,
+              "top": 75,
+              "bottom": 90,
+              "width": 235.0625
+            },
+            {
+              "left": 24,
+              "right": 262.203125,
+              "top": 95,
+              "bottom": 110,
+              "width": 238.203125
+            },
+            {
+              "left": 24,
+              "right": 245,
+              "top": 115,
+              "bottom": 130,
+              "width": 221
+            },
+            {
+              "left": 24,
+              "right": 159.703125,
+              "top": 135,
+              "bottom": 150,
+              "width": 135.703125
+            },
+            {
+              "left": 159.703125,
+              "right": 212.203125,
+              "top": 135,
+              "bottom": 150,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 156,
+              "bottom": 170,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 156,
+              "bottom": 170,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 264.21875,
+              "top": 156,
+              "bottom": 170,
+              "width": 6.671875
+            },
+            {
+              "left": 24,
+              "right": 53.359375,
+              "top": 176,
+              "bottom": 190,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 138,
+            "bottom": 150,
+            "left": 218.203125,
+            "right": 230.203125
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "open": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "0px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 129,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 279.0625,
+              "top": 75,
+              "bottom": 90,
+              "width": 235.0625
+            },
+            {
+              "left": 24,
+              "right": 262.203125,
+              "top": 95,
+              "bottom": 110,
+              "width": 238.203125
+            },
+            {
+              "left": 24,
+              "right": 245,
+              "top": 115,
+              "bottom": 130,
+              "width": 221
+            },
+            {
+              "left": 24,
+              "right": 159.703125,
+              "top": 135,
+              "bottom": 150,
+              "width": 135.703125
+            },
+            {
+              "left": 159.703125,
+              "right": 212.203125,
+              "top": 135,
+              "bottom": 150,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 156,
+              "bottom": 170,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 156,
+              "bottom": 170,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 264.21875,
+              "top": 156,
+              "bottom": 170,
+              "width": 6.671875
+            },
+            {
+              "left": 24,
+              "right": 53.359375,
+              "top": 176,
+              "bottom": 190,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 138,
+            "bottom": 150,
+            "left": 218.203125,
+            "right": 230.203125
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "true",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "0px",
+          "ends": [
+            {
+              "border": "1px",
+              "left": 24,
+              "right": 296,
+              "keyMatches": true,
+              "positionCorrect": true
+            }
+          ],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "sourceHover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "8px",
+            "8px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "13px",
+          "lineHeight": "20px",
+          "containerGap": "8px",
+          "headerHeight": 138,
+          "quoteRects": [
+            {
+              "left": 44,
+              "right": 279.0625,
+              "top": 75,
+              "bottom": 90,
+              "width": 235.0625
+            },
+            {
+              "left": 24,
+              "right": 262.203125,
+              "top": 95,
+              "bottom": 110,
+              "width": 238.203125
+            },
+            {
+              "left": 24,
+              "right": 245,
+              "top": 115,
+              "bottom": 130,
+              "width": 221
+            },
+            {
+              "left": 24,
+              "right": 159.703125,
+              "top": 135,
+              "bottom": 150,
+              "width": 135.703125
+            },
+            {
+              "left": 159.703125,
+              "right": 212.203125,
+              "top": 135,
+              "bottom": 150,
+              "width": 52.5
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 24,
+              "right": 212.5625,
+              "top": 156,
+              "bottom": 170,
+              "width": 188.5625
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 222.1875,
+              "right": 257.546875,
+              "top": 156,
+              "bottom": 170,
+              "width": 35.359375
+            },
+            {
+              "left": 257.546875,
+              "right": 264.21875,
+              "top": 156,
+              "bottom": 170,
+              "width": 6.671875
+            },
+            {
+              "left": 24,
+              "right": 53.359375,
+              "top": 176,
+              "bottom": 190,
+              "width": 29.359375
+            }
+          ],
+          "arrow": {
+            "top": 138,
+            "bottom": 150,
+            "left": 218.203125,
+            "right": 230.203125
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 8,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        }
+      }
+    },
+    {
+      "case": {
+        "width": 288,
+        "theme": "light",
+        "scale": 2
+      },
+      "states": {
+        "closed": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "16px",
+            "16px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "26px",
+          "lineHeight": "40px",
+          "containerGap": "16px",
+          "headerHeight": 557,
+          "quoteRects": [
+            {
+              "left": 88,
+              "right": 234.390625,
+              "top": 230,
+              "bottom": 260,
+              "width": 146.390625
+            },
+            {
+              "left": 48,
+              "right": 259.53125,
+              "top": 270,
+              "bottom": 300,
+              "width": 211.53125
+            },
+            {
+              "left": 48,
+              "right": 248.84375,
+              "top": 310,
+              "bottom": 340,
+              "width": 200.84375
+            },
+            {
+              "left": 48,
+              "right": 265.75,
+              "top": 350,
+              "bottom": 380,
+              "width": 217.75
+            },
+            {
+              "left": 48,
+              "right": 196.359375,
+              "top": 390,
+              "bottom": 420,
+              "width": 148.359375
+            },
+            {
+              "left": 48,
+              "right": 226.75,
+              "top": 430,
+              "bottom": 460,
+              "width": 178.75
+            },
+            {
+              "left": 48,
+              "right": 267.890625,
+              "top": 470,
+              "bottom": 500,
+              "width": 219.890625
+            },
+            {
+              "left": 48,
+              "right": 228.265625,
+              "top": 510,
+              "bottom": 540,
+              "width": 180.265625
+            },
+            {
+              "left": 48,
+              "right": 160.828125,
+              "top": 550,
+              "bottom": 580,
+              "width": 112.828125
+            },
+            {
+              "left": 48,
+              "right": 153,
+              "top": 590,
+              "bottom": 620,
+              "width": 105
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 48,
+              "right": 244.6875,
+              "top": 632,
+              "bottom": 660,
+              "width": 196.6875
+            },
+            {
+              "left": 48,
+              "right": 221.75,
+              "top": 673,
+              "bottom": 701,
+              "width": 173.75
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 48,
+              "right": 118.71875,
+              "top": 714,
+              "bottom": 742,
+              "width": 70.71875
+            },
+            {
+              "left": 118.71875,
+              "right": 138.734375,
+              "top": 714,
+              "bottom": 742,
+              "width": 20.015625
+            },
+            {
+              "left": 138.734375,
+              "right": 197.453125,
+              "top": 714,
+              "bottom": 742,
+              "width": 58.71875
+            }
+          ],
+          "arrow": {
+            "top": 596,
+            "bottom": 620,
+            "left": 165,
+            "right": 189
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 16,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "hover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "16px",
+            "16px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "26px",
+          "lineHeight": "40px",
+          "containerGap": "16px",
+          "headerHeight": 557,
+          "quoteRects": [
+            {
+              "left": 88,
+              "right": 234.390625,
+              "top": 230,
+              "bottom": 260,
+              "width": 146.390625
+            },
+            {
+              "left": 48,
+              "right": 259.53125,
+              "top": 270,
+              "bottom": 300,
+              "width": 211.53125
+            },
+            {
+              "left": 48,
+              "right": 248.84375,
+              "top": 310,
+              "bottom": 340,
+              "width": 200.84375
+            },
+            {
+              "left": 48,
+              "right": 265.75,
+              "top": 350,
+              "bottom": 380,
+              "width": 217.75
+            },
+            {
+              "left": 48,
+              "right": 196.359375,
+              "top": 390,
+              "bottom": 420,
+              "width": 148.359375
+            },
+            {
+              "left": 48,
+              "right": 226.75,
+              "top": 430,
+              "bottom": 460,
+              "width": 178.75
+            },
+            {
+              "left": 48,
+              "right": 267.890625,
+              "top": 470,
+              "bottom": 500,
+              "width": 219.890625
+            },
+            {
+              "left": 48,
+              "right": 228.265625,
+              "top": 510,
+              "bottom": 540,
+              "width": 180.265625
+            },
+            {
+              "left": 48,
+              "right": 160.828125,
+              "top": 550,
+              "bottom": 580,
+              "width": 112.828125
+            },
+            {
+              "left": 48,
+              "right": 153,
+              "top": 590,
+              "bottom": 620,
+              "width": 105
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 48,
+              "right": 244.6875,
+              "top": 632,
+              "bottom": 660,
+              "width": 196.6875
+            },
+            {
+              "left": 48,
+              "right": 221.75,
+              "top": 673,
+              "bottom": 701,
+              "width": 173.75
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 48,
+              "right": 118.71875,
+              "top": 714,
+              "bottom": 742,
+              "width": 70.71875
+            },
+            {
+              "left": 118.71875,
+              "right": 138.734375,
+              "top": 714,
+              "bottom": 742,
+              "width": 20.015625
+            },
+            {
+              "left": 138.734375,
+              "right": 197.453125,
+              "top": 714,
+              "bottom": 742,
+              "width": 58.71875
+            }
+          ],
+          "arrow": {
+            "top": 596,
+            "bottom": 620,
+            "left": 165,
+            "right": 189
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 16,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "focus": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "16px",
+            "16px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "26px",
+          "lineHeight": "40px",
+          "containerGap": "16px",
+          "headerHeight": 557,
+          "quoteRects": [
+            {
+              "left": 88,
+              "right": 234.390625,
+              "top": 230,
+              "bottom": 260,
+              "width": 146.390625
+            },
+            {
+              "left": 48,
+              "right": 259.53125,
+              "top": 270,
+              "bottom": 300,
+              "width": 211.53125
+            },
+            {
+              "left": 48,
+              "right": 248.84375,
+              "top": 310,
+              "bottom": 340,
+              "width": 200.84375
+            },
+            {
+              "left": 48,
+              "right": 265.75,
+              "top": 350,
+              "bottom": 380,
+              "width": 217.75
+            },
+            {
+              "left": 48,
+              "right": 196.359375,
+              "top": 390,
+              "bottom": 420,
+              "width": 148.359375
+            },
+            {
+              "left": 48,
+              "right": 226.75,
+              "top": 430,
+              "bottom": 460,
+              "width": 178.75
+            },
+            {
+              "left": 48,
+              "right": 267.890625,
+              "top": 470,
+              "bottom": 500,
+              "width": 219.890625
+            },
+            {
+              "left": 48,
+              "right": 228.265625,
+              "top": 510,
+              "bottom": 540,
+              "width": 180.265625
+            },
+            {
+              "left": 48,
+              "right": 160.828125,
+              "top": 550,
+              "bottom": 580,
+              "width": 112.828125
+            },
+            {
+              "left": 48,
+              "right": 153,
+              "top": 590,
+              "bottom": 620,
+              "width": 105
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 48,
+              "right": 244.6875,
+              "top": 632,
+              "bottom": 660,
+              "width": 196.6875
+            },
+            {
+              "left": 48,
+              "right": 221.75,
+              "top": 673,
+              "bottom": 701,
+              "width": 173.75
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 48,
+              "right": 118.71875,
+              "top": 714,
+              "bottom": 742,
+              "width": 70.71875
+            },
+            {
+              "left": 118.71875,
+              "right": 138.734375,
+              "top": 714,
+              "bottom": 742,
+              "width": 20.015625
+            },
+            {
+              "left": 138.734375,
+              "right": 197.453125,
+              "top": 714,
+              "bottom": 742,
+              "width": 58.71875
+            }
+          ],
+          "arrow": {
+            "top": 596,
+            "bottom": 620,
+            "left": 165,
+            "right": 189
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 16,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "open": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "16px",
+            "0px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "26px",
+          "lineHeight": "40px",
+          "containerGap": "16px",
+          "headerHeight": 540,
+          "quoteRects": [
+            {
+              "left": 88,
+              "right": 234.390625,
+              "top": 230,
+              "bottom": 260,
+              "width": 146.390625
+            },
+            {
+              "left": 48,
+              "right": 259.53125,
+              "top": 270,
+              "bottom": 300,
+              "width": 211.53125
+            },
+            {
+              "left": 48,
+              "right": 248.84375,
+              "top": 310,
+              "bottom": 340,
+              "width": 200.84375
+            },
+            {
+              "left": 48,
+              "right": 265.75,
+              "top": 350,
+              "bottom": 380,
+              "width": 217.75
+            },
+            {
+              "left": 48,
+              "right": 196.359375,
+              "top": 390,
+              "bottom": 420,
+              "width": 148.359375
+            },
+            {
+              "left": 48,
+              "right": 226.75,
+              "top": 430,
+              "bottom": 460,
+              "width": 178.75
+            },
+            {
+              "left": 48,
+              "right": 267.890625,
+              "top": 470,
+              "bottom": 500,
+              "width": 219.890625
+            },
+            {
+              "left": 48,
+              "right": 228.265625,
+              "top": 510,
+              "bottom": 540,
+              "width": 180.265625
+            },
+            {
+              "left": 48,
+              "right": 160.828125,
+              "top": 550,
+              "bottom": 580,
+              "width": 112.828125
+            },
+            {
+              "left": 48,
+              "right": 153,
+              "top": 590,
+              "bottom": 620,
+              "width": 105
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 48,
+              "right": 244.6875,
+              "top": 632,
+              "bottom": 660,
+              "width": 196.6875
+            },
+            {
+              "left": 48,
+              "right": 221.75,
+              "top": 673,
+              "bottom": 701,
+              "width": 173.75
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 48,
+              "right": 118.71875,
+              "top": 714,
+              "bottom": 742,
+              "width": 70.71875
+            },
+            {
+              "left": 118.71875,
+              "right": 138.734375,
+              "top": 714,
+              "bottom": 742,
+              "width": 20.015625
+            },
+            {
+              "left": 138.734375,
+              "right": 197.453125,
+              "top": 714,
+              "bottom": 742,
+              "width": 58.71875
+            }
+          ],
+          "arrow": {
+            "top": 596,
+            "bottom": 620,
+            "left": 165,
+            "right": 189
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 16,
+          "streamVisible": true,
+          "expanded": "true",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "0px",
+          "ends": [
+            {
+              "border": "1px",
+              "left": 48,
+              "right": 272,
+              "keyMatches": true,
+              "positionCorrect": true
+            }
+          ],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        },
+        "sourceHover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "16px",
+            "16px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "26px",
+          "lineHeight": "40px",
+          "containerGap": "16px",
+          "headerHeight": 557,
+          "quoteRects": [
+            {
+              "left": 88,
+              "right": 234.390625,
+              "top": 230,
+              "bottom": 260,
+              "width": 146.390625
+            },
+            {
+              "left": 48,
+              "right": 259.53125,
+              "top": 270,
+              "bottom": 300,
+              "width": 211.53125
+            },
+            {
+              "left": 48,
+              "right": 248.84375,
+              "top": 310,
+              "bottom": 340,
+              "width": 200.84375
+            },
+            {
+              "left": 48,
+              "right": 265.75,
+              "top": 350,
+              "bottom": 380,
+              "width": 217.75
+            },
+            {
+              "left": 48,
+              "right": 196.359375,
+              "top": 390,
+              "bottom": 420,
+              "width": 148.359375
+            },
+            {
+              "left": 48,
+              "right": 226.75,
+              "top": 430,
+              "bottom": 460,
+              "width": 178.75
+            },
+            {
+              "left": 48,
+              "right": 267.890625,
+              "top": 470,
+              "bottom": 500,
+              "width": 219.890625
+            },
+            {
+              "left": 48,
+              "right": 228.265625,
+              "top": 510,
+              "bottom": 540,
+              "width": 180.265625
+            },
+            {
+              "left": 48,
+              "right": 160.828125,
+              "top": 550,
+              "bottom": 580,
+              "width": 112.828125
+            },
+            {
+              "left": 48,
+              "right": 153,
+              "top": 590,
+              "bottom": 620,
+              "width": 105
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 48,
+              "right": 244.6875,
+              "top": 632,
+              "bottom": 660,
+              "width": 196.6875
+            },
+            {
+              "left": 48,
+              "right": 221.75,
+              "top": 673,
+              "bottom": 701,
+              "width": 173.75
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 48,
+              "right": 118.71875,
+              "top": 714,
+              "bottom": 742,
+              "width": 70.71875
+            },
+            {
+              "left": 118.71875,
+              "right": 138.734375,
+              "top": 714,
+              "bottom": 742,
+              "width": 20.015625
+            },
+            {
+              "left": 138.734375,
+              "right": 197.453125,
+              "top": 714,
+              "bottom": 742,
+              "width": 58.71875
+            }
+          ],
+          "arrow": {
+            "top": 596,
+            "bottom": 620,
+            "left": 165,
+            "right": 189
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 16,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.27 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.5 0 0)",
+            "border": "oklch(0.904954 0 0)"
+          },
+          "colors": [
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)",
+            "oklch(0.5 0 0)"
+          ],
+          "border": "oklch(0.904954 0 0)"
+        }
+      }
+    },
+    {
+      "case": {
+        "width": 288,
+        "theme": "dark",
+        "scale": 2
+      },
+      "states": {
+        "closed": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "16px",
+            "16px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "26px",
+          "lineHeight": "40px",
+          "containerGap": "16px",
+          "headerHeight": 557,
+          "quoteRects": [
+            {
+              "left": 88,
+              "right": 234.390625,
+              "top": 230,
+              "bottom": 260,
+              "width": 146.390625
+            },
+            {
+              "left": 48,
+              "right": 259.53125,
+              "top": 270,
+              "bottom": 300,
+              "width": 211.53125
+            },
+            {
+              "left": 48,
+              "right": 248.84375,
+              "top": 310,
+              "bottom": 340,
+              "width": 200.84375
+            },
+            {
+              "left": 48,
+              "right": 265.75,
+              "top": 350,
+              "bottom": 380,
+              "width": 217.75
+            },
+            {
+              "left": 48,
+              "right": 196.359375,
+              "top": 390,
+              "bottom": 420,
+              "width": 148.359375
+            },
+            {
+              "left": 48,
+              "right": 226.75,
+              "top": 430,
+              "bottom": 460,
+              "width": 178.75
+            },
+            {
+              "left": 48,
+              "right": 267.890625,
+              "top": 470,
+              "bottom": 500,
+              "width": 219.890625
+            },
+            {
+              "left": 48,
+              "right": 228.265625,
+              "top": 510,
+              "bottom": 540,
+              "width": 180.265625
+            },
+            {
+              "left": 48,
+              "right": 160.828125,
+              "top": 550,
+              "bottom": 580,
+              "width": 112.828125
+            },
+            {
+              "left": 48,
+              "right": 153,
+              "top": 590,
+              "bottom": 620,
+              "width": 105
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 48,
+              "right": 244.6875,
+              "top": 632,
+              "bottom": 660,
+              "width": 196.6875
+            },
+            {
+              "left": 48,
+              "right": 221.75,
+              "top": 673,
+              "bottom": 701,
+              "width": 173.75
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 48,
+              "right": 118.71875,
+              "top": 714,
+              "bottom": 742,
+              "width": 70.71875
+            },
+            {
+              "left": 118.71875,
+              "right": 138.734375,
+              "top": 714,
+              "bottom": 742,
+              "width": 20.015625
+            },
+            {
+              "left": 138.734375,
+              "right": 197.453125,
+              "top": 714,
+              "bottom": 742,
+              "width": 58.71875
+            }
+          ],
+          "arrow": {
+            "top": 596,
+            "bottom": 620,
+            "left": 165,
+            "right": 189
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 16,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "hover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "16px",
+            "16px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "26px",
+          "lineHeight": "40px",
+          "containerGap": "16px",
+          "headerHeight": 557,
+          "quoteRects": [
+            {
+              "left": 88,
+              "right": 234.390625,
+              "top": 230,
+              "bottom": 260,
+              "width": 146.390625
+            },
+            {
+              "left": 48,
+              "right": 259.53125,
+              "top": 270,
+              "bottom": 300,
+              "width": 211.53125
+            },
+            {
+              "left": 48,
+              "right": 248.84375,
+              "top": 310,
+              "bottom": 340,
+              "width": 200.84375
+            },
+            {
+              "left": 48,
+              "right": 265.75,
+              "top": 350,
+              "bottom": 380,
+              "width": 217.75
+            },
+            {
+              "left": 48,
+              "right": 196.359375,
+              "top": 390,
+              "bottom": 420,
+              "width": 148.359375
+            },
+            {
+              "left": 48,
+              "right": 226.75,
+              "top": 430,
+              "bottom": 460,
+              "width": 178.75
+            },
+            {
+              "left": 48,
+              "right": 267.890625,
+              "top": 470,
+              "bottom": 500,
+              "width": 219.890625
+            },
+            {
+              "left": 48,
+              "right": 228.265625,
+              "top": 510,
+              "bottom": 540,
+              "width": 180.265625
+            },
+            {
+              "left": 48,
+              "right": 160.828125,
+              "top": 550,
+              "bottom": 580,
+              "width": 112.828125
+            },
+            {
+              "left": 48,
+              "right": 153,
+              "top": 590,
+              "bottom": 620,
+              "width": 105
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 48,
+              "right": 244.6875,
+              "top": 632,
+              "bottom": 660,
+              "width": 196.6875
+            },
+            {
+              "left": 48,
+              "right": 221.75,
+              "top": 673,
+              "bottom": 701,
+              "width": 173.75
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 48,
+              "right": 118.71875,
+              "top": 714,
+              "bottom": 742,
+              "width": 70.71875
+            },
+            {
+              "left": 118.71875,
+              "right": 138.734375,
+              "top": 714,
+              "bottom": 742,
+              "width": 20.015625
+            },
+            {
+              "left": 138.734375,
+              "right": 197.453125,
+              "top": 714,
+              "bottom": 742,
+              "width": 58.71875
+            }
+          ],
+          "arrow": {
+            "top": 596,
+            "bottom": 620,
+            "left": 165,
+            "right": 189
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 16,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "none",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "focus": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "16px",
+            "16px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "26px",
+          "lineHeight": "40px",
+          "containerGap": "16px",
+          "headerHeight": 557,
+          "quoteRects": [
+            {
+              "left": 88,
+              "right": 234.390625,
+              "top": 230,
+              "bottom": 260,
+              "width": 146.390625
+            },
+            {
+              "left": 48,
+              "right": 259.53125,
+              "top": 270,
+              "bottom": 300,
+              "width": 211.53125
+            },
+            {
+              "left": 48,
+              "right": 248.84375,
+              "top": 310,
+              "bottom": 340,
+              "width": 200.84375
+            },
+            {
+              "left": 48,
+              "right": 265.75,
+              "top": 350,
+              "bottom": 380,
+              "width": 217.75
+            },
+            {
+              "left": 48,
+              "right": 196.359375,
+              "top": 390,
+              "bottom": 420,
+              "width": 148.359375
+            },
+            {
+              "left": 48,
+              "right": 226.75,
+              "top": 430,
+              "bottom": 460,
+              "width": 178.75
+            },
+            {
+              "left": 48,
+              "right": 267.890625,
+              "top": 470,
+              "bottom": 500,
+              "width": 219.890625
+            },
+            {
+              "left": 48,
+              "right": 228.265625,
+              "top": 510,
+              "bottom": 540,
+              "width": 180.265625
+            },
+            {
+              "left": 48,
+              "right": 160.828125,
+              "top": 550,
+              "bottom": 580,
+              "width": 112.828125
+            },
+            {
+              "left": 48,
+              "right": 153,
+              "top": 590,
+              "bottom": 620,
+              "width": 105
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 48,
+              "right": 244.6875,
+              "top": 632,
+              "bottom": 660,
+              "width": 196.6875
+            },
+            {
+              "left": 48,
+              "right": 221.75,
+              "top": 673,
+              "bottom": 701,
+              "width": 173.75
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 48,
+              "right": 118.71875,
+              "top": 714,
+              "bottom": 742,
+              "width": 70.71875
+            },
+            {
+              "left": 118.71875,
+              "right": 138.734375,
+              "top": 714,
+              "bottom": 742,
+              "width": 20.015625
+            },
+            {
+              "left": 138.734375,
+              "right": 197.453125,
+              "top": 714,
+              "bottom": 742,
+              "width": 58.71875
+            }
+          ],
+          "arrow": {
+            "top": 596,
+            "bottom": 620,
+            "left": 165,
+            "right": 189
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 16,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "open": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "16px",
+            "0px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "26px",
+          "lineHeight": "40px",
+          "containerGap": "16px",
+          "headerHeight": 540,
+          "quoteRects": [
+            {
+              "left": 88,
+              "right": 234.390625,
+              "top": 230,
+              "bottom": 260,
+              "width": 146.390625
+            },
+            {
+              "left": 48,
+              "right": 259.53125,
+              "top": 270,
+              "bottom": 300,
+              "width": 211.53125
+            },
+            {
+              "left": 48,
+              "right": 248.84375,
+              "top": 310,
+              "bottom": 340,
+              "width": 200.84375
+            },
+            {
+              "left": 48,
+              "right": 265.75,
+              "top": 350,
+              "bottom": 380,
+              "width": 217.75
+            },
+            {
+              "left": 48,
+              "right": 196.359375,
+              "top": 390,
+              "bottom": 420,
+              "width": 148.359375
+            },
+            {
+              "left": 48,
+              "right": 226.75,
+              "top": 430,
+              "bottom": 460,
+              "width": 178.75
+            },
+            {
+              "left": 48,
+              "right": 267.890625,
+              "top": 470,
+              "bottom": 500,
+              "width": 219.890625
+            },
+            {
+              "left": 48,
+              "right": 228.265625,
+              "top": 510,
+              "bottom": 540,
+              "width": 180.265625
+            },
+            {
+              "left": 48,
+              "right": 160.828125,
+              "top": 550,
+              "bottom": 580,
+              "width": 112.828125
+            },
+            {
+              "left": 48,
+              "right": 153,
+              "top": 590,
+              "bottom": 620,
+              "width": 105
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 48,
+              "right": 244.6875,
+              "top": 632,
+              "bottom": 660,
+              "width": 196.6875
+            },
+            {
+              "left": 48,
+              "right": 221.75,
+              "top": 673,
+              "bottom": 701,
+              "width": 173.75
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 48,
+              "right": 118.71875,
+              "top": 714,
+              "bottom": 742,
+              "width": 70.71875
+            },
+            {
+              "left": 118.71875,
+              "right": 138.734375,
+              "top": 714,
+              "bottom": 742,
+              "width": 20.015625
+            },
+            {
+              "left": 138.734375,
+              "right": 197.453125,
+              "top": 714,
+              "bottom": 742,
+              "width": 58.71875
+            }
+          ],
+          "arrow": {
+            "top": 596,
+            "bottom": 620,
+            "left": 165,
+            "right": 189
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 16,
+          "streamVisible": true,
+          "expanded": "true",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "0px",
+          "ends": [
+            {
+              "border": "1px",
+              "left": 48,
+              "right": 272,
+              "keyMatches": true,
+              "positionCorrect": true
+            }
+          ],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        },
+        "sourceHover": {
+          "quote": "Утраченное богатство можно вернуть трудом, знания — учёбой, здоровье — умеренностью или лекарствами, но потерянное время не вернуть.",
+          "source": "Сэмюэл Смайлс · «Самопомощь»",
+          "metrics": "2 tools · 13.2s",
+          "padding": [
+            "0px",
+            "0px",
+            "16px",
+            "16px"
+          ],
+          "buttonPadding": [
+            "0px",
+            "0px"
+          ],
+          "font": "26px",
+          "lineHeight": "40px",
+          "containerGap": "16px",
+          "headerHeight": 557,
+          "quoteRects": [
+            {
+              "left": 88,
+              "right": 234.390625,
+              "top": 230,
+              "bottom": 260,
+              "width": 146.390625
+            },
+            {
+              "left": 48,
+              "right": 259.53125,
+              "top": 270,
+              "bottom": 300,
+              "width": 211.53125
+            },
+            {
+              "left": 48,
+              "right": 248.84375,
+              "top": 310,
+              "bottom": 340,
+              "width": 200.84375
+            },
+            {
+              "left": 48,
+              "right": 265.75,
+              "top": 350,
+              "bottom": 380,
+              "width": 217.75
+            },
+            {
+              "left": 48,
+              "right": 196.359375,
+              "top": 390,
+              "bottom": 420,
+              "width": 148.359375
+            },
+            {
+              "left": 48,
+              "right": 226.75,
+              "top": 430,
+              "bottom": 460,
+              "width": 178.75
+            },
+            {
+              "left": 48,
+              "right": 267.890625,
+              "top": 470,
+              "bottom": 500,
+              "width": 219.890625
+            },
+            {
+              "left": 48,
+              "right": 228.265625,
+              "top": 510,
+              "bottom": 540,
+              "width": 180.265625
+            },
+            {
+              "left": 48,
+              "right": 160.828125,
+              "top": 550,
+              "bottom": 580,
+              "width": 112.828125
+            },
+            {
+              "left": 48,
+              "right": 153,
+              "top": 590,
+              "bottom": 620,
+              "width": 105
+            }
+          ],
+          "sourceRects": [
+            {
+              "left": 48,
+              "right": 244.6875,
+              "top": 632,
+              "bottom": 660,
+              "width": 196.6875
+            },
+            {
+              "left": 48,
+              "right": 221.75,
+              "top": 673,
+              "bottom": 701,
+              "width": 173.75
+            }
+          ],
+          "metricRects": [
+            {
+              "left": 48,
+              "right": 118.71875,
+              "top": 714,
+              "bottom": 742,
+              "width": 70.71875
+            },
+            {
+              "left": 118.71875,
+              "right": 138.734375,
+              "top": 714,
+              "bottom": 742,
+              "width": 20.015625
+            },
+            {
+              "left": 138.734375,
+              "right": 197.453125,
+              "top": 714,
+              "bottom": 742,
+              "width": 58.71875
+            }
+          ],
+          "arrow": {
+            "top": 596,
+            "bottom": 620,
+            "left": 165,
+            "right": 189
+          },
+          "arrowOrphan": false,
+          "contentFits": true,
+          "arrowFits": true,
+          "afterGap": 16,
+          "streamVisible": true,
+          "expanded": "false",
+          "order": [
+            "BUTTON",
+            "A",
+            "SPAN"
+          ],
+          "focusRing": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.82 0 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "topBorder": "1px",
+          "bottomBorder": "1px",
+          "ends": [],
+          "native": {
+            "text": "oklch(0.68 0 0)",
+            "border": "oklch(0.31431 0 0)"
+          },
+          "colors": [
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)",
+            "oklch(0.68 0 0)"
+          ],
+          "border": "oklch(0.31431 0 0)"
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "captures": [
+    "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-native-color-captures/native-gray-light-390x844.png",
+    "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-native-color-captures/native-gray-dark-390x844.png"
+  ],
+  "healthBefore": 200,
+  "healthAfter": 200
+}

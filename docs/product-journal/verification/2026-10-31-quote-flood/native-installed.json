@@ -1,0 +1,107 @@
+{
+  "method": "isolated headless Chromium; exact screenshot thread; actual installed assets, no interception",
+  "bundle": "a673068fb2c4b5dd",
+  "hashes": {
+    "group-tools.ts": "60918c5ee35db5df6e4bf522e1299b00e21c97dffbcc2fc9fce7a78925267197",
+    "group-tools.test.mjs": "ff4155093246c5a43fb1f9a623c4ce5fd53fbd21c46191fdae06ac814f67eb0a",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec"
+  },
+  "observations": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "closed": {
+        "key": "timeline:thr_s7z6upgkdt:thr_s7z6upgkdt:file-read:daf455b533-i92",
+        "metrics": "23 tools · 55.3s",
+        "headers": 1,
+        "quoteCount": 1,
+        "toolRows": 9,
+        "hiddenCount": 9,
+        "hidden": true,
+        "nativeErrorVisible": true,
+        "commentaryVisible": true,
+        "overflow": false,
+        "state": "error"
+      },
+      "open": {
+        "key": "timeline:thr_s7z6upgkdt:thr_s7z6upgkdt:file-read:daf455b533-i92",
+        "metrics": "23 tools · 55.3s",
+        "headers": 1,
+        "quoteCount": 1,
+        "toolRows": 9,
+        "hiddenCount": 0,
+        "hidden": false,
+        "nativeErrorVisible": true,
+        "commentaryVisible": true,
+        "overflow": false,
+        "state": "error"
+      },
+      "recollapsed": {
+        "key": "timeline:thr_s7z6upgkdt:thr_s7z6upgkdt:file-read:daf455b533-i92",
+        "metrics": "23 tools · 55.3s",
+        "headers": 1,
+        "quoteCount": 1,
+        "toolRows": 9,
+        "hiddenCount": 9,
+        "hidden": true,
+        "nativeErrorVisible": true,
+        "commentaryVisible": true,
+        "overflow": false,
+        "state": "error"
+      },
+      "served": [],
+      "errors": [],
+      "passed": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "closed": {
+        "key": "timeline:thr_s7z6upgkdt:thr_s7z6upgkdt:file-read:daf455b533-i92",
+        "metrics": "23 tools · 55.3s",
+        "headers": 1,
+        "quoteCount": 1,
+        "toolRows": 9,
+        "hiddenCount": 9,
+        "hidden": true,
+        "nativeErrorVisible": true,
+        "commentaryVisible": true,
+        "overflow": false,
+        "state": "error"
+      },
+      "open": {
+        "key": "timeline:thr_s7z6upgkdt:thr_s7z6upgkdt:file-read:daf455b533-i92",
+        "metrics": "23 tools · 55.3s",
+        "headers": 1,
+        "quoteCount": 1,
+        "toolRows": 9,
+        "hiddenCount": 0,
+        "hidden": false,
+        "nativeErrorVisible": true,
+        "commentaryVisible": true,
+        "overflow": false,
+        "state": "error"
+      },
+      "recollapsed": {
+        "key": "timeline:thr_s7z6upgkdt:thr_s7z6upgkdt:file-read:daf455b533-i92",
+        "metrics": "23 tools · 55.3s",
+        "headers": 1,
+        "quoteCount": 1,
+        "toolRows": 9,
+        "hiddenCount": 9,
+        "hidden": true,
+        "nativeErrorVisible": true,
+        "commentaryVisible": true,
+        "overflow": false,
+        "state": "error"
+      },
+      "served": [],
+      "errors": [],
+      "passed": true
+    }
+  ]
+}

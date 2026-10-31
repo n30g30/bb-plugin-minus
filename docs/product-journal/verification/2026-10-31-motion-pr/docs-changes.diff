@@ -1,0 +1,125 @@
+diff --git a/PLUGIN_OVERVIEW.md b/PLUGIN_OVERVIEW.md
+index 6e27165..bfe8e7f 100644
+--- a/PLUGIN_OVERVIEW.md
++++ b/PLUGIN_OVERVIEW.md
+@@ -24,7 +24,7 @@ Changes apply in every open window within about a second, without a reload. Keyb
+ 
+ ## Collapse tool calls
+ 
+-One more switch folds each run of consecutive tool calls in the chat into a single row styled after the native "Worked for" row. The summary shows a curated, self-contained italic Russian quote, linked author/source, a visible tool count, and the summed runtime of those calls. Text wraps naturally as the chat narrows. Quote, metrics and source keep BB's muted foreground token on hover and focus, with a visible keyboard focus ring. Click the row to show the original calls again. Counts and runtimes come from the complete thread timeline, so they include virtualized calls and update while a call is running. Concurrent calls are added together, so the total can exceed the group's wall-clock duration. A manual "Stopped manually" row stays visible outside the group and is excluded from both metrics.
++One more switch folds each run of consecutive tool calls in the chat into a single row styled after the native "Worked for" row. The summary shows a curated, self-contained italic Russian quote, inline Russian author/source attribution without a link, and a visible tool count. Text wraps naturally as the chat narrows. Quote, metrics and source keep BB's muted foreground token on hover and focus, with a visible keyboard focus ring. Click the quote, count/time or disclosure arrow to show the original calls again. A spinning ring indicates running calls; after the whole cycle finishes it becomes a static circle with a dot and the final summed duration appears. Durations use seconds, then minutes and seconds, then hours and minutes. Counts and runtimes come from the complete thread timeline, including virtualized calls; overlapping native summaries count each call once. Concurrent calls are added together, so the total can exceed the group's wall-clock duration. A manual "Stopped manually" row stays visible outside the group and is excluded from both metrics. Reduced-motion preferences are respected; offscreen and background animations pause.
+ 
+ ## How it works
+ 
+diff --git a/README.md b/README.md
+index e756b90..b8378ed 100644
+--- a/README.md
++++ b/README.md
+@@ -1,8 +1,8 @@
+ # bb-plugin-minus
+ 
+ A [bb](https://getbb.app) plugin that hides UI elements you do not want to see,
+-and can collapse tool calls in the chat behind a short Russian quote linked to
+-its source.
++and can collapse each continuous block of tool calls in the chat behind one
++short Russian quote with inline author attribution.
+ 
+ ## Install
+ 
+@@ -34,17 +34,23 @@ form on that page. Add an element by appending `{ key, label, selectors }` to
+ an area. Prefer bb's aria labels and `data-*` attributes over Tailwind classes.
+ 
+ `collapseToolCalls` is not CSS: `group-tools.ts` hides each run of tool rows in the top-level timeline and inserts a row styled after the native
+-"Worked for" row. The summary shows a curated, self-contained Russian quote, linked
+-author/source, a visible tool count, and the summed runtime across those calls.
++"Worked for" row. The summary shows a curated, self-contained Russian quote,
++Russian author/source attribution without a link, and a visible tool count.
+ The text wraps naturally as the chat narrows. Quote, metrics and source keep
+ BB's muted foreground token, including on hover and focus; keyboard focus has
+ a visible ring. bb virtualizes the timeline, so counts and runtimes come from
+ `sdk.threads.timeline()` (`kind: "work"` rows), including work that is not
+ currently mounted. Concurrent calls are added together, so the total can exceed
+ the group's wall-clock duration. A manual "Stopped manually" row stays visible
+-outside the group and is excluded from both metrics.
++outside the group and is excluded from both metrics. Each call is counted once,
++even when native summaries overlap. Adjacent API runs share one quote when no
++visible message or other meaningful boundary separates them.
+ 
+-Author names and work titles in the visible source link are shown in Russian. The complete link label wraps with the chat width; the original source URL stays unchanged.
++While calls are running, a native spinning ring indicates activity and the
++duration is hidden. After the whole cycle finishes, the icon becomes a static
++circle with a dot and the summed tool duration appears. Durations use seconds,
++then minutes and seconds, then hours and minutes. Reduced-motion preferences
++are respected; offscreen and background animations pause.
+ 
+ ## License
+ 
+@@ -52,4 +58,4 @@ MIT
+ 
+ Collapsing tools keeps reasoning, unknown streaming rows, nested agent timelines and delegation/workflow streams visible. When a completed stage is open, its commentary uses the normal chat inset without an enclosing Worked for disclosure; quote and metrics controls reveal only the tool rows. Turning grouping off restores the native presentation. Approval, question and form rows remain available for the user to respond. The summary reads quote → Russian author/source → tool count and total time, with a shared native horizontal inset.
+ 
+-The current accepted UI reference is [tool-group dividers, 2026-10-30](docs/product-journal/2026-10-30-dividers.md), approved by the owner in the Minus thread: a wrapping muted quote, Russian author/source, call count and time, with dividers around the group. Agent streams remain outside the dividers.
++The current accepted UI reference is [one summary per continuous tool block, 2026-10-31](docs/product-journal/2026-10-31-quote-flood.md), accepted by the owner in the Minus thread: “Теперь без флуда, оставляем”. It extends the accepted [ring, dot, disclosure arrow and final time](docs/product-journal/2026-10-30-ring-arrow.md) and the earlier divider/spacing decisions. Agent streams remain outside the dividers; quote and Russian attribution flow together without a link or forced line break. The [motion check and fork integration decision](docs/product-journal/2026-10-31-motion-pr.md) preserve this visual reference.
+diff --git a/skills/minus/SKILL.md b/skills/minus/SKILL.md
+index 310aaee..caf34b1 100644
+--- a/skills/minus/SKILL.md
++++ b/skills/minus/SKILL.md
+@@ -14,16 +14,16 @@ bb plugin config minus set <key> true|false
+ 
+ Keys: `hideWindowFrame` (macOS app workbench padding and rounded corners), `hideEmptyProjects`, `hideNavButtons`, `hideSidebarToggle` (⌘B still works), `hideRightPanelToggle` (⌘J still works),
+ `hideFooterMore`, `hideThreadHeaderMore`, `hideThreadRowMore` (right-click still opens thread actions),
+-`hideOpenIn` (⌘O still opens the default app), `hideCommit`, `collapseQueue` (queue starts collapsed), `hidePromptCollapse`, `hidePromptPlaceholder`, `hideClosePane`, `hideComposerFolder`, `hideComposerCheckout`, `hideComposerBranch`, `hideComposerNewThread`, `hideComposerContext`, `hidePromptPlus`, `hideModelSelector`, `hidePromptProviderIcon`, `hideMic`, `hideSend` (send, send options and stop; Enter still sends), `hideMessageActions` (copy/edit/side chat/"..." under messages), `hideSteerLabel`, `hideCodeBlockActions` (wrap/copy on code blocks), `hideMessageNav` (the jump-to-message rail), `hideThinking`, `hideThreadIcons`, `collapseToolCalls` (groups each run of tool rows behind a short Russian quote with its source link; the count and expand/collapse action remain accessible).
++`hideOpenIn` (⌘O still opens the default app), `hideCommit`, `collapseQueue` (queue starts collapsed), `hidePromptCollapse`, `hidePromptPlaceholder`, `hideClosePane`, `hideComposerFolder`, `hideComposerCheckout`, `hideComposerBranch`, `hideComposerNewThread`, `hideComposerContext`, `hidePromptPlus`, `hideModelSelector`, `hidePromptProviderIcon`, `hideMic`, `hideSend` (send, send options and stop; Enter still sends), `hideMessageActions` (copy/edit/side chat/"..." under messages), `hideSteerLabel`, `hideCodeBlockActions` (wrap/copy on code blocks), `hideMessageNav` (the jump-to-message rail), `hideThinking`, `hideThreadIcons`, `collapseToolCalls` (groups each continuous tool block behind one short Russian quote with inline author attribution; the count and expand/collapse action remain accessible).
+ 
+ When `collapseToolCalls` is enabled, the collapsed row keeps the Russian quote,
+-author/source link, visible tool count, and summed tool runtime in a muted
++Russian author/source attribution without a link, visible tool count, and final summed tool runtime in a muted
+ summary. Its text wraps as the chat narrows; the quote, metrics and source stay
+ gray on hover and focus, with a visible keyboard focus ring. Quotes are curated
+ to read as self-contained thoughts. Parallel calls contribute their individual runtimes to the sum;
+ the manual "Stopped manually" row stays separate and is not counted.
+ Users can also flip the settings in Settings → Plugins → Minus.
+ 
+-Author names and work titles in the visible source link are shown in Russian. The complete link label wraps with the chat width; the original source URL stays unchanged.
++Quote and Russian attribution flow together without a forced line break and wrap naturally with the chat width. During execution the ring spins and duration stays hidden; after the complete tool cycle it becomes a static circle with a dot and the final duration appears. Times use seconds, then minutes/seconds, then hours/minutes. Reduced-motion preferences are respected; offscreen and background animations pause.
+ 
+ Collapsing tools keeps reasoning, unknown streaming rows, nested agent timelines and delegation/workflow streams visible. When a completed stage is open, its commentary uses the normal chat inset without an enclosing Worked for disclosure; quote and metrics controls reveal only the tool rows. Turning grouping off restores the native presentation. Approval, question and form rows remain available for the user to respond. The summary reads quote → Russian author/source → tool count and total time, with a shared native horizontal inset.
+diff --git a/docs/product-journal/2026-10-31-motion-pr.md b/docs/product-journal/2026-10-31-motion-pr.md
+new file mode 100644
+index 0000000..14e33df
+--- /dev/null
++++ b/docs/product-journal/2026-10-31-motion-pr.md
+@@ -0,0 +1,33 @@
++---
++title: Minus — анимация работы и интеграция в свой репозиторий
++status: in progress
++updated: 2026-10-31
++---
++
++# Анимация работы и адресат PR
++
++## Решения владельца
++
++После приёмки исправления флуда («Теперь без флуда, оставляем») Вадик выбрал в форме: «Адресат интеграции; merge согласуется отдельно: Подготовить PR в vadikhq — рекомендую». Цель — подготовить отдельный PR в `vadikhq/bb-plugin-minus`, из текущей `bb/minus-tool-call-quotes` в `main`. Ветка и workspace сохраняются. PR #2 в `n30g30/bb-plugin-minus` не закрываем и не перенаправляем. Создание PR ждёт согласования окончательных заголовка и описания; merge и deploy отдельно не разрешены.
++
++Затем Вадик уточнил: при замене инструментов цитатой нужен анимированный индикатор во время работы и статичный после окончания. Продолжаем принятую основу [кольцо → круг с точкой](2026-10-30-ring-arrow.md) и [одна сводка на непрерывный блок](2026-10-31-quote-flood.md). Новый словарь и новые значки не нужны.
++
++## Проверка установленной анимации
++
++В source `eb5f9157786c412ebf2a26fa48641617a6b53400`, bundle `a673068fb2c4b5dd` уже реализован native `--animate-spin`: разомкнутое кольцо вращается во время pending. После completed — статичный круг с точкой. Длительность скрыта до завершения цикла; выключение или повторная установка не требуются.
++
++[Настоящий frontend](verification/2026-10-31-motion-pr/native-motion.json) проверен в isolated headless Chromium без interception JS/CSS/API и без изменения общего runtime: 390/1280 px, обычное и reduced motion. В обычном режиме у настоящего pending-кольца animationName=spin, currentTime растёт и transform меняется между кадрами; завершённая точка не имеет анимаций. При reduced motion кольцо статично, подпись «Выполняется» и отличие от завершённой точки сохраняются. Во всех четырёх contexts нет переполнения или browser errors; source/bundle и health до/после совпадают.
++
++Предварительная проба с клоном marker внутри работающего frontend была невалидной: Minus удалил чужой marker на следующем pass. Она не считается проверкой анимации. Итоговый evidence использует только настоящие подключённые pending/completed элементы.
++
++## Сверка навыков
++
++`bb-plugin-workflow` / `bb-plugin-authoring`: source/app/manifest/SDK/settings/rails не менялись. Settings остаются в существующей секции Minus; нового действия для rails нет. Исполняемые байты совпадают с прежними 89 тестами, strict TypeScript, build и независимым ревью; повтор полного suite при изменениях только документации не нужен.
++
++`impeccable` animate/polish в Operate и `frontend-design`: движение объясняет реальную работу, по окончании прекращается; переиспользуется существующий native spin с периодом 1s из computed token, собственный тайминг не вводится. Серый, размеры, отступы, разделители и стрелка сохранены. Имеющийся lifecycle паузы вне viewport/в фоне покрыт прежним тестом; новый native evidence подтверждает фактическое движение и reduced motion. Новый макет не создаётся.
++
++Документация README/overview/встроенного навыка приведена к принятой редакции: убраны устаревшие утверждения о ссылке источника и текущих секундах во время выполнения. Указатель текущего UI в README ведёт к принятой редакции от 31 октября и связанным решениям. Внешнее описание PR готовится по полному diff относительно main собственного fork, а не только последнему исправлению.
++
++## Граница применения и откат
++
++Программное поведение и установленная версия в этом шаге не менялись. Исправлены только документы и сохранён новый read-only evidence. Для отмены этой записи и документальных уточнений достаточно обратного diff их commit; откат установленного плагина не требуется. Подготовленный PR ещё не создан, его номер не присвоен; после согласования точного текста нужно создать PR, связать его с тредом и проверить local/remote/PR head. Слияние и установка не входят в это разрешение.

@@ -24,8 +24,10 @@ Changes apply in every open window within about a second, without a reload. Keyb
 
 ## Collapse tool calls
 
-One more switch folds each run of consecutive tool calls and thinking rows in the chat into a single "Called N tools" row, styled like bb's own "Worked for" row. Click it to show the original rows again. The count comes from the thread's full timeline, so it stays exact while the turn runs.
+One more switch folds each run of consecutive tool calls in the chat into a single row styled after the native "Worked for" row. The summary shows a curated, self-contained italic Russian quote, inline Russian author/source attribution without a link, and a visible tool count. Text wraps naturally as the chat narrows. Quote, metrics and source keep BB's muted foreground token on hover and focus, with a visible keyboard focus ring. Click the quote, count/time or disclosure arrow to show the original calls again. A spinning ring indicates running calls; after the whole cycle finishes it becomes a static circle with a dot and the final summed duration appears. Durations use seconds, then minutes and seconds, then hours and minutes. Counts and runtimes come from the complete thread timeline, including virtualized calls; overlapping native summaries count each call once. Concurrent calls are added together, so the total can exceed the group's wall-clock duration. A manual "Stopped manually" row stays visible outside the group and is excluded from both metrics. Reduced-motion preferences are respected; offscreen and background animations pause.
 
 ## How it works
 
 The plugin hides bb's own elements by their labels and data attributes. A bb update that renames an element brings it back until the plugin is updated. Agents can toggle the switches with `bb plugin config minus set <key> true`.
+
+Collapsing tools keeps reasoning, unknown streaming rows, nested agent timelines and delegation/workflow streams visible. Approval, question and form rows remain available for the user to respond. The summary reads quote → Russian author/source → tool count and total time, with a shared native horizontal inset.

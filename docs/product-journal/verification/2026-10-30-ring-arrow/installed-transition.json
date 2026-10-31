@@ -1,0 +1,22 @@
+{
+  "method": "isolated headless Chromium; actual installed frontend; real task tool-call transitions; no API/JS/CSS interception",
+  "bundle": "fac6b1fb37e65094",
+  "before": {
+    "state": "pending",
+    "label": "Выполняется",
+    "metrics": "5 tools",
+    "chevron": "1",
+    "animation": "spin",
+    "icon": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>"
+  },
+  "after": {
+    "state": "completed",
+    "label": "Завершено",
+    "metrics": "5 tools · 6.7s",
+    "chevron": "1",
+    "animation": "none",
+    "icon": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>"
+  },
+  "errors": [],
+  "passed": true
+}

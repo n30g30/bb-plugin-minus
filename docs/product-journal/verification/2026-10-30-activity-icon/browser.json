@@ -1,0 +1,173 @@
+{
+  "method": "isolated headless Chromium; current module, native BB CSS, disposable tool timeline fixture; SVG size from accepted size-3.5 native 4px spacing; motion uses native animate-spin 1s",
+  "hashes": {
+    "group-tools.ts": "b208ef44167745887b58c8b521dd51c264f3cc3dabc24c06390a9a373c580fea",
+    "group-tools.test.mjs": "9ed937903572ac03deb16b1eeb38e3fc95088fc4c48d7896d7b87a9be6f09df5",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec"
+  },
+  "observations": [
+    {
+      "reducedMotion": "no-preference",
+      "pending": {
+        "state": "pending",
+        "label": "Выполняется",
+        "animation": "spin",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "described": true
+      },
+      "completed": {
+        "state": "completed",
+        "label": "Завершено",
+        "animation": "none",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "described": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "reducedMotion": "reduce",
+      "pending": {
+        "state": "pending",
+        "label": "Выполняется",
+        "animation": "none",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "described": true
+      },
+      "completed": {
+        "state": "completed",
+        "label": "Завершено",
+        "animation": "none",
+        "playState": "running",
+        "iconWidth": 14,
+        "color": "oklch(0.5 0 0)",
+        "quoteColor": "oklch(0.5 0 0)",
+        "overflow": false,
+        "described": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "phase": "error",
+      "state": "error",
+      "passed": true
+    },
+    {
+      "phase": "cancelled",
+      "state": "cancelled",
+      "passed": true
+    },
+    {
+      "phase": "unknown-provider-state",
+      "state": "unknown",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "prefix": "light-pending",
+      "receipt": {
+        "url": "http://127.0.0.1:50366/?theme=light&phase=pending",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-icon-captures/light-pending-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 22172,
+            "sha256": "b41b2f388f527960cb47f7486f7b7a26654d22329e2ed3a1514dcd342f523ee5"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-icon-captures/light-pending-390x600.png",
+            "viewport": "390x600",
+            "bytes": 19094,
+            "sha256": "22014457dd97737582152806a1149ecf4143baf60a364c86a4b0b6f8ffef323f"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "light-completed",
+      "receipt": {
+        "url": "http://127.0.0.1:50366/?theme=light&phase=completed",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-icon-captures/light-completed-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 22184,
+            "sha256": "ccb1a8171f6b8076511d926eaf5e8ba5244ced04a7e99a47817026517f07671e"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-icon-captures/light-completed-390x600.png",
+            "viewport": "390x600",
+            "bytes": 19034,
+            "sha256": "d6bdd724380014c2828565415ecdf590e9524855b4279ae1874c1e1b25d28eb8"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "dark-pending",
+      "receipt": {
+        "url": "http://127.0.0.1:50366/?theme=dark&phase=pending",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-icon-captures/dark-pending-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 21891,
+            "sha256": "6be3148b1f8ffc500d89b784817e5ad8f527b9a38c9681d63b63ccd98c4674b1"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-icon-captures/dark-pending-390x600.png",
+            "viewport": "390x600",
+            "bytes": 18988,
+            "sha256": "eb9f4df25084936d92301aa2928b0ef2a159db2c9e1cd77cdc5ed5e84890f12a"
+          }
+        ]
+      }
+    },
+    {
+      "prefix": "dark-completed",
+      "receipt": {
+        "url": "http://127.0.0.1:50366/?theme=dark&phase=completed",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-icon-captures/dark-completed-1280x600.png",
+            "viewport": "1280x600",
+            "bytes": 21922,
+            "sha256": "106f03e30257986228891267cc53c1a4c11ac823d7c01e4e851614c862b5e447"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-icon-captures/dark-completed-390x600.png",
+            "viewport": "390x600",
+            "bytes": 18934,
+            "sha256": "2dcad1791acfe68570dc4f48ca70cd458b0c0c2e5d9e09027787896d055b51a4"
+          }
+        ]
+      }
+    }
+  ]
+}

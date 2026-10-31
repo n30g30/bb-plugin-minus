@@ -1,0 +1,265 @@
+{
+  "method": "isolated headless Chromium; installed frontend and real timeline; no interception or runtime mutation",
+  "source": "git:https://github.com/vadikhq/bb-plugin-minus.git@eb5f9157786c412ebf2a26fa48641617a6b53400",
+  "bundle": "a673068fb2c4b5dd",
+  "hashes": {
+    "group-tools.ts": "60918c5ee35db5df6e4bf522e1299b00e21c97dffbcc2fc9fce7a78925267197",
+    "group-tools.test.mjs": "ff4155093246c5a43fb1f9a623c4ce5fd53fbd21c46191fdae06ac814f67eb0a",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec",
+    "quotes.ts": "f0602bcffd488c315c68af1a0ab4adce84dccd4cfa35bbfae68f67744bd8806a"
+  },
+  "observations": [
+    {
+      "width": 390,
+      "reducedMotion": "no-preference",
+      "active": {
+        "first": {
+          "connected": true,
+          "state": "pending",
+          "label": "Выполняется",
+          "animation": "1s linear 0s infinite normal none running spin",
+          "animationName": "spin",
+          "transform": "matrix(-0.261315, 0.965254, -0.965254, -0.261315, 0, 0)",
+          "animations": [
+            {
+              "time": 292.077999992296,
+              "playState": "running"
+            }
+          ],
+          "metrics": "5 tools",
+          "icon": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>",
+          "overflow": false
+        },
+        "last": {
+          "connected": true,
+          "state": "pending",
+          "label": "Выполняется",
+          "animation": "1s linear 0s infinite normal none running spin",
+          "animationName": "spin",
+          "transform": "matrix(-0.934055, 0.357128, -0.357128, -0.934055, 0, 0)",
+          "animations": [
+            {
+              "time": 441.87799999229594,
+              "playState": "running"
+            }
+          ],
+          "metrics": "5 tools",
+          "icon": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>",
+          "overflow": false
+        }
+      },
+      "completed": {
+        "first": {
+          "connected": true,
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "0s ease 0s 1 normal none paused none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "2 tools · 15ms",
+          "icon": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>",
+          "overflow": false
+        },
+        "last": {
+          "connected": true,
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "0s ease 0s 1 normal none paused none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "2 tools · 15ms",
+          "icon": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>",
+          "overflow": false
+        }
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "reducedMotion": "reduce",
+      "active": {
+        "first": {
+          "connected": true,
+          "state": "pending",
+          "label": "Выполняется",
+          "animation": "0s ease 0s 1 normal none running none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "5 tools",
+          "icon": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>",
+          "overflow": false
+        },
+        "last": {
+          "connected": true,
+          "state": "pending",
+          "label": "Выполняется",
+          "animation": "0s ease 0s 1 normal none running none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "5 tools",
+          "icon": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>",
+          "overflow": false
+        }
+      },
+      "completed": {
+        "first": {
+          "connected": true,
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "0s ease 0s 1 normal none paused none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "2 tools · 15ms",
+          "icon": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>",
+          "overflow": false
+        },
+        "last": {
+          "connected": true,
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "0s ease 0s 1 normal none paused none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "2 tools · 15ms",
+          "icon": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>",
+          "overflow": false
+        }
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "reducedMotion": "no-preference",
+      "active": {
+        "first": {
+          "connected": true,
+          "state": "pending",
+          "label": "Выполняется",
+          "animation": "1s linear 0s infinite normal none running spin",
+          "animationName": "spin",
+          "transform": "matrix(0.994594, 0.103843, -0.103843, 0.994594, 0, 0)",
+          "animations": [
+            {
+              "time": 2016.5569999959785,
+              "playState": "running"
+            }
+          ],
+          "metrics": "5 tools",
+          "icon": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>",
+          "overflow": false
+        },
+        "last": {
+          "connected": true,
+          "state": "pending",
+          "label": "Выполняется",
+          "animation": "1s linear 0s infinite normal none running spin",
+          "animationName": "spin",
+          "transform": "matrix(0.869076, 0.494678, -0.494678, 0.869076, 0, 0)",
+          "animations": [
+            {
+              "time": 2082.356999995978,
+              "playState": "running"
+            }
+          ],
+          "metrics": "5 tools",
+          "icon": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>",
+          "overflow": false
+        }
+      },
+      "completed": {
+        "first": {
+          "connected": true,
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "0s ease 0s 1 normal none paused none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "2 tools · 15ms",
+          "icon": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>",
+          "overflow": false
+        },
+        "last": {
+          "connected": true,
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "0s ease 0s 1 normal none paused none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "2 tools · 15ms",
+          "icon": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>",
+          "overflow": false
+        }
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "reducedMotion": "reduce",
+      "active": {
+        "first": {
+          "connected": true,
+          "state": "pending",
+          "label": "Выполняется",
+          "animation": "0s ease 0s 1 normal none running none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "5 tools",
+          "icon": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>",
+          "overflow": false
+        },
+        "last": {
+          "connected": true,
+          "state": "pending",
+          "label": "Выполняется",
+          "animation": "0s ease 0s 1 normal none running none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "5 tools",
+          "icon": "<path d=\"M12 2a10 10 0 1 0 10 10\"></path>",
+          "overflow": false
+        }
+      },
+      "completed": {
+        "first": {
+          "connected": true,
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "0s ease 0s 1 normal none paused none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "2 tools · 15ms",
+          "icon": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>",
+          "overflow": false
+        },
+        "last": {
+          "connected": true,
+          "state": "completed",
+          "label": "Завершено",
+          "animation": "0s ease 0s 1 normal none paused none",
+          "animationName": "none",
+          "transform": "none",
+          "animations": [],
+          "metrics": "2 tools · 15ms",
+          "icon": "<circle cx=\"12\" cy=\"12\" r=\"9\"></circle><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" stroke=\"none\"></circle>",
+          "overflow": false
+        }
+      },
+      "errors": [],
+      "passed": true
+    }
+  ]
+}
