@@ -1,0 +1,145 @@
+{
+  "provenance": "Derived from exact screenshot-thread API snapshot maxSeq291; private IDs/absolute timestamps/content omitted. Compare only first completed region before error, not later growing rows.",
+  "members": [
+    {
+      "member": "tool-01",
+      "workKind": "file-read",
+      "status": "error",
+      "durationMs": 36
+    },
+    {
+      "member": "tool-02",
+      "workKind": "file-read",
+      "status": "completed",
+      "durationMs": 11
+    },
+    {
+      "member": "tool-03",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 1899
+    },
+    {
+      "member": "tool-04",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 2165
+    },
+    {
+      "member": "tool-05",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 2246
+    },
+    {
+      "member": "tool-06",
+      "workKind": "tool",
+      "status": "completed",
+      "durationMs": 2303
+    },
+    {
+      "member": "tool-07",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 2358
+    },
+    {
+      "member": "tool-08",
+      "workKind": "tool",
+      "status": "completed",
+      "durationMs": 1828
+    },
+    {
+      "member": "tool-09",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 3238
+    },
+    {
+      "member": "tool-10",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 3049
+    },
+    {
+      "member": "tool-11",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 1819
+    },
+    {
+      "member": "tool-12",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 3151
+    },
+    {
+      "member": "tool-13",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 5091
+    },
+    {
+      "member": "tool-14",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 1749
+    },
+    {
+      "member": "tool-15",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 1523
+    },
+    {
+      "member": "tool-16",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 5171
+    },
+    {
+      "member": "tool-17",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 3684
+    },
+    {
+      "member": "tool-18",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 1795
+    },
+    {
+      "member": "tool-19",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 6072
+    },
+    {
+      "member": "tool-20",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 4177
+    },
+    {
+      "member": "tool-21",
+      "workKind": "file-read",
+      "status": "completed",
+      "durationMs": 54
+    },
+    {
+      "member": "tool-22",
+      "workKind": "file-read",
+      "status": "completed",
+      "durationMs": 30
+    },
+    {
+      "member": "tool-23",
+      "workKind": "command",
+      "status": "completed",
+      "durationMs": 1880
+    }
+  ],
+  "uniqueCount": 23,
+  "sumDurationMs": 55329
+}

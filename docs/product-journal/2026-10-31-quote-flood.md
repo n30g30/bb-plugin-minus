@@ -1,6 +1,6 @@
 ---
 title: Minus — одна цитата на непрерывный блок инструментов
-status: in progress
+status: done
 updated: 2026-10-31
 ---
 
@@ -53,3 +53,14 @@ DOM-соседние инструменты получают одну сводк
 ## Независимое ревью точной редакции
 
 Reviewer подтвердил отсутствие P1/P2 на hashes 60918c5… / ff415509… / cc064c58…. Просмотрены все 12 PNG и native candidate JSON; JUnit 89/89. Три дополнительные независимые DOM-пробы подтвердили последний явный close и focus правых метрик, отсутствие заимствования соседних calls неполной summary и границу разных API sibling sources. Первая попытка reviewer harness была невалидной и не считается PASS; исправленные адресные пробы прошли. Reviewer файлов/runtime не менял. [Шаблон и CSS](verification/2026-10-31-quote-flood/style-unchanged.json) побайтно совпадают с принятой основой.
+
+
+## Установленная редакция
+
+Проверенная редакция опубликована коммитом `eb5f9157786c412ebf2a26fa48641617a6b53400`. Перед установкой local/remote/PR head совпали; GitHub Actions workflows на исполняемых head/base отсутствуют. Текущий PR #2 остаётся открытым, новый PR и merge не выполнялись.
+
+Штатное install job `25debeb7-efdc-4512-a864-4eefd4d6fa81` завершилось succeeded. [Отдельное чтение результата](verification/2026-10-31-quote-flood/installed-readback.json): source exact `eb5f9157786c412ebf2a26fa48641617a6b53400`, bundle `a673068fb2c4b5dd`, enabled/running, statusDetail=null, source/test/app/quotes hashes совпадают, все 31 settings равны непосредственному baseline. Restore потребовался только для collapseToolCalls=true. Backend не имеет secrets/storage/KV/schedules/host entry; исходный словарь не менялся. Общий BB не перезапускался.
+
+[Настоящий установленный frontend](verification/2026-10-31-quote-flood/native-installed.json), без interception JS/CSS/API, подтверждает исходный сценарий на 1280/390 px: одна цитатная сводка, 23 tools · 55.3s, при раскрытии hiddenCount=0, после Space hiddenCount=9; комментарий и нативная ошибка видимы, browser errors отсутствуют. [Проверяемый пересчёт](verification/2026-10-31-quote-flood/membership.json) сохраняет обезличенные 23 durations/status без приватного текста и IDs.
+
+Откат — штатно установить прежний source `0942a77d446dece4a572ac0bafc2873b6a0c1c74` и восстановить сохранённые 31 boolean settings; предыдущий commit доступен в опубликованной истории origin. Ни remotes, ни auth/scopes не менялись. Выбор собственного fork/upstream не принят за владельца. Эта запись применения будет отдельным docs-коммитом; исполняемые байты остаются проверенными выше.
