@@ -465,6 +465,18 @@ export function mountToolGrouping(
     turnChoices.set(row.dataset.timelineRowId!, button.getAttribute("aria-expanded") !== "true");
   }
 
+  // API reasoning can live inside native tool bundles without a visible row.
+  // Only DOM-adjacent tools may share a disclosure across that hidden detail;
+  // source boundaries and virtualization spacers remain independent.
+  function canJoinAdjacentApiRows(left: HTMLElement, right: HTMLElement, runs: ThreadRuns): boolean {
+    const a = runs.sourceOf.get(apiId(left));
+    const b = runs.sourceOf.get(apiId(right));
+    if (a === undefined || b === undefined || a.source !== b.source || a.index >= b.index) return false;
+    return a.source.slice(a.index, b.index + 1).every(row =>
+      runs.collapsible.get(row.id) === true ||
+      (row.kind === "system" && row.operationKind === "reasoning" && row.status === "completed"));
+  }
+
   function apiRun(rows: HTMLElement[]): {
     key: string;
     count: number;
@@ -486,7 +498,8 @@ export function mountToolGrouping(
       refresh(threadId);
       return null;
     }
-    if (summaries.some(members => members !== undefined)) {
+    const runIds = new Set(rows.map(row => runs.runOf.get(apiId(row))).filter(id => id !== undefined));
+    if (summaries.some(members => members !== undefined) || runIds.size > 1) {
       const members = new Map<string, TimelineRow>();
       let unknownCount = 0;
       for (const [index, row] of rows.entries()) {
@@ -553,10 +566,18 @@ export function mountToolGrouping(
     const api = threads.get(threadId);
     if (api === undefined) return [rows];
 
+    // Native summaries may start at reasoning rather than their first tool.
+    // A fully verified adjacent span does not need one quote per API run.
+    const mounted = rows.filter(row => row.dataset.timelineRowId !== undefined);
+    if (!rows.some(row => row.hasAttribute("data-timeline-window-spacer")) &&
+      mounted.length > 1 && mounted.slice(1).every((row, index) => canJoinAdjacentApiRows(mounted[index], row, api))) {
+      return [rows];
+    }
     const groups: HTMLElement[][] = [];
     let group: HTMLElement[] = [];
     let pendingSpacers: HTMLElement[] = [];
     let openRun: number | undefined;
+    let previousApiRow: HTMLElement | undefined;
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       if (row.hasAttribute("data-timeline-window-spacer")) {
@@ -606,7 +627,8 @@ export function mountToolGrouping(
         }
         continue;
       }
-      if (openRun !== undefined && run !== openRun) {
+      if (openRun !== undefined && run !== openRun &&
+        !(pendingSpacers.length === 0 && previousApiRow !== undefined && canJoinAdjacentApiRows(previousApiRow, row, api))) {
         for (const spacer of pendingSpacers) spacer.removeAttribute(HIDDEN);
         pendingSpacers = [];
         if (group.length > 0) groups.push(group);
@@ -616,6 +638,7 @@ export function mountToolGrouping(
         pendingSpacers = [];
       }
       openRun = run;
+      previousApiRow = row;
     }
     if (group.length > 0) groups.push(group);
     for (const spacer of pendingSpacers) spacer.removeAttribute(HIDDEN);
@@ -752,11 +775,26 @@ export function mountToolGrouping(
       for (const { api } of parts) {
         if (api !== null) apiParts.set(api.key, (apiParts.get(api.key) ?? 0) + 1);
       }
-      for (const { rows, api: candidate } of parts) {
+      // Different keys can still claim the same virtualized API members.
+      // Do not present duplicated full-run totals for separate DOM parts.
+      const memberOwners = new Map<string, (typeof parts)[number]>();
+      const ambiguousParts = new Set<(typeof parts)[number]>();
+      for (const part of parts) {
+        for (const id of part.api?.memberIds ?? []) {
+          const previous = memberOwners.get(id);
+          if (previous !== undefined) {
+            ambiguousParts.add(previous);
+            ambiguousParts.add(part);
+          }
+          memberOwners.set(id, part);
+        }
+      }
+      for (const part of parts) {
+        const { rows, api: candidate } = part;
         // A pending/stale API run can span separate visible DOM parts. Give each
         // part its row fallback identity rather than moving one header/end
         // between them on every observer pass. Full-run metrics are ambiguous.
-        const api = candidate !== null && apiParts.get(candidate.key) === 1 ? candidate : null;
+        const api = candidate !== null && apiParts.get(candidate.key) === 1 && !ambiguousParts.has(part) ? candidate : null;
         const calls =
           api?.count ??
           rows.reduce((sum, row) => sum + (row.dataset.timelineRowId === undefined ? 0 : domCount(row)), 0);

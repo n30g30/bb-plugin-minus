@@ -1,0 +1,384 @@
+{
+  "method": "isolated headless Chromium; current source, native BB CSS, disposable tool+reasoning fixture; no shared BB mutation",
+  "hashes": {
+    "group-tools.ts": "60918c5ee35db5df6e4bf522e1299b00e21c97dffbcc2fc9fce7a78925267197",
+    "group-tools.test.mjs": "ff4155093246c5a43fb1f9a623c4ce5fd53fbd21c46191fdae06ac814f67eb0a",
+    "app.tsx": "cc064c58a98d29dd42b602aba55fa63d685845d143569389f9088669637486ec"
+  },
+  "observations": [
+    {
+      "width": 320,
+      "zoom": 1,
+      "theme": "light",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.5 0 0)",
+        "iconColor": "oklch(0.5 0 0)",
+        "paddingTop": "16px",
+        "paddingBottom": "16px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "zoom": 1,
+      "theme": "dark",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.68 0 0)",
+        "iconColor": "oklch(0.68 0 0)",
+        "paddingTop": "16px",
+        "paddingBottom": "16px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "zoom": 2,
+      "theme": "light",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.5 0 0)",
+        "iconColor": "oklch(0.5 0 0)",
+        "paddingTop": "32px",
+        "paddingBottom": "32px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "zoom": 2,
+      "theme": "dark",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.68 0 0)",
+        "iconColor": "oklch(0.68 0 0)",
+        "paddingTop": "32px",
+        "paddingBottom": "32px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "zoom": 1,
+      "theme": "light",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.5 0 0)",
+        "iconColor": "oklch(0.5 0 0)",
+        "paddingTop": "16px",
+        "paddingBottom": "16px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "zoom": 1,
+      "theme": "dark",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.68 0 0)",
+        "iconColor": "oklch(0.68 0 0)",
+        "paddingTop": "16px",
+        "paddingBottom": "16px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "zoom": 2,
+      "theme": "light",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.5 0 0)",
+        "iconColor": "oklch(0.5 0 0)",
+        "paddingTop": "32px",
+        "paddingBottom": "32px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "zoom": 2,
+      "theme": "dark",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.68 0 0)",
+        "iconColor": "oklch(0.68 0 0)",
+        "paddingTop": "32px",
+        "paddingBottom": "32px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "zoom": 1,
+      "theme": "light",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.5 0 0)",
+        "iconColor": "oklch(0.5 0 0)",
+        "paddingTop": "16px",
+        "paddingBottom": "16px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "zoom": 1,
+      "theme": "dark",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.68 0 0)",
+        "iconColor": "oklch(0.68 0 0)",
+        "paddingTop": "16px",
+        "paddingBottom": "16px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "zoom": 2,
+      "theme": "light",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.5 0 0)",
+        "iconColor": "oklch(0.5 0 0)",
+        "paddingTop": "32px",
+        "paddingBottom": "32px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "zoom": 2,
+      "theme": "dark",
+      "geometry": {
+        "overflow": false,
+        "quotes": 1,
+        "metrics": "3 tools · 1m 08s",
+        "color": "oklch(0.68 0 0)",
+        "iconColor": "oklch(0.68 0 0)",
+        "paddingTop": "32px",
+        "paddingBottom": "32px",
+        "borderTop": "1px",
+        "borderBottom": "1px",
+        "chevronVisible": true
+      },
+      "errors": [],
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "theme": "light",
+      "variant": "pending",
+      "receipt": {
+        "url": "http://127.0.0.1:52835/?theme=light&phase=pending&open=0",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/light-pending-760x320.png",
+            "viewport": "760x320",
+            "bytes": 17449,
+            "sha256": "abcafe19d3823cec411d220159361e48105232cbea09ef3269b61e432c25f8ce"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/light-pending-390x420.png",
+            "viewport": "390x420",
+            "bytes": 17223,
+            "sha256": "48567c35fdc46b8739b14afe5c8a65a21ffe021f0c2d59128d94642741967bc4"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "variant": "closed",
+      "receipt": {
+        "url": "http://127.0.0.1:52835/?theme=light&phase=completed&open=0",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/light-closed-760x320.png",
+            "viewport": "760x320",
+            "bytes": 17968,
+            "sha256": "b3c21be0f6e9880f4ee7e7536d56b93fb04695b7300a18b8b63988ccd2c14658"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/light-closed-390x420.png",
+            "viewport": "390x420",
+            "bytes": 17635,
+            "sha256": "0662bbd47459ee13106654d76ce4042afe26eca7bbb640c0f96de08d78a90399"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "variant": "open",
+      "receipt": {
+        "url": "http://127.0.0.1:52835/?theme=light&phase=completed&open=1",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/light-open-760x320.png",
+            "viewport": "760x320",
+            "bytes": 23863,
+            "sha256": "baa84d830c3e385a674a3af4bea9e1a8e96878d054393728e7a7ace02fde1d02"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/light-open-390x420.png",
+            "viewport": "390x420",
+            "bytes": 23067,
+            "sha256": "f17744185a7e22b15d29beb5046c8bc9f274644e6214ebc5aa23fba7743a6193"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "variant": "pending",
+      "receipt": {
+        "url": "http://127.0.0.1:52835/?theme=dark&phase=pending&open=0",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/dark-pending-760x320.png",
+            "viewport": "760x320",
+            "bytes": 17343,
+            "sha256": "74f8347d3e0096366f80fc904c28f156f83229ead2c95f48a3373b54f78fdb10"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/dark-pending-390x420.png",
+            "viewport": "390x420",
+            "bytes": 16977,
+            "sha256": "b9837499bc72778dcbf518617b9eb480cf29222c69d70de4a90b541bdbc3b8ab"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "variant": "closed",
+      "receipt": {
+        "url": "http://127.0.0.1:52835/?theme=dark&phase=completed&open=0",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/dark-closed-760x320.png",
+            "viewport": "760x320",
+            "bytes": 17832,
+            "sha256": "b2aac1e09f28ba2c3b23659d3c409661a5df23b4c305188d1483a8a06669db1c"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/dark-closed-390x420.png",
+            "viewport": "390x420",
+            "bytes": 17367,
+            "sha256": "4b3af4b4a1b0801b34044654d9f605bdf17f6eb88183d05a1c75e49e5cc24113"
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "variant": "open",
+      "receipt": {
+        "url": "http://127.0.0.1:52835/?theme=dark&phase=completed&open=1",
+        "method": "isolated headless Chromium",
+        "browser": "Chromium 143.0.7499.4",
+        "deviceScaleFactor": 1,
+        "captures": [
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/dark-open-760x320.png",
+            "viewport": "760x320",
+            "bytes": 23568,
+            "sha256": "65ec17ff114fd9710a7bd50bb89ae2448d422a45a45cc6445cc97665571f331a"
+          },
+          {
+            "file": "/Users/vadikone/.bb/thread-storage/thr_bza87x5nhg/minus-flood-captures/dark-open-390x420.png",
+            "viewport": "390x420",
+            "bytes": 22686,
+            "sha256": "f206640dd421563ab808a099d7f2bb22b51c48e3840e0e8fb662d019c7c13fba"
+          }
+        ]
+      }
+    }
+  ]
+}
